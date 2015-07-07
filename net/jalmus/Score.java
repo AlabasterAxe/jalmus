@@ -74,17 +74,15 @@ public class Score {
   return this.win == 2;
 }
 
-public boolean isUnknown() {
-  return this.win == 0;
-}
+  public boolean isUnknown() {
+    return this.win == 0;
+  }
 
-
-  public void initScore(){
+  public void initScore() {
     this.nbtrue = 0;
     this.nbfalse = 0;
     this.points = 100;
     win = 0;
-
   }
 
   /**
@@ -95,44 +93,36 @@ public boolean isUnknown() {
      * If new number of points reach the max points or 0 update the win parameter
    */
 
-  public void addPoints(int i){
+  public void addPoints(int i) {
     if (i > 0) {
       if (this.points + i < maxpoints) {
         this.points = this.points + i;
-      }
-      else {
+      } else {
         this.points = maxpoints;
         this.setWin();
-
       }
-    }
-    else { // i < 0 substract points
+    } else { // i < 0 substract points
       if (this.points + i > 0) {
          this.points = this.points + i;
-       }
-       else {
+      } else {
          this.points = 0;
          this.setLost();
-
-       }
-     }
-
-
+      }
+    }
   }
-
 
   public void paint(Graphics g, int width) {
 
 	int xpos = (width - 251) / 2;
     g.setColor(Color.black);
-    g.draw3DRect( xpos, 420, 251, 20, true);
+    g.draw3DRect(xpos, 420, 251, 20, true);
     for (int tmp = 0; tmp < this.points; tmp = tmp + 10) {
-      if (tmp < 100)
+      if (tmp < 100) {
         g.setColor(new Color(60 + (tmp + 10) / 2, 26, 26));
-      else
+      } else {
         g.setColor(new Color(110, 26 + (tmp - 90) / 2, 26));
-      g.fillRect(xpos + 1 + tmp / 2, 421, 5, 19);
+        g.fillRect(xpos + 1 + tmp / 2, 421, 5, 19);
+      }
     }
-
   }
-  }
+}

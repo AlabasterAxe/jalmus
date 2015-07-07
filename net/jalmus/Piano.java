@@ -160,7 +160,6 @@ public class Piano {
     }
   }
 
-
   /**
    * Paint keyboard on screen with  keys in blue when played, in green for notes to train
    *

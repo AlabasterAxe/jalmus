@@ -81,7 +81,7 @@ E-mail : cvrichard@infonie.fr */
 
 package net.jalmus;
 
-import java.awt.Color;import java.awt.Dimension;import java.awt.Font;import java.awt.Graphics;import java.awt.Image;import java.awt.event.ActionEvent;import java.awt.event.ActionListener;import java.awt.event.ComponentAdapter;import java.awt.event.ComponentEvent;import java.awt.event.ItemEvent;import java.awt.event.ItemListener;import java.awt.event.KeyEvent;import java.awt.event.KeyListener;import java.awt.event.MouseAdapter;import java.awt.event.MouseEvent;import java.awt.event.MouseMotionAdapter;import java.awt.event.WindowAdapter;import java.awt.event.WindowEvent;import java.io.File;import java.io.FileInputStream;import java.io.FileOutputStream;import java.io.IOException;import java.io.InputStream;import java.util.ArrayList;import java.util.Arrays;import java.util.Locale;import java.util.ResourceBundle;import javax.imageio.ImageIO;import javax.sound.midi.Instrument;import javax.sound.midi.InvalidMidiDataException;import javax.sound.midi.MetaEventListener;import javax.sound.midi.MetaMessage;import javax.sound.midi.MidiChannel;import javax.sound.midi.MidiDevice;import javax.sound.midi.MidiEvent;import javax.sound.midi.MidiSystem;import javax.sound.midi.MidiUnavailableException;import javax.sound.midi.Receiver;import javax.sound.midi.Sequence;import javax.sound.midi.Sequencer;import javax.sound.midi.ShortMessage;import javax.sound.midi.Soundbank;import javax.sound.midi.Synthesizer;import javax.sound.midi.Track;import javax.sound.midi.Transmitter;import javax.swing.ImageIcon;import javax.swing.JButton;import javax.swing.JFrame;import javax.swing.JMenu;import javax.swing.JMenuItem;import javax.swing.JOptionPane;import javax.swing.plaf.ColorUIResource;import javax.xml.parsers.ParserConfigurationException;import javax.xml.parsers.SAXParser;import javax.xml.parsers.SAXParserFactory;import org.xml.sax.SAXException;
+import java.awt.Color;import java.awt.Dimension;import java.awt.Font;import java.awt.Graphics;import java.awt.Image;import java.awt.event.ActionEvent;import java.awt.event.ActionListener;import java.awt.event.ComponentAdapter;import java.awt.event.ComponentEvent;import java.awt.event.ItemEvent;import java.awt.event.ItemListener;import java.awt.event.KeyEvent;import java.awt.event.KeyListener;import java.awt.event.MouseAdapter;import java.awt.event.MouseEvent;import java.awt.event.MouseMotionAdapter;import java.awt.event.WindowAdapter;import java.awt.event.WindowEvent;import java.io.File;import java.io.FileInputStream;import java.io.IOException;import java.io.InputStream;import java.util.ArrayList;import java.util.Locale;import javax.imageio.ImageIO;import javax.sound.midi.Instrument;import javax.sound.midi.InvalidMidiDataException;import javax.sound.midi.MetaEventListener;import javax.sound.midi.MetaMessage;import javax.sound.midi.MidiChannel;import javax.sound.midi.MidiDevice;import javax.sound.midi.MidiEvent;import javax.sound.midi.MidiSystem;import javax.sound.midi.MidiUnavailableException;import javax.sound.midi.Receiver;import javax.sound.midi.Sequence;import javax.sound.midi.Sequencer;import javax.sound.midi.ShortMessage;import javax.sound.midi.Soundbank;import javax.sound.midi.Synthesizer;import javax.sound.midi.Track;import javax.sound.midi.Transmitter;import javax.swing.JButton;import javax.swing.JFrame;import javax.swing.JOptionPane;import javax.swing.plaf.ColorUIResource;import javax.xml.parsers.ParserConfigurationException;import javax.xml.parsers.SAXParser;import javax.xml.parsers.SAXParserFactory;import org.xml.sax.SAXException;
 
 public class Jalmus extends JFrame implements KeyListener, ActionListener, ItemListener {
 
@@ -496,16 +496,16 @@ public class Jalmus extends JFrame implements KeyListener, ActionListener, ItemL
       ui.principal.setVisible(true);
       System.out.println(noteLevel.getNbnotes());
       if (noteLevel.isNotesgame() && noteLevel.getCurrentTonality().getAlterationsNumber() == 0) {
-        ui.bdiese.setVisible(false);
-        ui.bdiese2.setVisible(false);
-        ui.bbemol.setVisible(false);
-        ui.bbemol2.setVisible(false);
+        ui.sharpButton1.setVisible(false);
+        ui.sharpButton2.setVisible(false);
+        ui.flatButton1.setVisible(false);
+        ui.flatButton2.setVisible(false);
         ui.pnotes.validate();
       } else {
-        ui.bdiese.setVisible(true);
-        ui.bdiese2.setVisible(true);
-        ui.bbemol.setVisible(true);
-        ui.bbemol2.setVisible(true);
+        ui.sharpButton1.setVisible(true);
+        ui.sharpButton2.setVisible(true);
+        ui.flatButton1.setVisible(true);
+        ui.flatButton2.setVisible(true);
         ui.pnotes.validate();
       }
     } else if (selectedGame == RHYTHMREADING || selectedGame==SCOREREADING) {
@@ -562,15 +562,15 @@ public class Jalmus extends JFrame implements KeyListener, ActionListener, ItemL
     // stopSound();
 
     ColorUIResource def = new ColorUIResource(238, 238, 238);
-    ui.bdo.setBackground(def);
-    ui.bre.setBackground(def);
-    ui.bmi.setBackground(def);
-    ui.bfa.setBackground(def);
-    ui.bsol.setBackground(def);
-    ui.bla.setBackground(def);
-    ui.bsi.setBackground(def);
-    ui.bdiese.setBackground(def);
-    ui.bbemol2.setBackground(def);
+    ui.doButton1.setBackground(def);
+    ui.reButton.setBackground(def);
+    ui.miButton.setBackground(def);
+    ui.faButton.setBackground(def);
+    ui.solButton.setBackground(def);
+    ui.laButton.setBackground(def);
+    ui.siButton.setBackground(def);
+    //ui.bdiese.setBackground(def);
+    //ui.bbemol2.setBackground(def);
 
     if (noteLevel.isNormalgame() || noteLevel.isLearninggame()) {
       noteMargin = 220;
@@ -1149,8 +1149,8 @@ public class Jalmus extends JFrame implements KeyListener, ActionListener, ItemL
 
     //  SI LE LABEL DU BOUTON SELECTIONNE EST EGAL A LA NOTE COURANTE   ----> GAGNE
 
-    if ((gameStarted && selectedGame == NOTEREADING && !paused)        && (e.getSource() == ui.bdo || e.getSource() == ui.bre || e.getSource() == ui.bmi || e.getSource() == ui.bfa         || e.getSource() == ui.bsol || e.getSource() == ui.bla || e.getSource() == ui.bsi || e.getSource() == ui.bdo2
-        || e.getSource() == ui.bdiese || e.getSource() == ui.bdiese2 || e.getSource() == ui.bbemol         || e.getSource() == ui.bbemol2)) {
+    if ((gameStarted && selectedGame == NOTEREADING && !paused)        && (e.getSource() == ui.doButton1 || e.getSource() == ui.reButton || e.getSource() == ui.miButton || e.getSource() == ui.faButton         || e.getSource() == ui.solButton || e.getSource() == ui.laButton || e.getSource() == ui.siButton || e.getSource() == ui.doButton2
+        || e.getSource() == ui.sharpButton1 || e.getSource() == ui.sharpButton2 || e.getSource() == ui.flatButton1         || e.getSource() == ui.flatButton2)) {
       if (!ncourante.getAlteration().equals("")) {  // NOTES AVEC ALTERATION
         if (((JButton)e.getSource()).getText().equals(ncourante.getAlteration())) {
           alterationOk = true;
@@ -2628,41 +2628,41 @@ public class Jalmus extends JFrame implements KeyListener, ActionListener, ItemL
 
     private void resetButtonColor() {
       ColorUIResource def = new ColorUIResource(238, 238, 238);
-      ui.bdo.setBackground(def);
-      ui.bre.setBackground(def);
-      ui.bmi.setBackground(def);
-      ui.bfa.setBackground(def);
-      ui.bsol.setBackground(def);
-      ui.bla.setBackground(def);
-      ui.bsi.setBackground(def);
-      ui.bdiese.setBackground(def);
-      ui.bbemol2.setBackground(def);
+      ui.doButton1.setBackground(def);
+      ui.reButton.setBackground(def);
+      ui.miButton.setBackground(def);
+      ui.faButton.setBackground(def);
+      ui.solButton.setBackground(def);
+      ui.laButton.setBackground(def);
+      ui.siButton.setBackground(def);
+      ui.sharpButton1.setBackground(def);
+      ui.flatButton2.setBackground(def);
     }
 
     void applyButtonColor() {
       resetButtonColor();
 
       Color red = new Color(242, 179, 112);
-      if (ncourante.getNom().equals(ui.bdo.getText())) {
-        ui.bdo.setBackground(red);
-      } else if (ncourante.getNom().equals(ui.bre.getText())) {
-        ui.bre.setBackground(red);
-      } else if (ncourante.getNom().equals(ui.bmi.getText())) {
-        ui.bmi.setBackground(red);
-      } else if (ncourante.getNom().equals(ui.bfa.getText())) {
-        ui.bfa.setBackground(red);
-      } else if (ncourante.getNom().equals(ui.bsol.getText())) {
-        ui.bsol.setBackground(red);
-      } else if (ncourante.getNom().equals(ui.bla.getText())) {
-        ui.bla.setBackground(red);
-      } else if (ncourante.getNom().equals(ui.bsi.getText())) {
-        ui.bsi.setBackground(red);
+      if (ncourante.getNom().equals(ui.doButton1.getText())) {
+        ui.doButton1.setBackground(red);
+      } else if (ncourante.getNom().equals(ui.reButton.getText())) {
+        ui.reButton.setBackground(red);
+      } else if (ncourante.getNom().equals(ui.miButton.getText())) {
+        ui.miButton.setBackground(red);
+      } else if (ncourante.getNom().equals(ui.faButton.getText())) {
+        ui.faButton.setBackground(red);
+      } else if (ncourante.getNom().equals(ui.solButton.getText())) {
+        ui.solButton.setBackground(red);
+      } else if (ncourante.getNom().equals(ui.laButton.getText())) {
+        ui.laButton.setBackground(red);
+      } else if (ncourante.getNom().equals(ui.siButton.getText())) {
+        ui.siButton.setBackground(red);
       }
 
-      if (ncourante.getAlteration().equals(ui.bdiese.getText())) {
-        ui.bdiese.setBackground(red);
-      } else if (ncourante.getAlteration().equals(ui.bbemol.getText())) {
-        ui.bbemol2.setBackground(red);
+      if (ncourante.getAlteration().equals(ui.sharpButton1.getText())) {
+        ui.sharpButton1.setBackground(red);
+      } else if (ncourante.getAlteration().equals(ui.flatButton1.getText())) {
+        ui.flatButton2.setBackground(red);
       }
     }
 
@@ -3435,6 +3435,5 @@ public class Jalmus extends JFrame implements KeyListener, ActionListener, ItemL
     jalmus.setTitle("Jalmus"); // Give the application a title
 
     jalmus.setLocationRelativeTo(null); // Center the window on the display
-    jalmus.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // exit when frame closed
-  }
+    jalmus.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // exit when frame closed  }
 }

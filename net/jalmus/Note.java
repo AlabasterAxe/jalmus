@@ -15,71 +15,71 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.util.ResourceBundle;
 
- public class Note {
-	    String Alteration;
-        String Nom;
-        int Height;
-        int X; // x position for animation
-        int Pitch; // midi pitch
+public class Note {
+  String Alteration;
+  String Nom;
+  int Height;
+  int X; // x position for animation
+  int Pitch; // midi pitch
 
+  public Note(int h, int x, int p) {
+    this.Alteration = "";
+    this.Nom = "";
+    this.Height = h; // pos. de la note dportee+20 = sol cle de sol, dportee+24 = fa (+4)
+    this.X = x;
+    this.Pitch = p;
+  }
 
-        public Note(int h, int x, int p) {
-          this.Alteration = "";
-          this.Nom = "";
-          this.Height = h; // pos. de la note dportee+20 = sol cle de sol, dportee+24 = fa (+4)
-          this.X = x;
-          this.Pitch = p;
-        }
+  public void init() {
+    this.Alteration = "";
+    this.Nom = "";
+    this.Height = 0; // pos. de la note dportee+20 = sol cle de sol, dportee+24 = fa (+4)
+    this.X = 0;
+    this.Pitch = 0;
+  }
 
-        public void init() {
-          this.Alteration = "";
-          this.Nom = "";
-          this.Height = 0; // pos. de la note dportee+20 = sol cle de sol, dportee+24 = fa (+4)
-          this.X = 0;
-          this.Pitch = 0;
-        }
+  public void copy(Note n) {
+    this.Alteration = n.Alteration;
+    this.Nom = n.Nom;
+    this.Height = n.Height; // pos. de la note dportee+20 = sol cle de sol, dportee+24 = fa (+4)
+    this.X = n.X;
+    this.Pitch = n.Pitch;
+  }
 
-        public void copy(Note n) {
-          this.Alteration = n.Alteration;
-          this.Nom = n.Nom;
-          this.Height = n.Height; // pos. de la note dportee+20 = sol cle de sol, dportee+24 = fa (+4)
-          this.X = n.X;
-          this.Pitch = n.Pitch;
-        }
+  public String getNom() {
+    return this.Nom;
+  }
 
-        public String getNom() {
-          return this.Nom;
-        }
+  public String getAlteration() {
+    return this.Alteration;
+  }
 
-        public String getAlteration() {
-          return this.Alteration;
-        }
+  public int getPitch(){
+    return this.Pitch;
+  }
 
-        public int getPitch(){
-          return this.Pitch;
-        }
+  public void setPitch(int i){
+    this.Pitch = i;
+  }
 
-        public void setPitch(int i){
-          this.Pitch = i;
-        }
+  public int getX(){
+    return this.X;
+  }
 
-        public int getX(){
-                  return this.X;
-                }
+  public void setX(int i){
+    this.X = i;
+  }
 
-        public void setX(int i){
-          this.X = i;
-        }
+  public int getHeight(){
+    return this.Height;
+  }
 
-        public int getHeight(){
-                  return this.Height;
-                }
+  public void setHeight(int h){
+    this.Height = h;
+  }
 
-        public void setHeight(int h){
-          this.Height = h;
-        }
-
-        public void paint(NoteLevel nrlevel, Graphics g, Font f, int decalagea, int decalagen, int dportee, Component j, Color couleur, ResourceBundle b){
+  public void paint(NoteLevel nrlevel, Graphics g, Font f, int decalagea,
+     int decalagen, int dportee, Component j, Color couleur, ResourceBundle b){
 
           // decalagea est utilis� pour le d�calage des alt�rations dans l'accord
           // decalagen est utilis� pour le d�calage des notes dans l'intervalle
@@ -90,12 +90,15 @@ import java.util.ResourceBundle;
 
            //g.fillOval(this.X+decalagen,this.Height+5,11,12);    // DESSINE LA NOTE
            g.drawString("w", this.X+decalagen, this.Height + 11);
-           if ((!this.Alteration.equals("") & !this.accidentalInTonality(nrlevel.getCurrentTonality(),b)) | (this.Alteration.equals("n")))
-           if (this.Alteration.equals("#")) g.drawString("B", this.X-decalagea, this.Height+10);
-           else if (this.Alteration.equals("b")) g.drawString("b", this.X-decalagea, this.Height+10);
-           else if (this.Alteration.equals("n")) {
-        	   String bq = "" + (char)0xBD;
-        	   g.drawString(bq, this.X-decalagea, this.Height + 10);
+           if ((!this.Alteration.equals("") & !this.accidentalInTonality(nrlevel.getCurrentTonality(),b)) | (this.Alteration.equals("n"))) {
+             if (this.Alteration.equals("#")) {
+               g.drawString("B", this.X-decalagea, this.Height + 10);
+             } else if (this.Alteration.equals("b")) {
+               g.drawString("b", this.X-decalagea, this.Height + 10);
+             } else if (this.Alteration.equals("n")) {
+               String bq = "" + (char)0xBD;
+               g.drawString(bq, this.X-decalagea, this.Height + 10);
+             }
            }
 /*
             if (couleur==Color.black) {
@@ -121,45 +124,41 @@ import java.util.ResourceBundle;
 
              if (nrlevel.isCurrentKeyTreble() | nrlevel.isCurrentKeyBass()) {
                if (this.Height>=dportee+45) { // <DO en dessous de la port�e en cl� de sol
-                 for(i=dportee+50; i<=this.Height+5; i=i+10){
-                   if (i != this.Height+5) g.setColor(Color.black); //!= this.Height+4
-                   else g.setColor(couleur);
-                 g.drawLine(this.X-2+decalagen,i,this.X+18+decalagen, i); // dessine la port�e en dessous de la port�e normale
-
+                 for(i=dportee+50; i<=this.Height+5; i=i+10) {
+                   if (i != this.Height+5) {
+                	   g.setColor(Color.black); //!= this.Height+4
+                   } else {
+                	   g.setColor(couleur);
+                   }
+                   g.drawLine(this.X-2+decalagen,i,this.X+18+decalagen, i); // dessine la port�e en dessous de la port�e normale
                  }
-               }
-
-               else  if (this.Height<=dportee-15) {  // <LA au dessus de la port�e en cl� de sol
-                 for(i=dportee-10; i>=this.Height+5; i=i-10){
-
-                   if (i != this.Height+5) g.setColor(Color.black);
-                   else g.setColor(couleur);
-                   g.drawLine(this.X-2+decalagen,i,this.X+18+decalagen, i);  // dessine la portee en dessus de la port�e normale
+               } else if (this.Height<=dportee-15) {  // <LA au dessus de la port�e en cl� de sol
+                 for (i=dportee-10; i>=this.Height+5; i=i-10) {
+                   if (i != this.Height+5) {
+                	 g.setColor(Color.black);
+                   } else {
+                     g.setColor(couleur);
+                   }
+                   g.drawLine(this.X-2+decalagen, i, this.X+18+decalagen, i);  // dessine la portee en dessus de la port�e normale
                  }
                };
-             }
-
+             } else if(nrlevel.isCurrentKeyBoth()) {
              // CAS DE LA DOUBLE CLE SOL ET FA
-
-             else if( nrlevel.isCurrentKeyBoth()) {
-
                // cas de la cl� de sol
                if (this.Height>=dportee+45 & this.Height <= dportee+55) { // du DO jusqu'au LA en dessous de la port�e
-                 for(i=dportee+50; i<=this.Height+5; i=i+10){
-                 g.drawLine(this.X-2+decalagen,i,this.X+18+decalagen, i); }       // dessine la port�e en dessous de la port�e normale
-               }
-               else if (this.Height<=dportee-15) {  // <LA au dessus de la port�e en cl� de sol
-                 for(i=dportee-10; i>=this.Height+5; i=i-10){
-                 g.drawLine(this.X-2+decalagen,i,this.X+18+decalagen, i); }       // dessine la portee en dessus de la port�e normale
-               }
-
-
+                 for(i=dportee+50; i<=this.Height+5; i=i+10) {
+                   g.drawLine(this.X-2+decalagen,i,this.X+18+decalagen, i);
+                 }       // dessine la port�e en dessous de la port�e normale
+               } else if (this.Height<=dportee-15) {  // <LA au dessus de la port�e en cl� de sol
+                 for(i=dportee-10; i>=this.Height+5; i=i-10) {
+                   g.drawLine(this.X-2+decalagen,i,this.X+18+decalagen, i);
+                 }       // dessine la portee en dessus de la port�e normale
+               } else if (this.Height>=dportee+135) {  // � partie du MI en dessous de la port�e
                // cas de la cl� de fa
-               else if (this.Height>=dportee+135) {  // � partie du MI en dessous de la port�e
-                 for(i=dportee+140; i<=this.Height+5; i=i+10){
-                 g.drawLine(this.X-2+decalagen,i,this.X+18+decalagen, i); }       // dessine la port�e en dessous de la port�e normale
-               }
-               else if (this.Height<=dportee+75 & this.Height >=dportee+60) {
+                 for(i=dportee+140; i<=this.Height+5; i=i+10) {
+                   g.drawLine(this.X-2+decalagen,i,this.X+18+decalagen, i);
+                 }       // dessine la port�e en dessous de la port�e normale
+               } else if (this.Height <= dportee + 75 & this.Height >= dportee + 60) {
                  for(i=dportee+80; i>=this.Height+5; i=i-10){
                  g.drawLine(this.X-2+decalagen,i,this.X+18+decalagen, i); }      // dessine la portee en dessus de la port�e normale
                };

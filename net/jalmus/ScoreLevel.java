@@ -12,28 +12,28 @@ import java.util.Random;
 import javax.swing.JOptionPane;
 
 public class ScoreLevel implements Level {
-	int Id;
-	String message;
-	boolean whole;
-	boolean half;
-	boolean dottedhalf;
-	boolean quarter; 
-	boolean eighth;
-	boolean silence;
-	boolean triplet;
-	String currentKey;
-	Tonality currenttonality;
-	boolean randomtonality;
-	String notetype;
-	int nbnotes;
-	int timeSignNumerator;
-	int timeSignDenominator;
-	int timeDivision; // ratio between time signature numerator and denominator 
-	int speed; // time sleep of thread = speed of the note
-	boolean metronome;
-	boolean beats;
-	//int[] pitchtab = new int [8];
-	ArrayList<Integer> pitcheslist = new ArrayList<Integer>(); 
+  int id;
+  String message;
+  boolean whole;
+  boolean half;
+  boolean dottedhalf;
+  boolean quarter; 
+  boolean eighth;
+  boolean silence;
+  boolean triplet;
+  String currentKey;
+  Tonality currentTonality;
+  boolean randomtonality;
+  String notetype;
+  int nbnotes;
+  int timeSignNumerator;
+  int timeSignDenominator;
+  int timeDivision; // ratio between time signature numerator and denominator 
+  int speed; // time sleep of thread = speed of the note
+  boolean metronome;
+  boolean beats;
+  //int[] pitchtab = new int [8];
+  ArrayList<Integer> pitcheslist = new ArrayList<Integer>(); 
 
   /*                          C3  D3  E3  F3  G3  A3  B3  */
   /*                         ---------------------------- */
@@ -59,7 +59,7 @@ public class ScoreLevel implements Level {
 		   				 };
 
   public ScoreLevel() {
-	this.Id = 0;
+	this.id = 0;
 	this.message = "";
     this.whole = true;
     this.half = true;
@@ -70,7 +70,7 @@ public class ScoreLevel implements Level {
     this.triplet = false;
     this.currentKey = "treble";
     this.randomtonality = false;
-    this.currenttonality = new Tonality(0, "");
+    this.currentTonality = new Tonality(0, "");
     this.pitcheslist = new ArrayList<Integer>(); 
     this.notetype = "notes";
 	this.nbnotes = 9;
@@ -85,27 +85,25 @@ public class ScoreLevel implements Level {
   /********************************/
 
   public void setId(int i) {
-    this.Id = i;
+    this.id = i;
   }
 
   public int getId() {
-    return this.Id;
-}
-
+    return this.id;
+  }
   
   /*****************************************/
   public void setNotetype(String s) {
- this.notetype = s;
-}
+    this.notetype = s;
+  }
+
   public boolean isNotes() {
-   return this.notetype.equals("notes");
- }
+    return this.notetype.equals("notes");
+  }
 
- public boolean isCustomNotes() {
-	return this.notetype.equals("custom");
-}
- 
-
+  public boolean isCustomNotes() {
+    return this.notetype.equals("custom");
+  }
  
   /*******************************************/
   public void setMessage(String s) {
@@ -114,11 +112,11 @@ public class ScoreLevel implements Level {
 
   public String getMessage() {
     return this.message;
-}
+  }
 
-public boolean isMessageEmpty(){
-  return this.message.equals("");
-}
+  public boolean isMessageEmpty(){
+    return this.message.equals("");
+  }
 
 /*******************************************/
   public void setCurrentKey(String s) {
@@ -126,7 +124,7 @@ public boolean isMessageEmpty(){
   }
 
   public String getKey() {
-	    return this.currentKey;
+    return this.currentKey;
   }
 
   public boolean isCurrentKeyTreble() {
@@ -143,113 +141,112 @@ public boolean isMessageEmpty(){
   }
 
   public void setRandomTonality(boolean b){
-   this.randomtonality = b;
- }
+    this.randomtonality = b;
+  }
 
+  public void setCurrentTonality(Tonality t) {
+    this.currentTonality = t;
+  }
 
-   public void setCurrentTonality(Tonality t) {
-  this.currenttonality = t;
- }
-
-   public Tonality getCurrentTonality(){
-     return this.currenttonality;
-   }
+  public Tonality getCurrentTonality(){
+    return this.currentTonality;
+  }
  /*****************************************/
 
+  public void setNbnotes(int i) {
+    this.nbnotes = i;
+  }
 
-   public void setNbnotes(int i) {
-     this.nbnotes = i;
-   }
+  public int getNbnotes() {
+    return this.nbnotes;
+  }
 
-   public int getNbnotes() {
-     return this.nbnotes;
- }
+  public void copy(ScoreLevel n) {
+    this.id = n.id;
+    this.message =  n.message;
+    this.whole = n.whole;
+    this.half = n.half;
+    this.dottedhalf = n.dottedhalf;
+    this.quarter = n.quarter;
+    this.eighth = n.eighth;
+    this.silence = n.silence;
+    this.triplet = n.triplet;
 
-   public void copy(ScoreLevel n) {
-		this.Id = n.Id;
-	    this.message =  n.message;
-	    this.whole = n.whole;
-	    this.half = n.half;
-	    this.dottedhalf = n.dottedhalf;
-	    this.quarter = n.quarter;
-	    this.eighth = n.eighth;
-	    this.silence = n.silence;
-	    this.triplet = n.triplet;
-	    
-	    this.timeSignNumerator = n.timeSignNumerator;
-	    this.timeSignDenominator = n.timeSignDenominator;
-	    
-	    this.timeDivision = n.timeDivision ; 
-	    this.metronome =   n.metronome;
-	    this.beats =    n.beats ;
-	    
-	    this.currentKey =  n.currentKey;
-	    this.randomtonality = n.randomtonality;
-	    this.currenttonality = n.currenttonality;
-	    
-		this.nbnotes = n.nbnotes;
-		
-		this.pitcheslist =  new ArrayList<Integer>(); 
-		this.pitcheslist.addAll(n.pitcheslist);
+    this.timeSignNumerator = n.timeSignNumerator;
+    this.timeSignDenominator = n.timeSignDenominator;
 
-	  }
+    this.timeDivision = n.timeDivision ; 
+    this.metronome =   n.metronome;
+    this.beats =    n.beats ;
+
+    this.currentKey =  n.currentKey;
+    this.randomtonality = n.randomtonality;
+    this.currentTonality = n.currentTonality;
+      
+    this.nbnotes = n.nbnotes;
+
+    this.pitcheslist =  new ArrayList<Integer>(); 
+    this.pitcheslist.addAll(n.pitcheslist);
+  }
    
    
-   public void adjustLevel(boolean r, boolean b, boolean n, boolean c, boolean s, boolean t) {
-	    this.whole = r;
-	    this.half = b;
-	    this.quarter = n;
-	    this.eighth = c;
-	    this.silence = s;
-	    this.triplet = t;
-	  }
+  public void adjustLevel(boolean r, boolean b, boolean n, boolean c, boolean s, boolean t) {
+    this.whole = r;
+    this.half = b;
+    this.quarter = n;
+    this.eighth = c;
+    this.silence = s;
+    this.triplet = t;
+  }
    
    /********************************/  
    
+  public void setPitcheslist(ArrayList<Integer> l){		
+    this.pitcheslist = new ArrayList<Integer>(); 
+    this.pitcheslist.addAll(l);
+  }
    
-   public void setPitcheslist(ArrayList<Integer> l){		
-	 	this.pitcheslist =  new ArrayList<Integer>(); 
-		 this.pitcheslist.addAll(l);
-	}
    
-   
-   public ArrayList<Integer> getPitcheslist(){		
-	  return	this.pitcheslist;
-	}
+  public ArrayList<Integer> getPitcheslist(){		
+    return this.pitcheslist;
+  }
    
   public void initPitcheslist(int notesNum) {
 
-	  int i = 0, noteIdx = 0; 
-	  int octaveOffset = 0;
-	  int altIndex = this.currenttonality.getAlterationsNumber();
-	  pitcheslist.clear();
+    int i = 0, noteIdx = 0; 
+    int octaveOffset = 0;
+    int altIndex = this.currentTonality.getAlterationsNumber();
+    pitcheslist.clear();
 
+    if (this.isCurrentKeyBass()) {
+      octaveOffset = -2;
+      if (notesNum == 9) {
+        noteIdx = 4; // starts from G
+      }
+	} else if (this.isCurrentKeyTreble()) {
+      octaveOffset = 0;
+      if (notesNum == 9) {
+        noteIdx = 2; // starts from E
+      }
+	}
 
-	  if (this.isCurrentKeyBass()) {
-		  octaveOffset = -2;
-		  if (notesNum == 9) noteIdx = 4; // starts from G
-	  }
-	  else if (this.isCurrentKeyTreble()) {
-		  octaveOffset = 0;
-		  if (notesNum == 9) noteIdx = 2; // starts from E
-	  }
+    for (i = 0; i < notesNum; i++) {
+      int alteration = 0;
+      if (this.currentTonality.issharp()) {
+        alteration = sharpsMatrix[altIndex][noteIdx];
+      } else if (this.currentTonality.isflat()) {
+        alteration =  0 - flatsMatrix[altIndex][noteIdx];
+      }
 
-	  for (i = 0; i < notesNum; i++) {
-		int alteration = 0;
-		if (this.currenttonality.issharp())
-			alteration = sharpsMatrix[altIndex][noteIdx];
-		else if (this.currenttonality.isflat())
-			alteration =  0 - flatsMatrix[altIndex][noteIdx];
-
-		pitcheslist.add(sharpsMatrix[0][noteIdx] + (octaveOffset * 12) + alteration);
+      pitcheslist.add(sharpsMatrix[0][noteIdx] + (octaveOffset * 12) + alteration);
 		
-		if (noteIdx == 6) {
-			octaveOffset++;
-			noteIdx = 0;
-		}
-		else
-			noteIdx++;
-	  }
+      if (noteIdx == 6) {
+        octaveOffset++;
+        noteIdx = 0;
+      } else {
+        noteIdx++;
+      }
+    }
 
 	//  for (i = 0; i < pitcheslist.size(); i++)
 	//	  System.out.println("pitchtab #" + i + ": " + pitcheslist.get(i));
@@ -288,17 +285,11 @@ public boolean isMessageEmpty(){
 	return ypos;
   }*/
   
-  public int getRandomPitch(){
-
-//	pitch =  pitcheslist.get((int) (pitcheslist.size() * Math.random()));
-	
+  public int getRandomPitch() {
 	Random generator = new Random();
 	int index = generator.nextInt ( this.pitcheslist.size() );
 	if( index >-1 )  return (this.pitcheslist.get( index ));  	
 	else return 0;
-	
-	//System.out.println("New random pitch = " + pitch);
-	  
   }
 
   public int tripletRandomPitch(int basePitch) {
@@ -306,26 +297,25 @@ public boolean isMessageEmpty(){
 	int delta = 4; // within +2 and -2 tones from basePitch
 	int shift = -2;
 	int pitch = 0;
-	for (int i = 0; i < pitcheslist.size(); i++)
-		if (pitcheslist.get(i) == basePitch) {
-			baseIndex = i;
-			break;
-		}
+	for (int i = 0; i < pitcheslist.size(); i++) {
+      if (pitcheslist.get(i) == basePitch) {
+        baseIndex = i;
+        break;
+      }
+	}
+
 	if (baseIndex == 0) {
-		delta = 2; // only +2
-		shift = 2;
-	}
-	else if (baseIndex == pitcheslist.size() - 1) {
-		delta = 2; // only -2
-		shift = -2;
-	}
-	else if (baseIndex == 1) {
-		delta = 3; // only -1/+2
-		shift = -1;
-	}
-	else if (baseIndex == pitcheslist.size() - 2) {
-		delta = 3; // only -2/+1
-		shift = -2;
+      delta = 2; // only +2
+      shift = 2;
+	} else if (baseIndex == pitcheslist.size() - 1) {
+      delta = 2; // only -2
+      shift = -2;
+	} else if (baseIndex == 1) {
+      delta = 3; // only -1/+2
+      shift = -1;
+	} else if (baseIndex == pitcheslist.size() - 2) {
+      delta = 3; // only -2/+1
+      shift = -2;
 	}
 	
 	int randIndex = baseIndex + shift + (int)(Math.random() * delta);
@@ -465,7 +455,7 @@ public boolean isMessageEmpty(){
 
       /********************************/
  public void printtest(){
-   	   System.out.println("Level n°"+this.Id);
+   	   System.out.println("Level n°"+this.id);
    	    System.out.println("Whole note : " + this.whole);
    	  System.out.println("Half note : " + this.half);
 	  System.out.println("DottedHalf note : " + this.dottedhalf);
@@ -479,7 +469,7 @@ public boolean isMessageEmpty(){
    	  System.out.println("Key : " + this.currentKey);
    	  System.out.println("Piches liste : " + this.pitcheslist);
 
-   	  System.out.println("Tonality : " + this.currenttonality);
+   	  System.out.println("Tonality : " + this.currentTonality);
 	  System.out.println("Nb notes "+this.nbnotes);
    	}
 
@@ -545,7 +535,7 @@ if ( dirmylessonok) {
 		else if (!this.getMetronome() & this.getMetronomeBeats()) fileContent.append("<metronome>visual</metronome>"+newline);
 		fileContent.append("<clef>"+this.currentKey+"</clef>"+newline);
 		if (this.randomtonality) fileContent.append("<tonality>random</tonality>"+newline);
-		else  if (this.currenttonality.getAlterationsNumber()!=0) fileContent.append("<tonality>"+this.currenttonality.getAlterationsNumber()+this.currenttonality.getAlteration()+ "</tonality>"+newline);
+		else  if (this.currentTonality.getAlterationsNumber()!=0) fileContent.append("<tonality>"+this.currentTonality.getAlterationsNumber()+this.currentTonality.getAlteration()+ "</tonality>"+newline);
 		fileContent.append("<notes>"+this.notetype+"</notes>"+newline);
 		if (this.isNotes()) fileContent.append("<nbnotes>"+this.getNbnotes()+"</nbnotes>"+newline);
 		if (this.isCustomNotes()){
@@ -568,11 +558,10 @@ else JOptionPane.showMessageDialog(null, "The personnal lessons directory begin 
 
   private static void writeFile(File destFile, String content)
   throws IOException {
-  BufferedWriter writer = new BufferedWriter(new FileWriter(destFile));
-  writer.write(content);
-  writer.flush();
-  writer.close();
-  writer = null;
+    BufferedWriter writer = new BufferedWriter(new FileWriter(destFile));
+    writer.write(content);
+    writer.flush();
+    writer.close();
+    writer = null;
   }
-
 }
