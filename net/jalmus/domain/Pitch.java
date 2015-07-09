@@ -7,7 +7,7 @@ package net.jalmus.domain;
  * to include different semitone names and numbers.
  */
 public final class Pitch implements Comparable<Pitch> {
-  public enum LetterName {
+  public static enum LetterName {
     C(0), D(2), E(4), F(5), G(7), A(9), B(11);
     
     private final int semitonesAboveC;
@@ -21,7 +21,7 @@ public final class Pitch implements Comparable<Pitch> {
     }
   };
 
-  public enum Modifier {
+  public static enum Modifier {
     DOUBLE_FLAT(-2), 
     FLAT(-1), 
     NONE(0), 

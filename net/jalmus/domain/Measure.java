@@ -10,7 +10,5 @@ public class Measure {
   private double tempo;
   private int timeSignatureNumerator;
   private int timeSignatureDenominator;
-  
-  
-  
+  private KeySignature keySignature;
 }
