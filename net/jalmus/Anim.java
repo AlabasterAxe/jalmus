@@ -117,7 +117,7 @@ class Anim extends JPanel {
         Color color = new Color(5, 5, 100);
         g.setColor(color);
         g.setFont(new Font("Arial", Font.BOLD, 60));
-        g.drawString("JALMUS", (d.width/2) - 95, (d.height / 2) - 35);
+        g.drawString("Jalmus", (d.width/2) - 95, (d.height / 2) - 35);
         g.setFont(new Font("Arial", Font.BOLD, 30));
         g.drawString("Java Lecture Musicale", (d.width/2) - 155, (d.height / 2) + 15);
         g.setFont(new Font("Arial", Font.BOLD, 15));

@@ -39,4 +39,8 @@ public class Chord implements Schedulable {
   }
   
   private final List<Note> notes;
+  
+  public Iterable<Note> getNotes() {
+    return notes;
+  }
 }

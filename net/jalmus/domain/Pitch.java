@@ -7,19 +7,20 @@ package net.jalmus.domain;
  * to include different semitone names and numbers.
  */
 public final class Pitch implements Comparable<Pitch> {
-  public static enum LetterName {
+
+  public enum Name {
     C(0), D(2), E(4), F(5), G(7), A(9), B(11);
     
     private final int semitonesAboveC;
     
-    private LetterName(int semitones) {
+    private Name(int semitones) {
       this.semitonesAboveC = semitones;
     }
     
     public int getSemitonesAboveC() {
       return semitonesAboveC;
     }
-  };
+  }
 
   public static enum Modifier {
     DOUBLE_FLAT(-2), 
@@ -40,32 +41,32 @@ public final class Pitch implements Comparable<Pitch> {
   };
   
   private static final int SEMITONES_PER_OCTAVE = 12;
-  private static final Pitch REFERENCE_PITCH = new Pitch(LetterName.A, 4, Modifier.NONE);
+  private static final Pitch REFERENCE_PITCH = new Pitch(Name.A, 4, Modifier.NONE);
   private static final int REFERENCE_FREQUENCY = 440;
   
   public static double getSemitoneFactor() {
     return Math.pow(2, (1/(double) SEMITONES_PER_OCTAVE));
   }
   
-  private final LetterName name;
+  private final Name name;
   private final int octave;
   private final Modifier modifier;
 	
-  private Pitch(LetterName name, int octave, Modifier modifier) {
+  private Pitch(Name name, int octave, Modifier modifier) {
     this.name = name;
     this.octave = octave;
     this.modifier = modifier;
   }
 	
-  public Pitch getPitch(LetterName name, int octave, Modifier modifier) {
+  public static Pitch getPitch(Name name, int octave, Modifier modifier) {
     return new Pitch(name, octave, modifier);
   }
   
-  public Pitch getPitchFromFrequency(double frequency) {
+  public static Pitch getPitchFromFrequency(double frequency) {
     throw new UnsupportedOperationException();
   }
 	
-  public LetterName getName() {
+  public Name getName() {
     return name;
   }
 
