@@ -1,25 +1,19 @@
 package net.jalmus.domain;
 
-import java.util.Set;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 
-import net.jalmus.util.Cycle;
+import net.jalmus.util.CycleArrayList;
 
 public class KeySignature {
 
   // TODO: Make this configurable via a KeySignature factory.
   // TODO: Represent this with some sort of a cyclic data structure.
-  private static final Cycle<Pitch.Name> modificationOrder;
+  private static final CycleArrayList<Pitch.Name> modificationOrder;
 
   static {
-    modificationOrder = new Cycle<Pitch.Name>();
+    modificationOrder = new CycleArrayList<Pitch.Name>();
     modificationOrder.add(Pitch.Name.B);
     modificationOrder.add(Pitch.Name.E);
     modificationOrder.add(Pitch.Name.A);

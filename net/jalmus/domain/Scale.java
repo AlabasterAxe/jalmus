@@ -1,6 +1,7 @@
 package net.jalmus.domain;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class for representing a series of {@link Pitch} objects that can be ascended
@@ -8,7 +9,27 @@ import java.util.ArrayList;
  */
 public class Scale {
 
-  public static enum Mode { MAJOR, MINOR }
+  public static enum Mode {
+    MAJOR(2, 4, 5, 7, 9, 11, 12),
+    MINOR(2, 3, 5, 7, 8, 10, 12),
+    HARMONIC_MINOR(2, 3, 5, 7, 8, 11, 12);
+    
+    private ArrayList<Integer> tones;
+    
+    private Mode(int... semitones) {
+      for (int semitone : semitones) {
+        tones.add(semitone);
+      }
+    }
+    
+    public ArrayList<Integer> getTones() {
+      return tones;
+    }
+    
+    public Integer getTones(int integer) {
+      return tones.get(integer);
+    }
+  }
   
   private final Mode mode;
   private final Pitch root;
@@ -45,7 +66,31 @@ public class Scale {
   }
   
   public static Scale getScale(Pitch pitch, Mode mode) {
-    throw new UnsupportedOperationException();
+    List<Pitch> pitches = new ArrayList<>();
+    pitches.add(pitch);
+    
+    int i = 0;
+    for (int tone : mode.getTones()) {
+      int minOrdinalDistance = -1;
+      Pitch closestPitch = null;
+      int previousPitchOrdinal = pitches.get(i).getName().ordinal();
+      for (Pitch possiblePitch : pitch.getSemitoneSum(tone)) {
+        // TODO: find a better way to pick amongst the possible notes.
+        int possiblePitchOrdinal = possiblePitch.getName().ordinal();
+        int ordinalDistance = Math.abs(previousPitchOrdinal - possiblePitchOrdinal);
+        if (previousPitchOrdinal != possiblePitchOrdinal 
+            && (minOrdinalDistance == -1 || ordinalDistance < minOrdinalDistance)) {
+          minOrdinalDistance = ordinalDistance;
+          closestPitch = possiblePitch;
+        }
+      }
+      if(closestPitch == null) {
+        throw new AssertionError("Shit's fucked up.");
+      }
+      pitches.add(closestPitch);
+      i++;
+    }
+    return getScale(pitches);
   }
   
   /**

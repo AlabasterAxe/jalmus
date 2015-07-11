@@ -1,5 +1,8 @@
 package net.jalmus.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /*
  * The Pitch class is used to contain frequency 
  * information in Jalmus. This class is the
@@ -8,7 +11,7 @@ package net.jalmus.domain;
  */
 public final class Pitch implements Comparable<Pitch> {
 
-  public enum Name {
+  public static enum Name {
     C(0), D(2), E(4), F(5), G(7), A(9), B(11);
     
     private final int semitonesAboveC;
@@ -19,6 +22,16 @@ public final class Pitch implements Comparable<Pitch> {
     
     public int getSemitonesAboveC() {
       return semitonesAboveC;
+    }
+    
+    public static Name getNameFromSemitonesAboveC(int semitones) {
+      Name[] names = values();
+      for (Name name : names) {
+        if(name.getSemitonesAboveC() == semitones) {
+          return name;
+        }
+      }
+      return null;
     }
   }
 
@@ -57,6 +70,10 @@ public final class Pitch implements Comparable<Pitch> {
     this.octave = octave;
     this.modifier = modifier;
   }
+  
+  public static Pitch getPitch(Name name, int octave) {
+    return getPitch(name, octave, Modifier.NONE);
+  }
 	
   public static Pitch getPitch(Name name, int octave, Modifier modifier) {
     return new Pitch(name, octave, modifier);
@@ -64,6 +81,33 @@ public final class Pitch implements Comparable<Pitch> {
   
   public static Pitch getPitchFromFrequency(double frequency) {
     throw new UnsupportedOperationException();
+  }
+  
+  public static Pitch getUnmodifiedPitchFromAbsoluteSemitones(int semitone) {
+    int octave = semitone / SEMITONES_PER_OCTAVE;
+    Name name = Name.getNameFromSemitonesAboveC(semitone % SEMITONES_PER_OCTAVE);
+    
+    if(name != null) {
+      return getPitch(name, octave);
+    } else {
+      return null;
+    }
+  }
+  
+  /**
+   * This converts semitones into a set of pitches that
+   * @param semitone
+   * @return
+   */
+  public static List<Pitch> getPitchesFromAbsoluteSemitones(int semitone) {
+    List<Pitch> result = new ArrayList<>();
+    for (Modifier modifier : Modifier.values()) {
+      Pitch pitch = getUnmodifiedPitchFromAbsoluteSemitones(semitone - modifier.getModification());
+      if (pitch != null) {
+        result.add(new Pitch(pitch.getName(), pitch.getOctave(), modifier));
+      }
+    }
+    return result;
   }
 	
   public Name getName() {
@@ -86,6 +130,10 @@ public final class Pitch implements Comparable<Pitch> {
   
   public int getSemitoneDifference(Pitch p) {
     return this.getAbsoluteSemitones() - p.getAbsoluteSemitones();
+  }
+  
+  public Iterable<Pitch> getSemitoneSum(int addend) {
+    return getPitchesFromAbsoluteSemitones(getAbsoluteSemitones() + addend);
   }
   
   public double getFrequency() {

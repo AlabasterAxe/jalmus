@@ -7,7 +7,7 @@ public class Interval {
 
   public Interval(Pitch p1, Pitch p2) {
     highPitch = (p1.compareTo(p2) > 0) ? p1 : p2;
-    lowPitch = (p2.compareTo(p1) < 0) ? p2 : p1;
+    lowPitch  = (p2.compareTo(p1) < 0) ? p2 : p1;
   }
   
   public Pitch getHighPitch() {
