@@ -8,7 +8,7 @@ import javax.sound.midi.SysexMessage;
 
 class DumpReceiver implements Receiver {
 
-    /**
+  /**
 	 * 
 	 */
 	private final Jalmus jalmus;
@@ -62,7 +62,7 @@ class DumpReceiver implements Receiver {
                     this.jalmus.ui.okscoreMessage.doClick();
 
                   } else {
-                    this.jalmus.requestFocus();
+                    this.jalmus.ui.requestFocus();
                     this.jalmus.startNoteGame();
                     if (!this.jalmus.renderingThread.isAlive()) {
                       this.jalmus.renderingThread.start();
@@ -77,7 +77,7 @@ class DumpReceiver implements Receiver {
                     }
                   }
 
-                  this.jalmus.repaint();
+                  this.jalmus.ui.repaint();
 
                   if (((ShortMessage)event).getData2() != 0&this.jalmus.gameStarted&!this.jalmus.paused) {
                     //  System.out.print(((ShortMessage)event).getData1());
@@ -90,7 +90,7 @@ class DumpReceiver implements Receiver {
                         this.jalmus.wrongAnswer();
                       }
 
-                    this.jalmus.repaint();
+                    this.jalmus.ui.repaint();
                   }
                 }
               }

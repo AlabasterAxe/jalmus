@@ -102,7 +102,7 @@ class RenderingThread extends Thread {
                 this.jalmus.showResult();
                 this.jalmus.stopRhythmGame();
                 this.jalmus.gameStarted = false;
-                this.jalmus.repaint();
+                this.jalmus.ui.repaint();
               }
             }
             sleep(10); // cursor moves every 10 milliseconds
