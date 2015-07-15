@@ -13,7 +13,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.Graphics;
-//import java.awt.Image;
 import java.awt.Graphics2D;
 import java.util.ResourceBundle;
 import java.awt.GraphicsEnvironment;
@@ -54,12 +53,12 @@ public class Tonality {
   }
 
   public boolean issharp() {
-	    return this.Alteration.equalsIgnoreCase("#");
-	  }
+	  return this.Alteration.equalsIgnoreCase("#");
+	}
   
   public boolean isflat() {
-	    return this.Alteration.equalsIgnoreCase("b");
-	  }
+	  return this.Alteration.equalsIgnoreCase("b");
+	}
   
   public void setAlteration(String s) {
     this.Alteration = s;
@@ -71,9 +70,9 @@ public class Tonality {
 	g.setColor(Color.black);
 	g.setFont(f.deriveFont(54f));
 	if (type == "B")
-	  g.drawString(type, x+2, y + 21);
+	  g.drawString(type, x + 2, y + 21);
 	else
-	  g.drawString(type, x+2, y + 22);
+	  g.drawString(type, x + 2, y + 22);
   }
 
   public void paint(int gametype, String key, Graphics g, Font f, int marge, int rowYpos, int rowDistance, int nbline, Component j, ResourceBundle bundle) {
@@ -86,19 +85,18 @@ public class Tonality {
     if (gametype == 1) { // notereading
     	keyDistance = 0;
     	drawName(g, marge - 30, 90,  bundle);
-    }
-    else if (gametype == 3) { // scorereading
+    } else if (gametype == 3) { // scorereading
     	keyDistance = 0;
     	drawName(g, marge - 30, 80,  bundle);
     }
     
-    if (key.equals("treble") | key.equals("bass"))
-      if ( key.equals("bass"))
+    if (key.equals("treble") || key.equals("bass")) {
+      if ( key.equals("bass")) {
         keyDistance = 10;
-   
+      }
+    }
     
 	for (int i=0; i<nbline; i++) {
-
     if (this.Alteration.equalsIgnoreCase("#")) {
       if (this.alterationsNumber >= 1) // FA#
         drawAlteration(g, f, marge, rowYpos - 15 + keyDistance + i*rowDistance, sharp, j); //-9
@@ -233,9 +231,6 @@ public class Tonality {
     GraphicsEnvironment.getLocalGraphicsEnvironment();
     graphics2D.setFont(new Font("LucidaSans", Font.PLAIN, 11));
     graphics2D.drawString(nom, marge, h);
-  
-
   }
-
 }
 

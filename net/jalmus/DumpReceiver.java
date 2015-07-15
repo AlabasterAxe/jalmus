@@ -83,10 +83,10 @@ class DumpReceiver implements Receiver {
                     //  System.out.print(((ShortMessage)event).getData1());
                     //  System.out.println("-"+ncourante.getPitch());
 
-                    if (this.jalmus.isSameNote(((ShortMessage)event).getData1(), this.jalmus.ncourante.getPitch())) {
+                    if (this.jalmus.isSameNote(((ShortMessage)event).getData1(), this.jalmus.currentNote.getPitch())) {
                       this.jalmus.rightAnswer();
                                     } else {
-                        System.out.println("Input:" + ((ShortMessage)event).getData1() +" Correct note:" + this.jalmus.ncourante.getPitch() );
+                        System.out.println("Input:" + ((ShortMessage)event).getData1() +" Correct note:" + this.jalmus.currentNote.getPitch() );
                         this.jalmus.wrongAnswer();
                       }
 

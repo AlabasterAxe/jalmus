@@ -11,14 +11,11 @@ import javax.swing.JPanel;
 
 class Anim extends JPanel {
 
-    /**
+  /**
 	 * A reference to the jalmus that contains this Anim.
 	 */
 	private final Jalmus jalmus;
 
-	/**
-     * 
-     */
     private static final long serialVersionUID = 1L;
 
     int width = 680;
@@ -26,7 +23,7 @@ class Anim extends JPanel {
 
     public Anim(Jalmus jalmus) {
       this.jalmus = jalmus;
-	  setPreferredSize(new Dimension(width, height));
+      setPreferredSize(new Dimension(width, height));
       setDoubleBuffered(true);
     }
 
@@ -43,20 +40,20 @@ class Anim extends JPanel {
 
         if (this.jalmus.gameStarted && !this.jalmus.paused && (this.jalmus.noteLevel.isNormalgame() || this.jalmus.noteLevel.isLearninggame())) {
           if (this.jalmus.noteLevel.isNotesgame() || this.jalmus.noteLevel.isAccidentalsgame() || this.jalmus.noteLevel.isCustomNotesgame()) {
-            this.jalmus.drawNote(this.jalmus.ncourante, g, this.jalmus.MusiSync, Color.black);
+            this.jalmus.drawNote(this.jalmus.currentNote, g, this.jalmus.musiSync, Color.black);
           } else if (this.jalmus.noteLevel.isChordsgame()) {
             //on affiche la note que lorsque la partie a commencï¿½e
-            this.jalmus.drawChord(this.jalmus.acourant, g, true);
+            this.jalmus.drawChord(this.jalmus.currentChord, g, true);
           } else if (this.jalmus.noteLevel.isIntervalsgame()) {
-            this.jalmus.drawInterval(this.jalmus.icourant, g, true);
+            this.jalmus.drawInterval(this.jalmus.currentInterval, g, true);
           }
         } else if ((this.jalmus.gameStarted && !this.jalmus.paused && this.jalmus.noteLevel.isInlinegame())) {
-          this.jalmus.drawInlineNotes(g, this.jalmus.MusiSync);
+          this.jalmus.drawInlineNotes(g, this.jalmus.musiSync);
         }
 
         this.jalmus.drawInlineGame(g);
         this.jalmus.drawKeys(g);
-        this.jalmus.noteLevel.getCurrentTonality().paint(1,this.jalmus.noteLevel.getKey(), g, this.jalmus.MusiSync, this.jalmus.noteMargin + this.jalmus.keyWidth, this.jalmus.scoreYpos, this.jalmus.rowsDistance, 1, this, this.jalmus.ui.bundle);
+        this.jalmus.noteLevel.getCurrentTonality().paint(1,this.jalmus.noteLevel.getKey(), g, this.jalmus.musiSync, this.jalmus.noteMargin + this.jalmus.keyWidth, this.jalmus.scoreYpos, this.jalmus.rowsDistance, 1, this, this.jalmus.ui.bundle);
 
         if (!this.jalmus.noteLevel.isLearninggame()) {
           this.jalmus.currentScore.paint(g, d.width);
@@ -92,16 +89,16 @@ class Anim extends JPanel {
         if (this.jalmus.noteLevel.isLearninggame()) {
           if (this.jalmus.noteLevel.isNotesgame() || this.jalmus.noteLevel.isAccidentalsgame() || this.jalmus.noteLevel.isCustomNotesgame()) {
             this.jalmus.piano.paint(g, d.width, !this.jalmus.isLessonMode & !this.jalmus.gameStarted, basenotet1.getPitch(), basenotet2.getPitch(),
-                basenoteb1.getPitch(), basenoteb2.getPitch(), this.jalmus.ncourante.getPitch(), 0, 0, this.jalmus.noteLevel.isCustomNotesgame(), this.jalmus.noteLevel.getPitcheslist());
+                basenoteb1.getPitch(), basenoteb2.getPitch(), this.jalmus.currentNote.getPitch(), 0, 0, this.jalmus.noteLevel.isCustomNotesgame(), this.jalmus.noteLevel.getPitcheslist());
           } else if (this.jalmus.noteLevel.isIntervalsgame()) {
             this.jalmus.piano.paint(g, d.width, false, basenotet1.getPitch(), basenotet2.getPitch(),basenoteb1.getPitch(), 
-                basenoteb2.getPitch(), this.jalmus.icourant.getNote(0).getPitch(),
-                this.jalmus.icourant.getNote(1).getPitch(), 0,this.jalmus.noteLevel.isCustomNotesgame(), this.jalmus.noteLevel.getPitcheslist());
+                basenoteb2.getPitch(), this.jalmus.currentInterval.getNote(0).getPitch(),
+                this.jalmus.currentInterval.getNote(1).getPitch(), 0,this.jalmus.noteLevel.isCustomNotesgame(), this.jalmus.noteLevel.getPitcheslist());
           } else if (this.jalmus.noteLevel.isChordsgame()) {
             this.jalmus.piano.paint(g, d.width, false, basenotet1.getPitch(), basenotet2.getPitch(),basenoteb1.getPitch(), 
-                basenoteb2.getPitch(), this.jalmus.acourant.getNote(0).getPitch(),
-                this.jalmus.acourant.getNote(1).getPitch(),
-                this.jalmus.acourant.getNote(2).getPitch(),
+                basenoteb2.getPitch(), this.jalmus.currentChord.getNote(0).getPitch(),
+                this.jalmus.currentChord.getNote(1).getPitch(),
+                this.jalmus.currentChord.getNote(2).getPitch(),
                 this.jalmus.noteLevel.isCustomNotesgame(), this.jalmus.noteLevel.getPitcheslist());
           }
           this.jalmus.applyButtonColor();
@@ -126,7 +123,7 @@ class Anim extends JPanel {
 
         g.setColor(Color.white);
         g.fillRect(0, 0, d.width, d.height);
-        this.jalmus.ui.pgamebutton.setBackground(Color.white);
+        this.jalmus.ui.gameButtonPanel.setBackground(Color.white);
 
         if ((this.jalmus.selectedGame == Jalmus.RHYTHMREADING && this.jalmus.rhythmLevel.getTriplet()) ||
             (this.jalmus.selectedGame == Jalmus.SCOREREADING && this.jalmus.scoreLevel.getTriplet())) {
@@ -142,7 +139,7 @@ class Anim extends JPanel {
 
         if (this.jalmus.selectedGame == Jalmus.SCOREREADING) {
           this.jalmus.numberOfRows = ((getSize().height - this.jalmus.scoreYpos - 50) / this.jalmus.rowsDistance)+1;    
-          this.jalmus.scoreLevel.getCurrentTonality().paint(3, this.jalmus.scoreLevel.getKey(), g, this.jalmus.MusiSync, this.jalmus.windowMargin + this.jalmus.keyWidth, this.jalmus.scoreYpos, this.jalmus.rowsDistance, this.jalmus.numberOfRows, this, this.jalmus.ui.bundle);
+          this.jalmus.scoreLevel.getCurrentTonality().paint(3, this.jalmus.scoreLevel.getKey(), g, this.jalmus.musiSync, this.jalmus.windowMargin + this.jalmus.keyWidth, this.jalmus.scoreYpos, this.jalmus.rowsDistance, this.jalmus.numberOfRows, this, this.jalmus.ui.bundle);
         }
         /* Show cursor if enabled */
         if ((this.jalmus.selectedGame == Jalmus.RHYTHMREADING && this.jalmus.rhythmLevel.getMetronomeBeats()) ||
@@ -153,7 +150,7 @@ class Anim extends JPanel {
         }
 
         if (this.jalmus.paintrhythms) {
-          this.jalmus.drawNotesAndAnswers(g, this.jalmus.MusiSync);
+          this.jalmus.drawNotesAndAnswers(g, this.jalmus.musiSync);
         }
       }
     }

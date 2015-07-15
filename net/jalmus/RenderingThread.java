@@ -41,15 +41,15 @@ class RenderingThread extends Thread {
           if (this.jalmus.gameStarted && !this.jalmus.paused) {
             if ((this.jalmus.noteLevel.isNormalgame() || this.jalmus.noteLevel.isLearninggame()) &&
                 (this.jalmus.noteLevel.isNotesgame() || this.jalmus.noteLevel.isAccidentalsgame() || this.jalmus.noteLevel.isCustomNotesgame())) {
-              this.jalmus.ncourante.setX(this.jalmus.ncourante.getX()+1);
+              this.jalmus.currentNote.setX(this.jalmus.currentNote.getX()+1);
             } else
               if ((this.jalmus.noteLevel.isNormalgame() || this.jalmus.noteLevel.isLearninggame()) &&
                   this.jalmus.noteLevel.isChordsgame()) {
-                this.jalmus.acourant.move(1);
+                this.jalmus.currentChord.move(1);
               } else
                 if ((this.jalmus.noteLevel.isNormalgame() || this.jalmus.noteLevel.isLearninggame()) &&
                     this.jalmus.noteLevel.isIntervalsgame()) {
-                  this.jalmus.icourant.move(1);
+                  this.jalmus.currentInterval.move(1);
                 } else if (this.jalmus.noteLevel.isInlinegame() &&
                     (this.jalmus.noteLevel.isNotesgame() || this.jalmus.noteLevel.isAccidentalsgame() || this.jalmus.noteLevel.isCustomNotesgame())) {
                   for (int i = 0; i<this.jalmus.line.length; i++) {

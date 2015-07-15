@@ -110,97 +110,84 @@ public class Rhythm {
     return this.silence;
   }
 
-  public boolean isnull() {
+  public boolean isNull() {
       return this.duration == 0;
   }
 
-  public void setTrpletValue(int val) {
+  public void setTripletValue(int val) {
 	  this.tripletValue = val;
   }
-
   
-  public boolean samenotePitch(int pitchbase){
-      int x;
-       boolean b = false;
-       for (x=0;x<=9;x++){ 
-         if ((this.pitch+x*12==pitchbase) | (this.pitch-x*12==pitchbase))  b = true;                                                   }
-           return b;
-           }
+  public boolean samenotePitch(int pitchbase) {
+    return samenotePitch(pitchbase, this.pitch);
+  }
 
-  public boolean samenotePitch(int pitchbase, int p){
-      int x;
-       boolean b = false;
-       for (x=0;x<=9;x++){ 
-         if ((p+x*12==pitchbase) | (p-x*12==pitchbase))  b = true;                                                   }
-           return b;
-           }
-
-   
- int getYpos(ScoreLevel sl, int p) {
-	 int noteY = 0;
-	  int keyoffset = 0; //for bass key
-      Tonality t = sl.getCurrentTonality();
-      
-	  if (sl.isCurrentKeyBass()) keyoffset = -60;
-
-      if (this.samenotePitch(0,p)) {  // DO 
-      			noteY = (60-p)*35/12+43 + keyoffset;
-      	}
-      
-      else if (this.samenotePitch(1,p)) { // DO# REb
-    	  if (t.isflat()) noteY = (61-p)*35/12 + 43 + keyoffset;
-    	    else   noteY = (61-p)*35/12 + 38 + keyoffset; 
-      	        		
-      }	
-      
-      else   if (this.samenotePitch(2,p)) 	noteY = (62-p)*35/12 + 38 + keyoffset;
-     
-                 
-      
-      else if (this.samenotePitch(3,p)) { //RE# MIb 
-    	  if (t.issharp()) noteY = (63-p)*35/12 + 38 + keyoffset;  
-    	  else noteY = (63-p)*35/12 + 33 + keyoffset;  
-    		
-      }	
-      
-      else   if (this.samenotePitch(4,p)) noteY = (64-p)*35/12 + 33 + keyoffset; 
-   
-				
-   
-      else   if (this.samenotePitch(5,p)) noteY = (65-p)*35/12 + 28 + keyoffset; 
-     
-   
-      else if (this.samenotePitch(6,p)) { //FA# SOLb
-      	  if (t.issharp()) noteY = (66-p)*35/12 + 28 + keyoffset;  
-          	  else noteY = (66-p)*35/12 + 23 + keyoffset;  
-            }	
-      
-      else   if (this.samenotePitch(7,p)) 	noteY = (67-p)*35/12 + 23 + keyoffset; 
- 
-      else if (this.samenotePitch(8,p)) { //SOL# LAb
-      	  if (t.issharp()) noteY = (68-p)*35/12 + 23 + keyoffset;  
-        	  else noteY = (68-p)*35/12 + 18 + keyoffset;  
-      		
-          }	
-     
-      else   if (this.samenotePitch(9,p)) {  	noteY = (69-p)*35/12 + 18 + keyoffset; 
+  public static boolean samenotePitch(int pitchbase, int p) {
+    for (int x = 0; x <= 9; x++) { 
+      if ((p+x*12==pitchbase) || (p-x*12==pitchbase)) { 
+        return true;                                                   
       }
-      
-      
-      else if (this.samenotePitch(10,p)) { // LA# SIb
-      	  if (t.issharp())      		noteY = (70-p)*35/12 + 18 + keyoffset;  
-          	  else      		noteY = (70-p)*35/12 + 13 + keyoffset;  
-      }	
-      
-      else   if (this.samenotePitch(11,p))  noteY = (71-p)*35/12 + 13 + keyoffset; 
+    }
+    return false;
+  }
 
-	 
+  int getYpos(ScoreLevel sl, int p) {
+	  int noteY = 0;
+	  int keyoffset = 0; //for bass key
+    Tonality t = sl.getCurrentTonality();
+      
+	  if (sl.isCurrentKeyBass()) {
+	    keyoffset = -60;
+	  }
+
+    if (samenotePitch(0,p)) {  // DO 
+      noteY = (60-p)*35/12+43 + keyoffset;
+    } else if (samenotePitch(1,p)) { // DO# REb
+      if (t.isflat()) {
+        noteY = (61-p)*35/12 + 43 + keyoffset;
+      } else {
+        noteY = (61-p)*35/12 + 38 + keyoffset; 
+      }
+    } else if (samenotePitch(2,p)) {
+      noteY = (62-p)*35/12 + 38 + keyoffset;
+    } else if (samenotePitch(3,p)) { //RE# MIb 
+      if (t.issharp()) {
+        noteY = (63-p)*35/12 + 38 + keyoffset;  
+    	} else {
+        noteY = (63-p)*35/12 + 33 + keyoffset;  
+    	}
+    } else if (samenotePitch(4,p)) {
+      noteY = (64-p)*35/12 + 33 + keyoffset; 
+    } else if (samenotePitch(5,p)) {
+      noteY = (65-p)*35/12 + 28 + keyoffset; 
+    } else if (samenotePitch(6,p)) { //FA# SOLb
+      if (t.issharp()) {
+        noteY = (66-p)*35/12 + 28 + keyoffset;  
+      } else {
+        noteY = (66-p)*35/12 + 23 + keyoffset;  
+      }
+    } else if (samenotePitch(7,p)) {
+      noteY = (67-p)*35/12 + 23 + keyoffset; 
+    } else if (samenotePitch(8,p)) { //SOL# LAb
+      if (t.issharp()) {
+        noteY = (68-p)*35/12 + 23 + keyoffset;  
+      } else {
+        noteY = (68-p)*35/12 + 18 + keyoffset;  
+      }
+    }	else if (samenotePitch(9,p)) {
+      noteY = (69-p)*35/12 + 18 + keyoffset; 
+    } else if (samenotePitch(10,p)) { // LA# SIb
+      if (t.issharp()) {
+        noteY = (70-p)*35/12 + 18 + keyoffset;  
+      } else {
+        noteY = (70-p)*35/12 + 13 + keyoffset;  
+      }
+    } else if (samenotePitch(11,p)) {
+      noteY = (71-p)*35/12 + 13 + keyoffset; 
+    }
+
 	 return noteY;
  }
-     
- 
-
-      
   
   public void paint(Graphics g, int Leveltype,  Font f, ScoreLevel sl, int position, int rowsDistance, boolean courant, int scoreYpos, Component l) {
 

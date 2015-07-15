@@ -38,10 +38,10 @@ public class Interval {
   }
 
   public void copy(Interval a) {
-    this.interv[0] = new Note(a.interv[0].getHeight(), a.interv[0].getX(),
-                              a.interv[0].getPitch());
-    this.interv[1] = new Note(a.interv[1].getHeight(), a.interv[1].getX(),
-                              a.interv[1].getPitch());
+    this.interv[0] = new Note(a.interv[0].getHeight(), 
+        a.interv[0].getX(), a.interv[0].getPitch());
+    this.interv[1] = new Note(a.interv[1].getHeight(), 
+        a.interv[1].getX(), a.interv[1].getPitch());
     this.name = a.name;
   }
 

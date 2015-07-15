@@ -32,14 +32,12 @@ public class ChannelData {
     velocity = pressure = bend = reverb = 64;
   }
 
-  public MidiChannel getchannel() {
+  public MidiChannel getChannel() {
     return this.channel;
   }
 
   public void playNote(boolean midiok, int kNum) {
-    if (midiok) {
-      this.channel.noteOn(kNum, 25);
-    }
+    playNote(midiok, kNum, 25);
   }
         
   public void playNote(boolean midiok, int kNum, int i) {
@@ -48,7 +46,7 @@ public class ChannelData {
     }
   }
 
-  public void stopnote(boolean midiok, int kNum) {
+  public void stopNote(boolean midiok, int kNum) {
     if (midiok) {
       this.channel.noteOff(kNum, 25);
     }

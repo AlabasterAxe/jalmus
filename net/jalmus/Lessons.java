@@ -27,7 +27,7 @@ import java.util.StringTokenizer;
 
 enum TLevel {NOTELEVEL, RHYTHMLEVEL, SCORELEVEL};
 
-public class Lessons extends DefaultHandler{
+public class Lessons extends DefaultHandler {
    LinkedList<Level> levelslist;
    int currentlevel;
    NoteLevel nlevel;

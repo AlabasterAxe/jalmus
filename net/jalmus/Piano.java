@@ -78,7 +78,6 @@ public class Piano {
     }
     keys.addAll(blackKeys);
     keys.addAll(whiteKeys);
-
   }
 
   public boolean is73keys() {
@@ -96,8 +95,6 @@ public class Piano {
   public Key Getprevkey() {
     return this.prevKey;
   }
-
-
 
   /**
      * To return Key of the Piano where the mouse aim
@@ -117,17 +114,17 @@ public class Piano {
     return null;
   }
   
-  public boolean rightbuttonpressed(Point point, int width){
-	    int offx = (width/2) - 390;
+  public boolean rightbuttonpressed(Point point, int width) {
+	  int offx = (width/2) - 390;
 	    
-	  Rectangle rec = new Rectangle(740+ offx, 440, 30 ,30); 
+	  Rectangle rec = new Rectangle(740 + offx, 440, 30 ,30); 
   	return (rec.contains(point));  
   }
   
-  public boolean leftbuttonpressed(Point point, int width){
-	    int offx = (width/2) - 390;
+  public boolean leftbuttonpressed(Point point, int width) {
+	  int offx = (width/2) - 390;
 	    
-	  Rectangle rec = new Rectangle(5+ offx, 440, 30 ,30); 
+	  Rectangle rec = new Rectangle(5 + offx, 440, 30 ,30); 
   	return (rec.contains(point));  
   }
 
@@ -145,18 +142,19 @@ public class Piano {
 
     for (int i = 0; i < whiteKeys.size(); i++) {
       Key key = (Key) whiteKeys.get(i);
-      if (onoff == 1 & key.kNum == pitch)
+      if (onoff == 1 & key.kNum == pitch) {
         key.on(cc, midiok);
-      else if (onoff == 0 & key.kNum == pitch)
+      } else if (onoff == 0 & key.kNum == pitch) {
         key.off(cc, midiok);
+      }
     }
-    for (int i = 0; i < blackKeys.size(); i++) 
-    {
+    for (int i = 0; i < blackKeys.size(); i++) {
       Key key = (Key) blackKeys.get(i);
-      if (onoff == 1 & key.kNum == pitch)
+      if (onoff == 1 & key.kNum == pitch) {
         key.on(cc, midiok);
-      else if (onoff == 0 & key.kNum == pitch)
+      } else if (onoff == 0 & key.kNum == pitch) {
         key.off(cc, midiok);
+      }
     }
   }
 

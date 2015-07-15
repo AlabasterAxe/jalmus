@@ -47,7 +47,7 @@ public class Key extends Rectangle {
 
   public void off(net.jalmus.ChannelData cc, boolean midiok) {
     setNoteState(OFF);
-    cc.stopnote(midiok, kNum);
+    cc.stopNote(midiok, kNum);
   }
 
   public void setNoteState(int state) {

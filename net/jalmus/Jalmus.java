@@ -78,24 +78,18 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307, Etats-Unis.
 E-mail : cvrichard@infonie.fr */
 
 /* NEED JDK 1.4.2 */
-
 package net.jalmus;
 
-import java.awt.Color;import java.awt.Dimension;import java.awt.Font;import java.awt.Graphics;import java.awt.Image;import java.awt.event.ActionEvent;import java.awt.event.ActionListener;import java.awt.event.ComponentAdapter;import java.awt.event.ComponentEvent;import java.awt.event.ItemEvent;import java.awt.event.ItemListener;import java.awt.event.KeyEvent;import java.awt.event.KeyListener;import java.awt.event.MouseAdapter;import java.awt.event.MouseEvent;import java.awt.event.MouseMotionAdapter;import java.awt.event.WindowAdapter;import java.awt.event.WindowEvent;import java.io.File;import java.io.FileInputStream;import java.io.IOException;import java.io.InputStream;import java.util.ArrayList;import java.util.Locale;import javax.imageio.ImageIO;import javax.sound.midi.Instrument;import javax.sound.midi.InvalidMidiDataException;import javax.sound.midi.MetaEventListener;import javax.sound.midi.MetaMessage;import javax.sound.midi.MidiChannel;import javax.sound.midi.MidiDevice;import javax.sound.midi.MidiEvent;import javax.sound.midi.MidiSystem;import javax.sound.midi.MidiUnavailableException;import javax.sound.midi.Receiver;import javax.sound.midi.Sequence;import javax.sound.midi.Sequencer;import javax.sound.midi.ShortMessage;import javax.sound.midi.Soundbank;import javax.sound.midi.Synthesizer;import javax.sound.midi.Track;import javax.sound.midi.Transmitter;import javax.swing.JFrame;import javax.swing.JOptionPane;import javax.swing.plaf.ColorUIResource;import javax.xml.parsers.ParserConfigurationException;import javax.xml.parsers.SAXParser;import javax.xml.parsers.SAXParserFactory;import org.xml.sax.SAXException;
+import java.awt.Color;import java.awt.Dimension;import java.awt.Font;import java.awt.Graphics;import java.awt.Image;import java.io.File;import java.io.FileInputStream;import java.io.IOException;import java.io.InputStream;import java.util.ArrayList;import java.util.Locale;import javax.imageio.ImageIO;import javax.sound.midi.Instrument;import javax.sound.midi.InvalidMidiDataException;import javax.sound.midi.MetaEventListener;import javax.sound.midi.MetaMessage;import javax.sound.midi.MidiChannel;import javax.sound.midi.MidiDevice;import javax.sound.midi.MidiEvent;import javax.sound.midi.MidiSystem;import javax.sound.midi.MidiUnavailableException;import javax.sound.midi.Receiver;import javax.sound.midi.Sequence;import javax.sound.midi.Sequencer;import javax.sound.midi.ShortMessage;import javax.sound.midi.Soundbank;import javax.sound.midi.Synthesizer;import javax.sound.midi.Track;import javax.sound.midi.Transmitter;import javax.swing.JOptionPane;import javax.swing.plaf.ColorUIResource;import javax.xml.parsers.ParserConfigurationException;import javax.xml.parsers.SAXParser;import javax.xml.parsers.SAXParserFactory;import org.xml.sax.SAXException;
 
 public class Jalmus {
 
   //----------------------------------------------------------------
   // Translation variables
 
-  /**
-   * 
-   */
-  private static final long serialVersionUID = 1L;
-
   String language = "en";
 
-  Font MusiSync; // font used to render scores 
+  Font musiSync; // font used to render scores 
 
   //----------------------------------------------------------------
   // Main variables
@@ -104,8 +98,7 @@ public class Jalmus {
   static int FIRSTSCREEN = 0;
   static int NOTEREADING = 1;
   static int RHYTHMREADING = 2;
-  static int SCOREREADING = 3;
-
+  static int SCOREREADING = 3;
   //----------------------------------------------------------------
   // Lesson variables
   Lessons currentlesson = new Lessons();
@@ -131,11 +124,11 @@ public class Jalmus {
 
   RenderingThread renderingThread = new RenderingThread(this);
   Anim panelanim = new Anim(this);
-  Image jbackground;  JalmusUi ui = new JalmusUi(this);
+  Image jbackground;    // TODO: Remove all references to UI  JalmusUi ui;
 
-  Note ncourante = new Note(0, 25, 0);
-  Chord acourant = new Chord(ncourante, ncourante, ncourante, "", 0);
-  Interval icourant = new Interval(ncourante, ncourante, "");
+  Note currentNote = new Note(0, 25, 0);
+  Chord currentChord = new Chord(currentNote, currentNote, currentNote, "", 0);
+  Interval currentInterval = new Interval(currentNote, currentNote, "");
 
   /*
    *  ************************************* SCORE LAYOUT ***************************************
@@ -233,7 +226,7 @@ public class Jalmus {
   private int[] savePrefs = new int[30]; // for cancel button
 
   private int[] sauvmidi = new int[16]; // for save midi options when cancel
-
+  public void setUi(JalmusUi ui) {    this.ui = ui;  }  
   //################################################################
   // Initialization methods
 
@@ -252,7 +245,7 @@ public class Jalmus {
 
     try {
       InputStream fInput = this.getClass().getResourceAsStream("/images/MusiSync.ttf");
-      MusiSync = Font.createFont (Font.PLAIN, fInput);
+      musiSync = Font.createFont (Font.PLAIN, fInput);
     } catch (Exception e) {
       System.out.println("Cannot load MusiSync font !!");
       System.exit(1);
@@ -351,10 +344,10 @@ public class Jalmus {
         ui.listenButton.setVisible(false);
         ui.menuPrefs.setEnabled(false);
       } else if (currentlesson.isRhythmLevel() || currentlesson.isScoreLevel()) {	
-        ui.pgamebutton.add(ui.newButton);
-        ui.pgamebutton.add(ui.listenButton);
-        ui.pgamebutton.add(ui.startButton);
-        ui.pgamebutton.add(ui.preferencesButton);
+        ui.gameButtonPanel.add(ui.newButton);
+        ui.gameButtonPanel.add(ui.listenButton);
+        ui.gameButtonPanel.add(ui.startButton);
+        ui.gameButtonPanel.add(ui.preferencesButton);
         scoreYpos = 110;
         if (currentlesson.isScoreLevel()) {
           alterationWidth = scoreLevel.getCurrentTonality().getAlterationsNumber() * 12;
@@ -366,7 +359,7 @@ public class Jalmus {
           numberOfMeasures = (size.width - (windowMargin * 2) - scoreLineWidth) / (rhythmLevel.getTimeSignNumerator() * noteDistance);         	  
         }
         ui.repaint();
-        ui.pgamebutton.setVisible(true);
+        ui.gameButtonPanel.setVisible(true);
 
         ui.menuPrefs.setEnabled(false);
       }
@@ -377,8 +370,8 @@ public class Jalmus {
     }
 
     if (selectedGame == NOTEREADING) {
-      ui.pgamebutton.setVisible(true);
-      ui.pnotes.setVisible(true);
+      ui.gameButtonPanel.setVisible(true);
+      ui.noteButtonPanel.setVisible(true);
       ui.principal.setVisible(true);
       System.out.println(noteLevel.getNbnotes());
       if (noteLevel.isNotesgame() && noteLevel.getCurrentTonality().getAlterationsNumber() == 0) {
@@ -386,17 +379,17 @@ public class Jalmus {
         ui.sharpButton2.setVisible(false);
         ui.flatButton1.setVisible(false);
         ui.flatButton2.setVisible(false);
-        ui.pnotes.validate();
+        ui.noteButtonPanel.validate();
       } else {
         ui.sharpButton1.setVisible(true);
         ui.sharpButton2.setVisible(true);
         ui.flatButton1.setVisible(true);
         ui.flatButton2.setVisible(true);
-        ui.pnotes.validate();
+        ui.noteButtonPanel.validate();
       }
     } else if (selectedGame == RHYTHMREADING || selectedGame==SCOREREADING) {
-      ui.pgamebutton.setVisible(true);
-      ui.pnotes.setVisible(false);
+      ui.gameButtonPanel.setVisible(true);
+      ui.noteButtonPanel.setVisible(false);
       ui.newButton.setVisible(true);
       ui.listenButton.setVisible(true);
       ui.principal.setVisible(true);
@@ -506,9 +499,9 @@ public class Jalmus {
     gameStarted = false;
     ui.startButton.setText(ui.bundle.getString("_start"));
 
-    ncourante = new Note(0, 25, 0);
-    acourant = new Chord(ncourante, ncourante, ncourante, "", 0);
-    icourant = new Interval(ncourante, ncourante, "");
+    currentNote = new Note(0, 25, 0);
+    currentChord = new Chord(currentNote, currentNote, currentNote, "", 0);
+    currentInterval = new Interval(currentNote, currentNote, "");
     resetButtonColor();
 
     stopSound();
@@ -607,7 +600,7 @@ public class Jalmus {
         metronomeCount = 0;
       }
     } else {
-      nextRythm();
+      nextRhythm();
       ui.repaint();
     }
       }
@@ -642,7 +635,6 @@ public class Jalmus {
       sm_sequencer.setTrackMute(1, false); 
       sm_sequencer.setTrackMute(0, true); 
     }
-
 
     gameStarted = true; // start game
     ui.startButton.setText(ui.bundle.getString("_stop"));
@@ -896,10 +888,10 @@ public class Jalmus {
        */
     //   pgamebutton.removeAll();
 
-    ui.pgamebutton.add(ui.newButton);
-    ui.pgamebutton.add(ui.listenButton);
-    ui.pgamebutton.add(ui.startButton);
-    ui.pgamebutton.add(ui.preferencesButton);
+    ui.gameButtonPanel.add(ui.newButton);
+    ui.gameButtonPanel.add(ui.listenButton);
+    ui.gameButtonPanel.add(ui.startButton);
+    ui.gameButtonPanel.add(ui.preferencesButton);
     scoreYpos = 110;
     ui.repaint();
 
@@ -921,10 +913,10 @@ public class Jalmus {
        JOptionPane.showMessageDialog(ui, ui.bundle.getString("_setlatency"),
        "", JOptionPane.INFORMATION_MESSAGE);
        */
-    ui.pgamebutton.add(ui.newButton);
-    ui.pgamebutton.add(ui.listenButton);
-    ui.pgamebutton.add(ui.startButton);
-    ui.pgamebutton.add(ui.preferencesButton);
+    ui.gameButtonPanel.add(ui.newButton);
+    ui.gameButtonPanel.add(ui.listenButton);
+    ui.gameButtonPanel.add(ui.startButton);
+    ui.gameButtonPanel.add(ui.preferencesButton);
     scoreYpos = 110;
     ui.repaint();
 
@@ -939,10 +931,10 @@ public class Jalmus {
 
   void handleNoteReadingMenuItem() {
     stopGames();
-    ui.pgamebutton.removeAll();
-    ui.pgamebutton.add(ui.startButton);
-    ui.pgamebutton.add(ui.pnotes);
-    ui.pgamebutton.add(ui.preferencesButton);
+    ui.gameButtonPanel.removeAll();
+    ui.gameButtonPanel.add(ui.startButton);
+    ui.gameButtonPanel.add(ui.noteButtonPanel);
+    ui.gameButtonPanel.add(ui.preferencesButton);
 
     initNoteGame();
     if (isLessonMode) {
@@ -1110,19 +1102,19 @@ public class Jalmus {
   }
 
   void backupPreferences() {
-    savePrefs[0] = ui.noteGameTypeComboBox.getSelectedIndex();
-    savePrefs[1] = ui.noteGameSpeedComboBox.getSelectedIndex();
-    savePrefs[2] = ui.keyComboBox.getSelectedIndex();
-    savePrefs[4] = ui.keySignatureCheckBox.getSelectedIndex();
-    savePrefs[5] = ui.noteGameSpeedComboBox.getSelectedIndex();
-    savePrefs[6] = ui.noteGroupComboBox.getSelectedIndex();
-    if (ui.noteGroupComboBox.getSelectedIndex() == 0     	|| ui.noteGroupComboBox.getSelectedIndex() == 1) {
-      savePrefs[7] = ui.noteCountComboBox.getSelectedIndex();
-    } else if (ui.noteGroupComboBox.getSelectedIndex() == 2) {
-      savePrefs[7] = ui.intervalComboBox.getSelectedIndex();
-    } else if (ui.noteGroupComboBox.getSelectedIndex() == 3) {
-      savePrefs[7] = ui.chordTypeComboBox.getSelectedIndex();
-    }
+    //savePrefs[0] = ui.noteGameTypeComboBox.getSelectedIndex();
+    //savePrefs[1] = ui.noteGameSpeedComboBox.getSelectedIndex();
+    //savePrefs[2] = ui.keyComboBox.getSelectedIndex();
+    //savePrefs[4] = ui.keySignatureCheckBox.getSelectedIndex();
+    //savePrefs[5] = ui.noteGameSpeedComboBox.getSelectedIndex();
+    //savePrefs[6] = ui.noteGroupComboBox.getSelectedIndex();
+    //if (ui.noteGroupComboBox.getSelectedIndex() == 0     //	|| ui.noteGroupComboBox.getSelectedIndex() == 1) {
+      // savePrefs[7] = ui.noteCountComboBox.getSelectedIndex();
+    //} else if (ui.noteGroupComboBox.getSelectedIndex() == 2) {
+    //  savePrefs[7] = ui.intervalComboBox.getSelectedIndex();
+    //} else if (ui.noteGroupComboBox.getSelectedIndex() == 3) {
+    //  savePrefs[7] = ui.chordTypeComboBox.getSelectedIndex();
+    //}
     savePrefs[8] = ui.rhythmGameTypeComboBox.getSelectedIndex();
     savePrefs[9] = ui.rhythmGameSpeedComboBox.getSelectedIndex();
     if (ui.wholeCheckBox.isSelected()) {
@@ -1405,15 +1397,15 @@ public class Jalmus {
     void drawKeys(Graphics g) {
       if (selectedGame == NOTEREADING) {
         if (noteLevel.isCurrentKeyTreble()) {
-          g.setFont(MusiSync.deriveFont(70f));
+          g.setFont(musiSync.deriveFont(70f));
           g.drawString("G", noteMargin, scoreYpos + 42);
         } else if (noteLevel.isCurrentKeyBass()) {
-          g.setFont(MusiSync.deriveFont(60f));
+          g.setFont(musiSync.deriveFont(60f));
           g.drawString("?", noteMargin, scoreYpos + 40);
         } else if (noteLevel.isCurrentKeyBoth()) {
-          g.setFont(MusiSync.deriveFont(70f));
+          g.setFont(musiSync.deriveFont(70f));
           g.drawString("G", noteMargin, scoreYpos+42);
-          g.setFont(MusiSync.deriveFont(60f));
+          g.setFont(musiSync.deriveFont(60f));
           g.drawString("?", noteMargin, scoreYpos+130);
         }
       } else if (selectedGame == RHYTHMREADING ) {
@@ -1424,18 +1416,18 @@ public class Jalmus {
       } else if (selectedGame == SCOREREADING ) {
         if (scoreLevel.isCurrentKeyTreble()) {
           for (int rowNum = 0; rowNum < numberOfRows; rowNum++) {
-            g.setFont(MusiSync.deriveFont(70f));
+            g.setFont(musiSync.deriveFont(70f));
             g.drawString("G", windowMargin, scoreYpos+42+rowNum*rowsDistance);
           }        } else if (scoreLevel.isCurrentKeyBass()) {
           for (int rowNum = 0; rowNum < numberOfRows; rowNum++) {
-            g.setFont(MusiSync.deriveFont(60f));
+            g.setFont(musiSync.deriveFont(60f));
             g.drawString("?", windowMargin, scoreYpos+40+rowNum*rowsDistance);
           }        }
       }
     }
 
     void drawTimeSignature(Graphics g) {
-      g.setFont(MusiSync.deriveFont(58f));
+      g.setFont(musiSync.deriveFont(58f));
       int tmpnum = 4;      int tmpden = 4;      if (selectedGame == RHYTHMREADING ) {
         tmpnum = rhythmLevel.getTimeSignNumerator();
         tmpden = rhythmLevel.getTimeSignDenominator();
@@ -1578,7 +1570,7 @@ public class Jalmus {
 
     void rhythmKeyReleased(int pitch) {
       if (ui.keyboardsoundCheckBox.isSelected()) {
-        currentChannel.stopnote(true,pitch);
+        currentChannel.stopNote(true,pitch);
       }
 
       float rhythmCursorXposcorrected;
@@ -1754,23 +1746,23 @@ public class Jalmus {
 
     private void newinterval() {
       stopSound();
-      icourant.copy(intervalchoice());
+      currentInterval.copy(intervalchoice());
       if (noteLevel.isNormalgame() || noteLevel.isLearninggame()) {
         posnote = 0;
-        ncourante = icourant.getNote(posnote);
+        currentNote = currentInterval.getNote(posnote);
         if (ui.soundOnCheckBox.isSelected()) {
-          synthNote(ncourante.getPitch(), 80, noteDuration);
+          synthNote(currentNote.getPitch(), 80, noteDuration);
         }
       } else if (noteLevel.isInlinegame()) {
         if (position<line.length-1) {
           position += 1;
-          icourant.copy(lineint[position]);
+          currentInterval.copy(lineint[position]);
 
           posnote = 0;
           //acourant.convertir(clecourante, typeaccord);
-          ncourante = icourant.getNote(posnote);
+          currentNote = currentInterval.getNote(posnote);
           if (ui.soundOnCheckBox.isSelected()) {
-            synthNote(ncourante.getPitch(), 80, noteDuration);
+            synthNote(currentNote.getPitch(), 80, noteDuration);
           }
         }
       }
@@ -1858,25 +1850,25 @@ public class Jalmus {
       resetButtonColor();
 
       Color red = new Color(242, 179, 112);
-      if (ncourante.getNom().equals(ui.doButton1.getText())) {
+      if (currentNote.getNom().equals(ui.doButton1.getText())) {
         ui.doButton1.setBackground(red);
-      } else if (ncourante.getNom().equals(ui.reButton.getText())) {
+      } else if (currentNote.getNom().equals(ui.reButton.getText())) {
         ui.reButton.setBackground(red);
-      } else if (ncourante.getNom().equals(ui.miButton.getText())) {
+      } else if (currentNote.getNom().equals(ui.miButton.getText())) {
         ui.miButton.setBackground(red);
-      } else if (ncourante.getNom().equals(ui.faButton.getText())) {
+      } else if (currentNote.getNom().equals(ui.faButton.getText())) {
         ui.faButton.setBackground(red);
-      } else if (ncourante.getNom().equals(ui.solButton.getText())) {
+      } else if (currentNote.getNom().equals(ui.solButton.getText())) {
         ui.solButton.setBackground(red);
-      } else if (ncourante.getNom().equals(ui.laButton.getText())) {
+      } else if (currentNote.getNom().equals(ui.laButton.getText())) {
         ui.laButton.setBackground(red);
-      } else if (ncourante.getNom().equals(ui.siButton.getText())) {
+      } else if (currentNote.getNom().equals(ui.siButton.getText())) {
         ui.siButton.setBackground(red);
       }
 
-      if (ncourante.getAlteration().equals(ui.sharpButton1.getText())) {
+      if (currentNote.getAlteration().equals(ui.sharpButton1.getText())) {
         ui.sharpButton1.setBackground(red);
-      } else if (ncourante.getAlteration().equals(ui.flatButton1.getText())) {
+      } else if (currentNote.getAlteration().equals(ui.flatButton1.getText())) {
         ui.flatButton2.setBackground(red);
       }
     }
@@ -1887,7 +1879,7 @@ public class Jalmus {
       if (a.getNote(posnote).getX()<d.width-noteMargin &&
           a.getNote(posnote).getX() >= noteMargin+98 && gameStarted) {
         // NOTE DANS LIMITES
-        a.paint(posnote, noteLevel, g, MusiSync, accordcourant, ui,
+        a.paint(posnote, noteLevel, g, musiSync, accordcourant, ui,
             scoreYpos, ui.bundle);
         //g.drawString("Renv" + a.renvst,100,100);
       } else {
@@ -1927,46 +1919,46 @@ public class Jalmus {
         if (precedente != 0 & ui.soundOnCheckBox.isSelected()) {
           stopSound();
         }
-        ncourante.init();
+        currentNote.init();
 
         if (noteLevel.isNotesgame() || noteLevel.isAccidentalsgame()) {
           //choosing note with height to do change to choose note with pitch
-          ncourante.setHeight(setNoteHeight(noteLevel.getNbnotesupper(),        				                    noteLevel.getNbnotesunder(),        				                    noteLevel.getNbnotesupper(),        				                    noteLevel.getNbnotesunder()));
-          while (ncourante.getHeight() == precedente) {
-            ncourante.setHeight(setNoteHeight(noteLevel.getNbnotesupper(),            		                          noteLevel.getNbnotesunder(),            		                          noteLevel.getNbnotesupper(),            		                          noteLevel.getNbnotesunder()));
+          currentNote.setHeight(setNoteHeight(noteLevel.getNbnotesupper(),        				                    noteLevel.getNbnotesunder(),        				                    noteLevel.getNbnotesupper(),        				                    noteLevel.getNbnotesunder()));
+          while (currentNote.getHeight() == precedente) {
+            currentNote.setHeight(setNoteHeight(noteLevel.getNbnotesupper(),            		                          noteLevel.getNbnotesunder(),            		                          noteLevel.getNbnotesupper(),            		                          noteLevel.getNbnotesunder()));
           }
-          ncourante.updateNote(noteLevel, scoreYpos, ui.bundle);
-          ncourante.updateAccidental(noteLevel, ui.bundle);
-          precedente = ncourante.getHeight();
+          currentNote.updateNote(noteLevel, scoreYpos, ui.bundle);
+          currentNote.updateAccidental(noteLevel, ui.bundle);
+          precedente = currentNote.getHeight();
         } else if (noteLevel.isCustomNotesgame()) {
           // choosing note with pitch
 
-          ncourante.setPitch(noteLevel.getRandomPitch());
-          ncourante.updateNotePitch(noteLevel, scoreYpos, ui.bundle);
-          precedente = ncourante.getHeight();
+          currentNote.setPitch(noteLevel.getRandomPitch());
+          currentNote.updateNotePitch(noteLevel, scoreYpos, ui.bundle);
+          precedente = currentNote.getHeight();
         }
 
-        ncourante.setX(noteMargin+98);
-        System.out.println(ncourante.getNom());
-        System.out.println(ncourante.getHeight());
-        System.out.println(ncourante.getPitch());
+        currentNote.setX(noteMargin+98);
+        System.out.println(currentNote.getNom());
+        System.out.println(currentNote.getHeight());
+        System.out.println(currentNote.getPitch());
         //if (soundOnCheckBox.isSelected()) sons[indiceson(ncourante.getHeight())].play();
 
         if (ui.soundOnCheckBox.isSelected()) {
-          synthNote(ncourante.getPitch(), 80, noteDuration);
+          synthNote(currentNote.getPitch(), 80, noteDuration);
         }
       } else if (noteLevel.isInlinegame()) {
         //sons[indiceson(ncourante.getHeight())].stop();
         if (precedente != 0 & ui.soundOnCheckBox.isSelected()) {
           stopSound();
         }
-        if (position<line.length-1) {
+        if (position < line.length-1) {
           position += 1;
-          ncourante.copy(line[position]);
+          currentNote.copy(line[position]);
         }
         //if (soundOnCheckBox.isSelected()) sons[indiceson(ncourante.getHeight())].play();
         if (ui.soundOnCheckBox.isSelected()) {
-          synthNote(ncourante.getPitch(), 80, noteDuration);
+          synthNote(currentNote.getPitch(), 80, noteDuration);
         }
       }
     }
@@ -1979,7 +1971,7 @@ public class Jalmus {
       Dimension size = ui.getSize();
 
       g.setColor(couleur);
-      if (note.getX()<size.width-noteMargin && note.getX() >= noteMargin+98 && gameStarted) { // NOTE DANS LIMITES
+      if (note.getX() < size.width-noteMargin && note.getX() >= noteMargin + 98           && gameStarted) { // NOTE DANS LIMITES
         if (noteLevel.isAccidentalsgame() || noteLevel.isCustomNotesgame()) {
           note.paint(noteLevel, g, f, 9, 0, scoreYpos, ui, couleur, ui.bundle);
         } else {
@@ -2012,7 +2004,7 @@ public class Jalmus {
     //################################################################
     // RHYTHMS READING
 
-    private void nextRythm() {
+    private void nextRhythm() {
       System.out.println ("rhytm xpos: " + rhythms.get(rhythmIndex).getPosition() + 
           " pitch: " + rhythms.get(rhythmIndex).getPitch() + 
           " index: " + rhythmIndex);
@@ -2104,9 +2096,8 @@ public class Jalmus {
 
     private static MidiEvent createNoteEvent(int nCommand, int nKey, int nVelocity, long lTick) {
       ShortMessage message = new ShortMessage();
-      try {
-        message.setMessage(nCommand, 0, // always on channel 1
-                           nKey, nVelocity);
+      try {        // always on channel 1
+        message.setMessage(nCommand, 0, nKey, nVelocity);
       } catch (InvalidMidiDataException e) {
         e.printStackTrace();
         System.exit(1);
@@ -2143,7 +2134,7 @@ public class Jalmus {
       System.out.println("[addRhythm] pitch: " + pitch + "duration: " + duration + "stemup " + stemup);
 
       double tmpsilence = Math.random();
-      if (!silence           || (silence && tmpsilence<0.85)           || (duration == 3 && tmpnum !=3)) {
+      if (!silence           || (silence && tmpsilence < 0.85)           || (duration == 3 && tmpnum != 3)) {
         rhythms.add(new Rhythm(duration, newXPos, pitch,  row, stemup, false, false, 0));
         track.add(createNoteOnEvent(pitch, velocity, tick));
         mutetrack.add(createNoteOnEvent(pitch, 0, tick));
@@ -2164,19 +2155,19 @@ public class Jalmus {
     }
 
     private void setTripletValue(int val) {
-      rhythms.get(rhythms.size() - 1).setTrpletValue(val);
+      rhythms.get(rhythms.size() - 1).setTripletValue(val);
     }
 
     private boolean isBeginMeasure(int i) {
       double d = 0;
       int id = 0;
-      for (int j = 0; j<i; j++) {
+      for (int j = 0; j < i; j++) {
         //   d += 4.0/rhythms.get(j).getDuration();
         d += rhythms.get(j).getDuration();
       }
       id = (int) Math.round(d); // we should round because of 0.33 triplet need to be fixed
 
-      int tmpnum = 4;        if (selectedGame == RHYTHMREADING) {
+      int tmpnum = 4;      if (selectedGame == RHYTHMREADING) {
         tmpnum = rhythmLevel.getTimeSignNumerator();
       } else if (selectedGame == SCOREREADING) {
         tmpnum = scoreLevel.getTimeSignNumerator();
@@ -2193,7 +2184,7 @@ public class Jalmus {
 
     private void createSequence() {
       ui.repaint();
-      int tmpnum = 4;    	  // int tmpden = 4;    	  int tmpdiv = 1;
+      int tmpnum = 4;    	  // int tmpden = 4;    	int tmpdiv = 1;
       int currentTick = 0;
       int rowCount = 0; // measures counter
       double tpsmes = 0; // number of quarters 
@@ -2201,7 +2192,7 @@ public class Jalmus {
       int pitch;
       boolean wholeNote = false;      boolean halfNote = false;      boolean dottedhalfNote = false;      boolean quarterNote = false;      boolean eighthNote = false;      boolean triplet = false;
       boolean stemup = true;
-      //Dimension size = getSize();
+      // Dimension size = getSize();
 
       if (selectedGame == RHYTHMREADING) {
         wholeNote = rhythmLevel.getWholeNote();
@@ -2326,7 +2317,7 @@ public class Jalmus {
         }
 
         tpsmes = 0;
-        if ((r%numberOfMeasures) == 0) {
+        if ((r % numberOfMeasures) == 0) {
           currentXPos = windowMargin + keyWidth + alterationWidth + timeSignWidth + notesShift;
           rowCount++;
         }
@@ -2337,11 +2328,11 @@ public class Jalmus {
            */
     }
 
-    if (selectedGame == RHYTHMREADING) {    	regroupenotes(); //not workin with Scorereading yet    }
+    if (selectedGame == RHYTHMREADING) {    	regroupeNotes(); //not workin with Scorereading yet    }
   }
 
-  private void regroupenotes() {
-    for (int i = 0; i<rhythms.size()-1; i++) {
+  private void regroupeNotes() {
+    for (int i = 0; i < rhythms.size()-1; i++) {
       if (rhythms.get(i).getDuration() == 0.5 && rhythms.get(i+1).getDuration()==0.5 &&  //TO BE FIX  FOR 8
           !rhythms.get(i+1).isSilence() && !rhythms.get(i).isSilence() &&
           !isBeginMeasure(i+1)  && !rhythms.get(i).isGroupee()) {
@@ -2355,8 +2346,8 @@ public class Jalmus {
 
   private void createLine() {
     Dimension size = ui.getSize();
-    Chord a = new Chord(ncourante, ncourante, ncourante, "", 0);
-    Interval inter = new Interval(ncourante, ncourante, "");
+    Chord a = new Chord(currentNote, currentNote, currentNote, "", 0);
+    Interval inter = new Interval(currentNote, currentNote, "");
 
     // System.out.println(type2);
 
@@ -2365,7 +2356,7 @@ public class Jalmus {
       line[0].updateNote(noteLevel, scoreYpos, ui.bundle);
       line[0].updateAccidental(noteLevel, ui.bundle);
 
-      for (int i = 1; i<line.length; i++) {
+      for (int i = 1; i < line.length; i++) {
         int tmph = setNoteHeight(noteLevel.getNbnotesupper(), noteLevel.getNbnotesunder(),        		                 noteLevel.getNbnotesupper(), noteLevel.getNbnotesunder());
         while (tmph == line[i-1].getHeight()) {
           tmph = setNoteHeight(noteLevel.getNbnotesupper(), noteLevel.getNbnotesunder(), noteLevel.getNbnotesupper(), noteLevel.getNbnotesunder()); // pour �viter les r�p�titions
@@ -2379,7 +2370,7 @@ public class Jalmus {
       line[0] = new Note(0, size.width-noteMargin, noteLevel.getRandomPitch() );
       line[0].updateNotePitch(noteLevel, scoreYpos, ui.bundle);
 
-      for (int i = 1; i<line.length; i++) {
+      for (int i = 1; i < line.length; i++) {
         int tmpp = noteLevel.getRandomPitch();
         while (tmpp == line[i-1].getPitch()) {
           tmpp = noteLevel.getRandomPitch(); // to avoid same pitch
@@ -2391,10 +2382,10 @@ public class Jalmus {
     }
 
     position = 0;
-    ncourante = line[position]; // initialisa tion avec la premiï¿½re note
+    currentNote = line[position]; // initialisa tion avec la premiï¿½re note
     //if (soundOnCheckBox.isSelected()) sons[indiceson(ncourante.getHeight())].play(); // dï¿½part du son de la premiï¿½re note
     if (ui.soundOnCheckBox.isSelected()) {
-      synthNote(ncourante.getPitch(), 80, noteDuration);
+      synthNote(currentNote.getPitch(), 80, noteDuration);
     } else if (noteLevel.isChordsgame()) {
       // voir pour precedant
       for (int i = 0; i<line.length; i++) {
@@ -2406,11 +2397,11 @@ public class Jalmus {
       }
       position = 0;
       posnote = 0;
-      acourant.copy(lineacc[position]);
+      currentChord.copy(lineacc[position]);
       // acourant.convertir(clecourante,typeaccord);
-      ncourante = acourant.getNote(acourant.realposition(posnote));
+      currentNote = currentChord.getNote(currentChord.realposition(posnote));
       if (ui.soundOnCheckBox.isSelected()) {
-        synthNote(ncourante.getPitch(), 80, noteDuration);
+        synthNote(currentNote.getPitch(), 80, noteDuration);
       }
     } else if (noteLevel.isIntervalsgame()) {
       // voir pour precedant
@@ -2423,10 +2414,10 @@ public class Jalmus {
       position = 0;
       posnote = 0;
 
-      icourant.copy(lineint[position]);
-      ncourante = icourant.getNote(posnote); //0
+      currentInterval.copy(lineint[position]);
+      currentNote = currentInterval.getNote(posnote); //0
       if (ui.soundOnCheckBox.isSelected()) {
-        synthNote(ncourante.getPitch(), 80, noteDuration);
+        synthNote(currentNote.getPitch(), 80, noteDuration);
       }
     }
   }
@@ -2469,22 +2460,22 @@ public class Jalmus {
 
     if (noteLevel.isNormalgame() || noteLevel.isLearninggame()) {
       posnote = 0;
-      acourant.copy(chordchoice());
-      acourant.convert(noteLevel);
-      ncourante = acourant.getNote(acourant.realposition(posnote));
+      currentChord.copy(chordchoice());
+      currentChord.convert(noteLevel);
+      currentNote = currentChord.getNote(currentChord.realposition(posnote));
       if (ui.soundOnCheckBox.isSelected()) {
-        synthNote(ncourante.getPitch(), 80, noteDuration);
+        synthNote(currentNote.getPitch(), 80, noteDuration);
       }
     } else if (noteLevel.isInlinegame()) {
       if (position<line.length-1) {
         position += 1;
-        acourant.copy(lineacc[position]);
+        currentChord.copy(lineacc[position]);
 
         posnote = 0;
         //acourant.convertir(clecourante,typeaccord);
-        ncourante = acourant.getNote(acourant.realposition(posnote));
+        currentNote = currentChord.getNote(currentChord.realposition(posnote));
         if (ui.soundOnCheckBox.isSelected()) {
-          synthNote(ncourante.getPitch(), 80, noteDuration);
+          synthNote(currentNote.getPitch(), 80, noteDuration);
         }
       }
     }
@@ -2493,10 +2484,10 @@ public class Jalmus {
   void drawInterval(Interval inter, Graphics g, boolean Intervallecourant) {
     Dimension size = ui.getSize();
 
-    if (inter.getNote(posnote).getX()<size.width-noteMargin &&
-        inter.getNote(posnote).getX() >= noteMargin+98 && gameStarted) {
+    if (inter.getNote(posnote).getX() < size.width - noteMargin &&
+        inter.getNote(posnote).getX() >= noteMargin + 98 && gameStarted) {
       // NOTE DANS LIMITES
-      inter.paint(posnote, noteLevel, g, MusiSync, scoreYpos,
+      inter.paint(posnote, noteLevel, g, musiSync, scoreYpos,
           ui.bundle, Intervallecourant, ui);
       //g.drawString("Renv" + a.renvst,100,100);
     } else {
@@ -2531,10 +2522,10 @@ public class Jalmus {
       if (posnote < 2) {
         posnote += 1;
 
-        ncourante = acourant.getNote(acourant.realposition(posnote));
+        currentNote = currentChord.getNote(currentChord.realposition(posnote));
         alterationOk = false;
         if (ui.soundOnCheckBox.isSelected()) {
-          synthNote(ncourante.getPitch(), 80, noteDuration);
+          synthNote(currentNote.getPitch(), 80, noteDuration);
         }
       } else {
         if (isLessonMode && notecounter == noteLevel.getLearningduration()) {
@@ -2549,10 +2540,10 @@ public class Jalmus {
     } else if (noteLevel.isIntervalsgame()) {
       if (posnote == 0) {
         posnote += 1;
-        ncourante = icourant.getNote(posnote);
+        currentNote = currentInterval.getNote(posnote);
         alterationOk = false;
         if (ui.soundOnCheckBox.isSelected()) {
-          synthNote(ncourante.getPitch(), 80, noteDuration);
+          synthNote(currentNote.getPitch(), 80, noteDuration);
         }
       } else {
         if (isLessonMode && notecounter == noteLevel.getLearningduration()) {
@@ -2595,22 +2586,22 @@ public class Jalmus {
 
         stopNoteGame();
       }
-    } else if (selectedGame == RHYTHMREADING || selectedGame==SCOREREADING ) {
+    } else if (selectedGame == RHYTHMREADING || selectedGame == SCOREREADING ) {
 
       int nbgood = 0;
       int nbnotefalse = 0;
       int nbrhythmfalse = 0;
       int nbrhythms = 0;
 
-      for (int i = 0; i<answers.size(); i++) {
+      for (int i = 0; i < answers.size(); i++) {
         if (answers.get(i).allgood() && !answers.get(i).isnull()) nbgood = nbgood +1;
         if (!answers.get(i).isnull() && answers.get(i).badnote()) nbnotefalse = nbnotefalse +1;
         if (!answers.get(i).isnull() && answers.get(i).badrhythm() ) nbrhythmfalse = nbrhythmfalse +1;
       }
 
       //Nb rhythms
-      for (int i = 0; i<rhythms.size(); i++) {
-        if (!rhythms.get(i).isSilence() && !rhythms.get(i).isnull()) nbrhythms =  nbrhythms +1;
+      for (int i = 0; i < rhythms.size(); i++) {
+        if (!rhythms.get(i).isSilence() && !rhythms.get(i).isNull()) nbrhythms =  nbrhythms +1;
       }
       if (nbrhythms ==  nbgood) {        ui.scoreMessage.setTitle(ui.bundle.getString("_congratulations"));      } else {        ui.scoreMessage.setTitle(ui.bundle.getString("_sorry"));      }
 

@@ -1,6 +1,8 @@
 package net.jalmus;
 
 import java.awt.Dimension;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JFrame;
 
@@ -11,6 +13,12 @@ public final class JalmusMain {
     // Constructions de la frame
 
     Jalmus jalmus = new Jalmus();
+    SwingNoteReadingGame game = new SwingNoteReadingGame();
+    List<SwingGame> games = new ArrayList<>();
+    games.add(game);
+    JalmusUi ui = new JalmusUi(jalmus, games);
+    game.setUi(ui);
+    jalmus.setUi(ui);
     // Initialization
     if (args.length == 0) {
       jalmus.init("");
@@ -20,21 +28,21 @@ public final class JalmusMain {
 
     // Force the window size
     Dimension dim = new Dimension(790, 590);
-    jalmus.ui.setSize(800, 600);
-    jalmus.ui.setMinimumSize(dim);
+    ui.setSize(800, 600);
+    ui.setMinimumSize(dim);
 
     // Draw
-    jalmus.ui.repaint();
+    ui.repaint();
 
-    jalmus.ui.setVisible(true);
-    jalmus.ui.setFocusable(true);
+    ui.setVisible(true);
+    ui.setFocusable(true);
 
     //jalmus.setResizable(false);
 
-    jalmus.ui.setTitle("Jalmus"); // Give the application a title
+    ui.setTitle("Jalmus"); // Give the application a title
 
-    jalmus.ui.setLocationRelativeTo(null); // Center the window on the display
+    ui.setLocationRelativeTo(null); // Center the window on the display
 
-    jalmus.ui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // exit when frame closed
+    ui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // exit when frame closed
   }
 }
