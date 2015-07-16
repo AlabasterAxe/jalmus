@@ -2,10 +2,24 @@ package net.jalmus;
 
 public class NoteReadingGame implements Game {
 
+  NoteLevel noteLevel = new NoteLevel();
+  
+  boolean gameStarted;
+  boolean paused;
+
+  int prevNote;
+  int noteCount;
+
+  Score currentScore = new Score();
+
   @Override
   public void initGame() {
-    // TODO Auto-generated method stub
-    
+    currentScore.initScore();
+
+    prevNote = 0;
+    noteCount = 1;
+
+    paused = false;
   }
 
   @Override

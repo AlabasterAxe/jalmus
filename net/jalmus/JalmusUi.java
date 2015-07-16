@@ -71,7 +71,7 @@ public class JalmusUi extends JFrame implements ActionListener, ItemListener, Ke
   // Menu
   private final Jalmus jalmus;
   
-  private List<SwingGame> newGames;
+  private SwingNoteReadingGame noteGame;
 
   boolean selectmidi_forlang; // is true when combobox selection occurs during language initialization
 
@@ -99,6 +99,21 @@ public class JalmusUi extends JFrame implements ActionListener, ItemListener, Ke
 
   String tlicence;
   String tcredits;
+
+  int alterationWidth = 0; // width of alterations symbols. None by default
+  int windowMargin = 50; // margin from the window border
+  int keyWidth = 30; // width of score keys
+  int noteMargin = 220; // margin for note reading
+  int timeSignWidth = 30; // width of current score time signature symbol. This includes also the first note margin
+  int notesShift = 10; // space in pixel to align notes to the score layout
+  int noteDistance = 72; // distance in pixel between 1/4 notes
+  int firstNoteXPos = windowMargin + keyWidth + alterationWidth + timeSignWidth + notesShift;
+  int rhythmAnswerScoreYpos = 100; //distance to paint answer
+  float rhythmCursorXpos = firstNoteXPos - noteDistance; // X position of the cursor on the score during rhythm game
+  int rhythmCursorXStartPos = firstNoteXPos - noteDistance;
+  int rhythmCursorXlimit;
+
+  int scoreYpos = 110; // Y coordinate of the first row of the score
 
   String[] pathsubdir = new String[16];
   //----------------------------------------------------------------
@@ -173,15 +188,7 @@ public class JalmusUi extends JFrame implements ActionListener, ItemListener, Ke
 
   JTabbedPane preferencesTabbedPane =
       new JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT); // panel pour les parametres
-  JComboBox<String> noteGameTypeComboBox; //Game type
-  JComboBox<String> noteGameSpeedComboBox; // button to choose speed
-  JComboBox<String> keyComboBox; //  drop down combo to select the key
-  JComboBox<String> keySignatureCheckBox; // button to choose tonality
   JPanel noteReadingNotesPanel = new JPanel(); // panel for choose type on fonts on first exercise
-  JComboBox<String> noteGroupComboBox; // to choose notes, intervals or chords
-  JComboBox<String> noteCountComboBox; //  to choose number of notes
-  JComboBox<String> intervalComboBox; //  to choose intervals type
-  JComboBox<String> chordTypeComboBox; // to choose chords type
 
   JComboBox<String> rhythmGameTypeComboBox;
   JComboBox<String> rhythmGameSpeedComboBox;
@@ -274,11 +281,7 @@ public class JalmusUi extends JFrame implements ActionListener, ItemListener, Ke
   JButton blicence;
   JButton bfermer;
 
-  //----
-
   //For table to choose notes on exercises
-  JDialog notesDialog;
-  ChooseNotePanel chooseNoteP;
 
   JDialog scoreNotesDialog;
   ChooseNotePanel scoreChooseNoteP;
@@ -288,9 +291,12 @@ public class JalmusUi extends JFrame implements ActionListener, ItemListener, Ke
 
   Properties settings = new Properties();
 
-  JalmusUi(Jalmus jalmus, List<SwingGame> games) {
+  private int[] savePrefs = new int[30]; // for cancel button
+
+  JalmusUi(Jalmus jalmus, SwingNoteReadingGame game) {
     this.jalmus = jalmus;
-    this.newGames = games;
+    rhythmCursorXlimit = firstNoteXPos + (4 * jalmus.numberOfMeasures * noteDistance);
+    this.noteGame = game;
   }
 
   void init(String paramlanguage) {
@@ -348,22 +354,6 @@ public class JalmusUi extends JFrame implements ActionListener, ItemListener, Ke
     });
 
     bundle = ResourceBundle.getBundle("language", new Locale(this.jalmus.language));
-
-    chooseNoteP = new ChooseNotePanel(this.jalmus.noteLevel.getKey(), Jalmus.NOTEREADING, bundle);
-    chooseNoteP.setOpaque(true); //content panes must be opaque 
-    chooseNoteP.setVisible(true);
-    chooseNoteP.okButton.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        //Execute when button is pressed
-        if (! chooseNoteP.atLeast3Pitches()) {
-          JOptionPane.showMessageDialog(null, "Choose at least three notes", "Warning", JOptionPane.ERROR_MESSAGE); 
-        } else {
-          notesDialog.setVisible(false);
-          jalmus.noteLevel.setPitcheslist(chooseNoteP.getPitches());
-        }
-      }
-    });   
 
     scoreChooseNoteP = new ChooseNotePanel(this.jalmus.scoreLevel.getKey(), Jalmus.SCOREREADING, bundle);
     scoreChooseNoteP.setOpaque(true); //content panes must be opaque 
@@ -466,10 +456,6 @@ public class JalmusUi extends JFrame implements ActionListener, ItemListener, Ke
     aboutDialog = new JDialog(this, true);
     //aboutDialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
     aboutDialog.setResizable(false);
-
-    notesDialog = new JDialog(this, true);
-    //    notesDialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-    notesDialog.setResizable(false);   
 
     scoreNotesDialog = new JDialog(this, true);
     //    notesDialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -807,10 +793,10 @@ public class JalmusUi extends JFrame implements ActionListener, ItemListener, Ke
 
         if (jalmus.selectedGame == Jalmus.NOTEREADING) {
           if (jalmus.piano.rightbuttonpressed(e.getPoint(),d.width)) {
-            jalmus.noteLevel.basenotetoRight(jalmus.piano);
+            noteGame.noteLevel.basenotetoRight(jalmus.piano);
           }
           if (jalmus.piano.leftbuttonpressed(e.getPoint(),d.width)) {
-            jalmus.noteLevel.basenotetoLeft(jalmus.piano);
+            noteGame.noteLevel.basenotetoLeft(jalmus.piano);
           }
 
           repaint();
@@ -1162,12 +1148,8 @@ public class JalmusUi extends JFrame implements ActionListener, ItemListener, Ke
     JPanel rhythmReadingPanel = buildRhythmReadingPreferencesPanel();
     JPanel scoreReadingPanel = buildScoreReadingPreferencesPanel();
 
-    int i = 0;
-    for (SwingGame game : newGames) {
-      preferencesTabbedPane.addTab(null, new ImageIcon(getClass().getResource(game.getPreferencesIconResource())), game.getPreferencesPanel());
-      localizables.add(new Localizable.Tab(preferencesTabbedPane, i, game.getPreferencesLocalizable()));
-      i++;
-    }
+    preferencesTabbedPane.addTab(null, new ImageIcon(getClass().getResource(noteGame.getPreferencesIconResource())), noteGame.getPreferencesPanel());
+    localizables.add(new Localizable.Tab(preferencesTabbedPane, NOTE_READING_TAB, noteGame.getPreferencesLocalizable()));
     preferencesTabbedPane.addTab(null, new ImageIcon(getClass().getResource("/images/rhythm.png")), rhythmReadingPanel);
     localizables.add(new Localizable.Tab(preferencesTabbedPane, RHYTHM_READING_TAB, "_menuRythmreading"));
     preferencesTabbedPane.addTab(null, new ImageIcon(getClass().getResource("/images/score.png")), scoreReadingPanel);
@@ -1525,68 +1507,6 @@ public class JalmusUi extends JFrame implements ActionListener, ItemListener, Ke
     return panel;
   }
 
-  //----------------------------------------------------------------
-  private JPanel buildNoteReadingPreferencesPanel() {
-
-    /* 1er panel - type de jeu */
-
-    noteGameTypeComboBox = new JComboBox<String>();
-    noteGameTypeComboBox.addItemListener(this);
-
-    noteGameSpeedComboBox = new JComboBox<String>();
-    noteGameSpeedComboBox.addItem("Largo");
-    noteGameSpeedComboBox.addItem("Adagio");
-    noteGameSpeedComboBox.addItem("Moderato");
-    noteGameSpeedComboBox.addItem("Allegro");
-    noteGameSpeedComboBox.addItem("Presto");
-    noteGameSpeedComboBox.addItemListener(this);
-
-    JPanel gamePanel = new JPanel();
-    gamePanel.add(noteGameTypeComboBox);
-    gamePanel.add(noteGameSpeedComboBox);
-    localizables.add(new Localizable.NamedGroup(gamePanel, "_menuExercises"));
-
-    /* 2nd panel - Key */
-
-    keyComboBox = new JComboBox<String>();
-    keyComboBox.addItemListener(this);
-
-    keySignatureCheckBox = new JComboBox<String>();
-    keySignatureCheckBox.addItemListener(this);
-
-    JPanel KeyPanel = new JPanel(); // panel pour la Key du premier jeu
-    KeyPanel.add(keyComboBox);
-    KeyPanel.add(keySignatureCheckBox);
-    localizables.add(new Localizable.NamedGroup(KeyPanel, "_menuClef"));
-
-    /* 3rd panel - Notes */
-
-    noteGroupComboBox = new JComboBox<String>();
-    noteGroupComboBox.addItemListener(this);
-
-    noteCountComboBox = new JComboBox<String>();
-    noteCountComboBox.addItemListener(this);
-
-    intervalComboBox = new JComboBox<String>();
-    intervalComboBox.addItemListener(this);
-
-    chordTypeComboBox = new JComboBox<String>();
-    chordTypeComboBox.addItemListener(this);
-
-    noteReadingNotesPanel.add(noteGroupComboBox);
-    noteReadingNotesPanel.add(noteCountComboBox);
-
-    localizables.add(new Localizable.NamedGroup(noteReadingNotesPanel, "_menuNotes"));
-
-    JPanel panel = new JPanel();
-    panel.setLayout(new GridLayout(3, 1));
-    panel.add(gamePanel);
-    panel.add(KeyPanel);
-    panel.add(noteReadingNotesPanel);
-
-    return panel;
-  }
-
   void changeLanguage() {
     bundle = ResourceBundle.getBundle("language", new Locale(this.jalmus.language));
     System.out.println(new Locale(this.jalmus.language));
@@ -1595,9 +1515,7 @@ public class JalmusUi extends JFrame implements ActionListener, ItemListener, Ke
       localizable.update(bundle);
     }
     
-    for (SwingGame game : newGames) {
-      game.updateLanguage(bundle);
-    }
+    noteGame.updateLanguage(bundle);
 
     menuParameters.setText(bundle.getString("_menuSettings"));
     menuPrefs.setText(bundle.getString("_menuPreferences"));
@@ -1610,7 +1528,6 @@ public class JalmusUi extends JFrame implements ActionListener, ItemListener, Ke
     timeSignLabel.setText(bundle.getString("_timeSignature"));
     scoreTimeSignLabel.setText(bundle.getString("_timeSignature"));
     aboutDialog.setTitle(bundle.getString("_menuAbout"));
-    notesDialog.setTitle("Choose notes to study");
     scoreNotesDialog.setTitle("Choose notes to study");
 
     tlicence = bundle.getString("_licence");
@@ -1834,7 +1751,7 @@ public class JalmusUi extends JFrame implements ActionListener, ItemListener, Ke
 
     if (e.getSource() == menuPrefs) {
       jalmus.stopGames();
-      jalmus.backupPreferences();
+      backupPreferences();
 
       preferencesDialog.setLocationRelativeTo(this);
       preferencesDialog.setVisible(true);
@@ -2110,17 +2027,6 @@ public class JalmusUi extends JFrame implements ActionListener, ItemListener, Ke
         if (!jalmus.midierror && jalmus.instruments != null) {
           jalmus.currentChannel.getChannel().programChange(this.instrumentsComboBox.getSelectedIndex());
         }
-      } else if (evt.getItemSelectable() == this.keyComboBox) {
-        if (this.keyComboBox.getSelectedIndex() == 0) {
-          jalmus.noteLevel.setCurrentKey("treble");
-          jalmus.noteLevel.resetPitcheslist();
-        } else if (this.keyComboBox.getSelectedIndex() == 1) {
-          jalmus.noteLevel.setCurrentKey("bass");
-          jalmus.noteLevel.resetPitcheslist();
-        } else if (this.keyComboBox.getSelectedIndex() == 2) {
-          jalmus.noteLevel.setCurrentKey("both");
-          jalmus.noteLevel.resetPitcheslist();
-        }
       } else if (evt.getItemSelectable() == this.scoreKeyComboBox) {
         if (this.scoreKeyComboBox.getSelectedIndex() == 0) {
           jalmus.scoreLevel.setCurrentKey("treble");
@@ -2135,66 +2041,8 @@ public class JalmusUi extends JFrame implements ActionListener, ItemListener, Ke
             jalmus.initRhythmGame();
           }
         }
-      } else if (evt.getItemSelectable() == this.keySignatureCheckBox) {
-        jalmus.initNoteGame();
-
-        if (this.keySignatureCheckBox.getSelectedIndex() == 0) {
-          double tmp = Math.random();  // to choice same alteration for alterated notes
-          String stmp;
-          if (tmp < 0.5) {
-            stmp = "#";
-          } else {
-            stmp = "b";
-          }
-          jalmus.noteLevel.setRandomtonality(false);
-          jalmus.noteLevel.getCurrentTonality().init(0, stmp);
-        } else if (this.keySignatureCheckBox.getSelectedIndex() == 15) {
-          // choix de la tonalite au hasard au lancement du jeu
-          jalmus.noteLevel.setRandomtonality(true);
-          jalmus.noteLevel.getCurrentTonality().init(0, "r");
-        } else {
-          jalmus.noteLevel.setRandomtonality(false);
-          if (this.keySignatureCheckBox.getSelectedIndex() == 1) {
-            jalmus.noteLevel.getCurrentTonality().init(1, "#");
-          } else if (this.keySignatureCheckBox.getSelectedIndex() == 2) {
-            jalmus.noteLevel.getCurrentTonality().init(2, "#");
-          } else if (this.keySignatureCheckBox.getSelectedIndex() == 3) {
-            jalmus.noteLevel.getCurrentTonality().init(3, "#");
-          } else if (this.keySignatureCheckBox.getSelectedIndex() == 4) {
-            jalmus.noteLevel.getCurrentTonality().init(4, "#");
-          } else if (this.keySignatureCheckBox.getSelectedIndex() == 5) {
-            jalmus.noteLevel.getCurrentTonality().init(5, "#");
-          } else if (this.keySignatureCheckBox.getSelectedIndex() == 6) {
-            jalmus.noteLevel.getCurrentTonality().init(6, "#");
-          } else if (this.keySignatureCheckBox.getSelectedIndex() == 7) {
-            jalmus.noteLevel.getCurrentTonality().init(7, "#");
-          } else if (this.keySignatureCheckBox.getSelectedIndex() == 8) {
-            jalmus.noteLevel.getCurrentTonality().init(1, "b");
-          } else if (this.keySignatureCheckBox.getSelectedIndex() == 9) {
-            jalmus.noteLevel.getCurrentTonality().init(2, "b");
-          } else if (this.keySignatureCheckBox.getSelectedIndex() == 10) {
-            jalmus.noteLevel.getCurrentTonality().init(3, "b");
-          } else if (this.keySignatureCheckBox.getSelectedIndex() == 11) {
-            jalmus.noteLevel.getCurrentTonality().init(4, "b");
-          } else if (this.keySignatureCheckBox.getSelectedIndex() == 12) {
-            jalmus.noteLevel.getCurrentTonality().init(5, "b");
-          } else if (this.keySignatureCheckBox.getSelectedIndex() == 13) {
-            jalmus.noteLevel.getCurrentTonality().init(6, "b");
-          } else if (this.keySignatureCheckBox.getSelectedIndex() == 14) {
-            jalmus.noteLevel.getCurrentTonality().init(7, "b");
-          }
-        }
       }
-      // Game type choice
-      else if (evt.getItemSelectable() == this.noteGameTypeComboBox) {
-        if (this.noteGameTypeComboBox.getSelectedIndex() == 0) {
-          jalmus.noteLevel.setGametype("normal");
-        } else if (this.noteGameTypeComboBox.getSelectedIndex() == 1) {
-          jalmus.noteLevel.setGametype("inline");
-        } else if (this.noteGameTypeComboBox.getSelectedIndex() == 2) {
-          jalmus.noteLevel.setGametype("learning");
-        }
-      }
+      
 
       else if (evt.getItemSelectable() == this.rhythmGameTypeComboBox) {
         if (this.rhythmGameTypeComboBox.getSelectedIndex() == 0) {
@@ -2203,21 +2051,6 @@ public class JalmusUi extends JFrame implements ActionListener, ItemListener, Ke
         rhythmgame = 1;
 
         }*/
-      }
-
-      // Speed choice note reading
-      else if (evt.getItemSelectable() == this.noteGameSpeedComboBox) {
-        if (this.noteGameSpeedComboBox.getSelectedIndex() == 0) {
-          jalmus.noteLevel.setSpeed(28);
-        } else if (this.noteGameSpeedComboBox.getSelectedIndex() == 1) {
-          jalmus.noteLevel.setSpeed(22);
-        } else if (this.noteGameSpeedComboBox.getSelectedIndex() == 2) {
-          jalmus.noteLevel.setSpeed(16);
-        } else if (this.noteGameSpeedComboBox.getSelectedIndex() == 3) {
-          jalmus.noteLevel.setSpeed(12);
-        } else if (this.noteGameSpeedComboBox.getSelectedIndex() == 4) {
-          jalmus.noteLevel.setSpeed(8);
-        }
       }
 
       // Speed choice rhythm reading
@@ -2233,116 +2066,11 @@ public class JalmusUi extends JFrame implements ActionListener, ItemListener, Ke
         } else if (this.rhythmGameSpeedComboBox.getSelectedIndex() == 4) {
           jalmus.rhythmLevel.setSpeed(160);
         }
-      } else if (evt.getItemSelectable() == this.noteGroupComboBox) {
-        if (this.noteGroupComboBox.getSelectedIndex() == 0) {
-          jalmus.noteLevel.setNotetype("notes");
-          this.noteReadingNotesPanel.removeAll();
-          this.noteReadingNotesPanel.add(this.noteGroupComboBox);
-          this.noteReadingNotesPanel.add(this.noteCountComboBox);
-          this.noteReadingNotesPanel.repaint();
-          this.preferencesDialog.repaint();
-        }
-
-        if (this.noteGroupComboBox.getSelectedIndex() == 1) {
-          jalmus.noteLevel.setNotetype("accidentals");
-          this.noteReadingNotesPanel.removeAll();
-          this.noteReadingNotesPanel.add(this.noteGroupComboBox);
-          this.noteReadingNotesPanel.add(this.noteCountComboBox);
-          this.noteReadingNotesPanel.repaint();
-          this.preferencesDialog.repaint();
-        } else if (this.noteGroupComboBox.getSelectedIndex() == 2) {
-          jalmus.noteLevel.setNotetype("custom");
-          this.noteReadingNotesPanel.removeAll();
-          this.noteReadingNotesPanel.add(this.noteGroupComboBox);
-          this.preferencesDialog.repaint();
-          this.chooseNoteP = new ChooseNotePanel(jalmus.noteLevel.getKey(), Jalmus.NOTEREADING,  this.bundle);
-          this.chooseNoteP.updateTable(jalmus.noteLevel.getPitcheslist());
-          this.chooseNoteP.setOpaque(true); //content panes must be opaque 
-          this.chooseNoteP.setVisible(true);
-          this.chooseNoteP.okButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-              //Execute when button is pressed
-              if (!chooseNoteP.atLeast3Pitches()) {
-                JOptionPane.showMessageDialog(null, "Choose at least three notes", "Warning", JOptionPane.ERROR_MESSAGE); 
-              } else {
-                notesDialog.setVisible(false);
-                jalmus.noteLevel.setPitcheslist(chooseNoteP.getPitches());
-              }
-            }
-          });   
-
-          this.notesDialog.setContentPane(this.chooseNoteP);
-          this.notesDialog.setSize(650, 220);
-          this.notesDialog.setLocationRelativeTo(this);
-          this.notesDialog.setVisible(true);
-
-          this.chooseNoteP.setVisible(true);
-
-          add(this.notesDialog);
-
-        } else if (this.noteGroupComboBox.getSelectedIndex() == 3) {
-          jalmus.noteLevel.setNotetype("intervals");
-
-          this.noteReadingNotesPanel.removeAll();
-          this.noteReadingNotesPanel.add(this.noteGroupComboBox);
-          this.noteReadingNotesPanel.add(this.intervalComboBox);
-          this.noteReadingNotesPanel.repaint();
-          this.preferencesDialog.repaint();
-
-        } else if (this.noteGroupComboBox.getSelectedIndex() == 4) {
-          jalmus.noteLevel.setNotetype("chords");
-
-          this.noteReadingNotesPanel.removeAll();
-          this.noteReadingNotesPanel.add(this.noteGroupComboBox);
-          this.noteReadingNotesPanel.add(this.chordTypeComboBox);
-          this.noteReadingNotesPanel.repaint();
-          this.preferencesDialog.repaint();
-        }
       } else if (evt.getItemSelectable() == this.keyboardLengthComboBox) {
         if (this.keyboardLengthComboBox.getSelectedIndex() == 0) {
           jalmus.piano = new Piano(73, 40);
         } else if (this.keyboardLengthComboBox.getSelectedIndex() == 1) {
           jalmus.piano = new Piano(61, 90);
-        }
-      } else if (evt.getItemSelectable() == this.noteCountComboBox) {
-        if (this.noteCountComboBox.getSelectedIndex() == 0) {
-          jalmus.noteLevel.setNbnotes(3);
-        } else if (this.noteCountComboBox.getSelectedIndex() == 1) {
-          jalmus.noteLevel.setNbnotes(5);
-        } else if (this.noteCountComboBox.getSelectedIndex() == 2) {
-          jalmus.noteLevel.setNbnotes(9);
-        } else if (this.noteCountComboBox.getSelectedIndex() == 3) {
-          jalmus.noteLevel.setNbnotes(15);
-        } else if (this.noteCountComboBox.getSelectedIndex() == 4) {
-          jalmus.noteLevel.setNbnotes(0);
-        }
-        ;
-      } else if (evt.getItemSelectable() == this.chordTypeComboBox) {
-        if (this.chordTypeComboBox.getSelectedIndex() == 0) {
-          jalmus.noteLevel.setChordtype("root");
-        } else if (this.chordTypeComboBox.getSelectedIndex() == 1) {
-          jalmus.noteLevel.setChordtype("inversion");
-        }
-      } else if (evt.getItemSelectable() == this.intervalComboBox) {
-        if (this.intervalComboBox.getSelectedIndex() == 0) {
-          jalmus.noteLevel.setIntervaltype("second");
-        } else if (this.intervalComboBox.getSelectedIndex() == 1) {
-          jalmus.noteLevel.setIntervaltype("third");
-        } else if (this.intervalComboBox.getSelectedIndex() == 2) {
-          jalmus.noteLevel.setIntervaltype("fourth");
-        } else if (this.intervalComboBox.getSelectedIndex() == 3) {
-          jalmus.noteLevel.setIntervaltype("fifth");
-        } else if (this.intervalComboBox.getSelectedIndex() == 4) {
-          jalmus.noteLevel.setIntervaltype("sixth");
-        } else if (this.intervalComboBox.getSelectedIndex() == 5) {
-          jalmus.noteLevel.setIntervaltype("seventh");
-        } else if (this.intervalComboBox.getSelectedIndex() == 6) {
-          jalmus.noteLevel.setIntervaltype("octave");
-        } else if (this.intervalComboBox.getSelectedIndex() == 7) {
-          jalmus.noteLevel.setIntervaltype("random");
-        } else if (this.intervalComboBox.getSelectedIndex() == 8) {
-          jalmus.noteLevel.setIntervaltype("all");
         }
       } else if (evt.getItemSelectable() == this.scoreGameSpeedComboBox) {
         if (this.scoreGameSpeedComboBox.getSelectedIndex() == 0) {
@@ -2447,14 +2175,14 @@ public class JalmusUi extends JFrame implements ActionListener, ItemListener, Ke
     if (jalmus.selectedGame == Jalmus.NOTEREADING 
       && !jalmus.isLessonMode
         && !jalmus.gameStarted 
-        && (jalmus.noteLevel.isNotesgame() 
-            || jalmus.noteLevel.isAccidentalsgame() 
-            || jalmus.noteLevel.isCustomNotesgame()) 
-        && !jalmus.noteLevel.isAllnotesgame()) {
+        && (noteGame.noteLevel.isNotesgame() 
+            || noteGame.noteLevel.isAccidentalsgame() 
+            || noteGame.noteLevel.isCustomNotesgame()) 
+        && !noteGame.noteLevel.isAllnotesgame()) {
       if (key == KeyEvent.VK_LEFT) {
-        jalmus.noteLevel.basenotetoLeft(jalmus.piano);
+        noteGame.noteLevel.basenotetoLeft(jalmus.piano);
       } else if (key == KeyEvent.VK_RIGHT) {
-        jalmus.noteLevel.basenotetoRight(jalmus.piano);
+        noteGame.noteLevel.basenotetoRight(jalmus.piano);
       }
     } else if (jalmus.selectedGame == Jalmus.RHYTHMREADING && 
         jalmus.rhythmgame == 0 && jalmus.muterhythms && jalmus.gameStarted) {
@@ -2492,7 +2220,7 @@ public class JalmusUi extends JFrame implements ActionListener, ItemListener, Ke
       }
     }
 
-    if (jalmus.selectedGame == Jalmus.NOTEREADING && jalmus.gameStarted && !jalmus.paused && jalmus.noteLevel.isNotesgame()) {
+    if (jalmus.selectedGame == Jalmus.NOTEREADING && jalmus.gameStarted && !jalmus.paused && noteGame.noteLevel.isNotesgame()) {
 
       if (ch == 'Q' || ch=='q' || ch=='A' || ch=='a' || ch=='S' || ch=='s' ||
           ch == 'D' || ch=='d' || ch=='F' || ch=='f' || ch=='G' || ch=='g' ||
@@ -2523,4 +2251,248 @@ public class JalmusUi extends JFrame implements ActionListener, ItemListener, Ke
           }
     }
   }  // end keyTyped()
+  
+  void changeScreen(boolean isLessonMode, Lessons currentlesson,
+      int selectedGame) {
+    if (isLessonMode) {     
+      if (currentlesson.isNoteLevel()) {  
+        startButton.setVisible(false);
+        preferencesButton.setVisible(false);
+        newButton.setVisible(false);
+        listenButton.setVisible(false);
+        menuPrefs.setEnabled(false);
+      } else if (currentlesson.isRhythmLevel() || currentlesson.isScoreLevel()) { 
+        gameButtonPanel.add(newButton);
+        gameButtonPanel.add(listenButton);
+        gameButtonPanel.add(startButton);
+        gameButtonPanel.add(preferencesButton);
+        scoreYpos = 110;
+        if (currentlesson.isScoreLevel()) {
+          alterationWidth = jalmus.scoreLevel.getCurrentTonality().getAlterationsNumber() * 12;
+          firstNoteXPos = windowMargin + keyWidth + alterationWidth + timeSignWidth + notesShift;
+//          numberOfMeasures = (size.width - (windowMargin * 2) - scoreLineWidth) / (scoreLevel.getTimeSignNumerator() * noteDistance);             
+        } else if ( currentlesson.isRhythmLevel()) {
+          Dimension size = getSize();
+          int scoreLineWidth = keyWidth + alterationWidth + timeSignWidth;
+          jalmus.numberOfMeasures = (size.width - (windowMargin * 2) - scoreLineWidth) / (jalmus.rhythmLevel.getTimeSignNumerator() * noteDistance);            
+        }
+        repaint();
+        gameButtonPanel.setVisible(true);
+
+        menuPrefs.setEnabled(false);
+      }
+    } else {
+      startButton.setVisible(true);
+      preferencesButton.setVisible(true);
+      menuPrefs.setEnabled(true);
+    }
+
+    if (selectedGame == Jalmus.NOTEREADING) {
+      gameButtonPanel.setVisible(true);
+      noteButtonPanel.setVisible(true);
+      principal.setVisible(true);
+      System.out.println(noteGame.noteLevel.getNbnotes());
+      if (noteGame.noteLevel.isNotesgame() && noteGame.noteLevel.getCurrentTonality().getAlterationsNumber() == 0) {
+        sharpButton1.setVisible(false);
+        sharpButton2.setVisible(false);
+        flatButton1.setVisible(false);
+        flatButton2.setVisible(false);
+        noteButtonPanel.validate();
+      } else {
+        sharpButton1.setVisible(true);
+        sharpButton2.setVisible(true);
+        flatButton1.setVisible(true);
+        flatButton2.setVisible(true);
+        noteButtonPanel.validate();
+      }
+    } else if (selectedGame == Jalmus.RHYTHMREADING || 
+               selectedGame == Jalmus.SCOREREADING) {
+      gameButtonPanel.setVisible(true);
+      noteButtonPanel.setVisible(false);
+      newButton.setVisible(true);
+      listenButton.setVisible(true);
+      principal.setVisible(true);
+    }
+  }
+
+  void restorePreferences() {
+    noteGame.deserializePrefs(savePrefs);
+    rhythmGameTypeComboBox.setSelectedIndex(savePrefs[8]);
+    rhythmGameSpeedComboBox.setSelectedIndex(savePrefs[9]);
+    if (savePrefs[10] == 1) {
+      wholeCheckBox.setSelected(true);
+    } else {
+      wholeCheckBox.setSelected(false);
+    }
+    if (savePrefs[11] == 1) {
+      halfCheckBox.setSelected(true);
+    } else {
+      halfCheckBox.setSelected(false);
+    }
+    if (savePrefs[28] == 1) {
+      dottedhalfCheckBox.setSelected(true);
+    } else {
+      dottedhalfCheckBox.setSelected(false);
+    }
+    if (savePrefs[12] == 1) {
+      quarterCheckBox.setSelected(true);
+    } else {
+      quarterCheckBox.setSelected(false);
+    }
+    if (savePrefs[13] == 1) {
+      eighthCheckBox.setSelected(true);
+    } else {
+      eighthCheckBox.setSelected(false);
+    }
+    if (savePrefs[14] == 1) {
+      restCheckBox.setSelected(true);
+    } else {
+      restCheckBox.setSelected(false);
+    }
+    if (savePrefs[15] == 1) {
+      metronomeCheckBox.setSelected(true);
+    } else {
+      metronomeCheckBox.setSelected(false);
+    }
+
+    scoreGameTypeComboBox.setSelectedIndex(savePrefs[16]);
+    scoreGameSpeedComboBox.setSelectedIndex(savePrefs[17]);
+    if (savePrefs[18] == 1) {
+      scorewholeCheckBox.setSelected(true);
+    } else {
+      scorewholeCheckBox.setSelected(false);
+    }
+    if (savePrefs[19] == 1) {
+      scorehalfCheckBox.setSelected(true);
+    } else {
+      scorehalfCheckBox.setSelected(false);
+    }
+    if (savePrefs[28] == 1) {
+      scoredottedhalfCheckBox.setSelected(true);
+    } else {
+      scoredottedhalfCheckBox.setSelected(false);
+    }
+    if (savePrefs[20] == 1) {
+      scorequarterCheckBox.setSelected(true);
+    } else {
+      scorequarterCheckBox.setSelected(false);
+    }
+    if (savePrefs[21] == 1) {
+      scoreeighthCheckBox.setSelected(true);
+    } else {
+      scoreeighthCheckBox.setSelected(false);
+    }
+    if (savePrefs[22] == 1) {
+      scorerestCheckBox.setSelected(true);
+    } else {
+      scorerestCheckBox.setSelected(false);
+    }
+    if (savePrefs[23] == 1) {
+      scoreMetronomeCheckBox.setSelected(true);
+    } else {
+      scoreMetronomeCheckBox.setSelected(false);
+    }
+    scoreKeyComboBox.setSelectedIndex(savePrefs[24]);
+    scoreAlterationsComboBox.setSelectedIndex(savePrefs[25]);
+    if (savePrefs[26] == 1) {
+      tripletCheckBox.setSelected(true);
+    } else {
+      tripletCheckBox.setSelected(false);
+    }
+    if (savePrefs[27] == 1) {
+      scoreTripletCheckBox.setSelected(true);
+    } else {
+      scoreTripletCheckBox.setSelected(false);
+    }
+  }
+  
+  void backupPreferences() {
+    System.arraycopy(noteGame.serializePrefs(), 0, savePrefs, 0, 8);
+    savePrefs[8] = rhythmGameTypeComboBox.getSelectedIndex();
+    savePrefs[9] = rhythmGameSpeedComboBox.getSelectedIndex();
+    if (wholeCheckBox.isSelected()) {
+      savePrefs[10] = 1;
+    } else {
+      savePrefs[10] = 0;
+    }
+    if (halfCheckBox.isSelected()) {
+      savePrefs[11] = 1;
+    } else {
+      savePrefs[11] = 0;
+    }
+    if (dottedhalfCheckBox.isSelected()) {
+      savePrefs[28] = 1;
+    } else {
+      savePrefs[28] = 0;
+    }
+    if (quarterCheckBox.isSelected()) {
+      savePrefs[12] = 1;
+    } else {
+      savePrefs[12] = 0;
+    }
+    if (eighthCheckBox.isSelected()) {
+      savePrefs[13] = 1;
+    } else {
+      savePrefs[13] = 0;
+    }
+    if (restCheckBox.isSelected()) {
+      savePrefs[14] = 1;
+    } else {
+      savePrefs[14] = 0;
+    }
+    if (metronomeCheckBox.isSelected()) {
+      savePrefs[15] = 1;
+    } else {
+      savePrefs[15] = 0;
+    }
+    savePrefs[16] = scoreGameTypeComboBox.getSelectedIndex();
+    savePrefs[17] = scoreGameSpeedComboBox.getSelectedIndex();
+    if (scorewholeCheckBox.isSelected()) {
+      savePrefs[18] = 1;
+    } else {
+      savePrefs[18] = 0;
+    }
+    if (scorehalfCheckBox.isSelected()) {
+      savePrefs[19] = 1;
+    } else {
+      savePrefs[19] = 0;
+    }
+    if (scoredottedhalfCheckBox.isSelected()) {
+      savePrefs[28] = 1;
+    } else {
+      savePrefs[28] = 0;
+    }
+    if (scorequarterCheckBox.isSelected()) {
+      savePrefs[20] = 1;
+    } else {
+      savePrefs[20] = 0;
+    }
+    if (scoreeighthCheckBox.isSelected()) {
+      savePrefs[21] = 1;
+    } else {
+      savePrefs[21] = 0;
+    }
+    if (scorerestCheckBox.isSelected()) {
+      savePrefs[22] = 1;
+    } else {
+      savePrefs[22] = 0;
+    }
+    if (scoreMetronomeCheckBox.isSelected()) {
+      savePrefs[23] = 1;
+    } else {
+      savePrefs[23] = 0;
+    }
+    savePrefs[24] = scoreKeyComboBox.getSelectedIndex();
+    savePrefs[25] = scoreAlterationsComboBox.getSelectedIndex();
+    if (tripletCheckBox.isSelected()) {
+      savePrefs[26] = 1;
+    } else {
+      savePrefs[26] = 0;
+    }
+    if (scoreTripletCheckBox.isSelected()) {
+      savePrefs[27] = 1;
+    } else {
+      savePrefs[27] = 0;
+    }
+  }
 }

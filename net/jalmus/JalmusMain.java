@@ -12,11 +12,9 @@ public final class JalmusMain {
     // Event pour la gestion des Evenements et principalement le message EXIT
     // Constructions de la frame
 
-    Jalmus jalmus = new Jalmus();
     SwingNoteReadingGame game = new SwingNoteReadingGame();
-    List<SwingGame> games = new ArrayList<>();
-    games.add(game);
-    JalmusUi ui = new JalmusUi(jalmus, games);
+    Jalmus jalmus = new Jalmus(game);
+    JalmusUi ui = new JalmusUi(jalmus, game);
     game.setUi(ui);
     jalmus.setUi(ui);
     // Initialization

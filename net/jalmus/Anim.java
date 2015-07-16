@@ -38,24 +38,27 @@ class Anim extends JPanel {
         g.setColor(Color.white);
         g.fillRect(0, 0, d.width, d.height);
 
-        if (this.jalmus.gameStarted && !this.jalmus.paused && (this.jalmus.noteLevel.isNormalgame() || this.jalmus.noteLevel.isLearninggame())) {
-          if (this.jalmus.noteLevel.isNotesgame() || this.jalmus.noteLevel.isAccidentalsgame() || this.jalmus.noteLevel.isCustomNotesgame()) {
+        if (this.jalmus.gameStarted && !this.jalmus.paused && (this.jalmus.game.noteLevel.isNormalgame() || this.jalmus.game.noteLevel.isLearninggame())) {
+          if (this.jalmus.game.noteLevel.isNotesgame() || this.jalmus.game.noteLevel.isAccidentalsgame() || this.jalmus.game.noteLevel.isCustomNotesgame()) {
             this.jalmus.drawNote(this.jalmus.currentNote, g, this.jalmus.musiSync, Color.black);
-          } else if (this.jalmus.noteLevel.isChordsgame()) {
+          } else if (this.jalmus.game.noteLevel.isChordsgame()) {
             //on affiche la note que lorsque la partie a commencï¿½e
             this.jalmus.drawChord(this.jalmus.currentChord, g, true);
-          } else if (this.jalmus.noteLevel.isIntervalsgame()) {
+          } else if (this.jalmus.game.noteLevel.isIntervalsgame()) {
             this.jalmus.drawInterval(this.jalmus.currentInterval, g, true);
           }
-        } else if ((this.jalmus.gameStarted && !this.jalmus.paused && this.jalmus.noteLevel.isInlinegame())) {
+        } else if ((this.jalmus.gameStarted && !this.jalmus.paused && this.jalmus.game.noteLevel.isInlinegame())) {
           this.jalmus.drawInlineNotes(g, this.jalmus.musiSync);
         }
 
         this.jalmus.drawInlineGame(g);
         this.jalmus.drawKeys(g);
-        this.jalmus.noteLevel.getCurrentTonality().paint(1,this.jalmus.noteLevel.getKey(), g, this.jalmus.musiSync, this.jalmus.noteMargin + this.jalmus.keyWidth, this.jalmus.scoreYpos, this.jalmus.rowsDistance, 1, this, this.jalmus.ui.bundle);
+        this.jalmus.game.noteLevel.getCurrentTonality().paint(1,
+            this.jalmus.game.noteLevel.getKey(), g, this.jalmus.musiSync,
+            this.jalmus.ui.noteMargin + this.jalmus.ui.keyWidth, this.jalmus.ui.scoreYpos,
+            this.jalmus.rowsDistance, 1, this, this.jalmus.ui.bundle);
 
-        if (!this.jalmus.noteLevel.isLearninggame()) {
+        if (!this.jalmus.game.noteLevel.isLearninggame()) {
           this.jalmus.currentScore.paint(g, d.width);
         }
 
@@ -65,47 +68,47 @@ class Anim extends JPanel {
         Note basenoteb1 = new Note(0,0,0);
         Note basenoteb2 = new Note(0,0,0);
 
-        if (this.jalmus.noteLevel.isCurrentKeyTreble()) {
-          basenotet1.setHeight(this.jalmus.scoreYpos+this.jalmus.noteLevel.getBasetreble()-(this.jalmus.noteLevel.getNbnotesunder()*5));
-          basenotet1.updateNote(this.jalmus.noteLevel, this.jalmus.scoreYpos, this.jalmus.ui.bundle);
-          basenotet2.setHeight(this.jalmus.scoreYpos+this.jalmus.noteLevel.getBasetreble()+(this.jalmus.noteLevel.getNbnotesupper()*5));
-          basenotet2.updateNote(this.jalmus.noteLevel, this.jalmus.scoreYpos, this.jalmus.ui.bundle);
-        } else if (this.jalmus.noteLevel.isCurrentKeyBass()) {
-          basenoteb1.setHeight(this.jalmus.scoreYpos+this.jalmus.noteLevel.getBasebass()-(this.jalmus.noteLevel.getNbnotesunder()*5));
-          basenoteb1.updateNote(this.jalmus.noteLevel, this.jalmus.scoreYpos, this.jalmus.ui.bundle);
-          basenoteb2.setHeight(this.jalmus.scoreYpos+this.jalmus.noteLevel.getBasebass()+(this.jalmus.noteLevel.getNbnotesupper()*5));
-          basenoteb2.updateNote(this.jalmus.noteLevel, this.jalmus.scoreYpos, this.jalmus.ui.bundle);                 
-        } else if (this.jalmus.noteLevel.isCurrentKeyBoth()) {
-          basenotet1.setHeight(this.jalmus.scoreYpos+this.jalmus.noteLevel.getBasetreble()-(this.jalmus.noteLevel.getNbnotesunder()*5));
-          basenotet1.updateNote(this.jalmus.noteLevel, this.jalmus.scoreYpos, this.jalmus.ui.bundle);
-          basenotet2.setHeight(this.jalmus.scoreYpos+this.jalmus.noteLevel.getBasetreble()+(this.jalmus.noteLevel.getNbnotesupper()*5));
-          basenotet2.updateNote(this.jalmus.noteLevel, this.jalmus.scoreYpos, this.jalmus.ui.bundle);
-          basenoteb1.setHeight(this.jalmus.scoreYpos+this.jalmus.noteLevel.getBasebass()+90-(this.jalmus.noteLevel.getNbnotesunder()*5));
-          basenoteb1.updateNote(this.jalmus.noteLevel, this.jalmus.scoreYpos, this.jalmus.ui.bundle);
-          basenoteb2.setHeight(this.jalmus.scoreYpos+this.jalmus.noteLevel.getBasebass()+90+(this.jalmus.noteLevel.getNbnotesupper()*5));
-          basenoteb2.updateNote(this.jalmus.noteLevel, this.jalmus.scoreYpos, this.jalmus.ui.bundle);
+        if (this.jalmus.game.noteLevel.isCurrentKeyTreble()) {
+          basenotet1.setHeight(this.jalmus.ui.scoreYpos+this.jalmus.game.noteLevel.getBasetreble()-(this.jalmus.game.noteLevel.getNbnotesunder()*5));
+          basenotet1.updateNote(this.jalmus.game.noteLevel, this.jalmus.ui.scoreYpos, this.jalmus.ui.bundle);
+          basenotet2.setHeight(this.jalmus.ui.scoreYpos+this.jalmus.game.noteLevel.getBasetreble()+(this.jalmus.game.noteLevel.getNbnotesupper()*5));
+          basenotet2.updateNote(this.jalmus.game.noteLevel, this.jalmus.ui.scoreYpos, this.jalmus.ui.bundle);
+        } else if (this.jalmus.game.noteLevel.isCurrentKeyBass()) {
+          basenoteb1.setHeight(this.jalmus.ui.scoreYpos+this.jalmus.game.noteLevel.getBasebass()-(this.jalmus.game.noteLevel.getNbnotesunder()*5));
+          basenoteb1.updateNote(this.jalmus.game.noteLevel, this.jalmus.ui.scoreYpos, this.jalmus.ui.bundle);
+          basenoteb2.setHeight(this.jalmus.ui.scoreYpos+this.jalmus.game.noteLevel.getBasebass()+(this.jalmus.game.noteLevel.getNbnotesupper()*5));
+          basenoteb2.updateNote(this.jalmus.game.noteLevel, this.jalmus.ui.scoreYpos, this.jalmus.ui.bundle);                 
+        } else if (this.jalmus.game.noteLevel.isCurrentKeyBoth()) {
+          basenotet1.setHeight(this.jalmus.ui.scoreYpos+this.jalmus.game.noteLevel.getBasetreble()-(this.jalmus.game.noteLevel.getNbnotesunder()*5));
+          basenotet1.updateNote(this.jalmus.game.noteLevel, this.jalmus.ui.scoreYpos, this.jalmus.ui.bundle);
+          basenotet2.setHeight(this.jalmus.ui.scoreYpos+this.jalmus.game.noteLevel.getBasetreble()+(this.jalmus.game.noteLevel.getNbnotesupper()*5));
+          basenotet2.updateNote(this.jalmus.game.noteLevel, this.jalmus.ui.scoreYpos, this.jalmus.ui.bundle);
+          basenoteb1.setHeight(this.jalmus.ui.scoreYpos+this.jalmus.game.noteLevel.getBasebass()+90-(this.jalmus.game.noteLevel.getNbnotesunder()*5));
+          basenoteb1.updateNote(this.jalmus.game.noteLevel, this.jalmus.ui.scoreYpos, this.jalmus.ui.bundle);
+          basenoteb2.setHeight(this.jalmus.ui.scoreYpos+this.jalmus.game.noteLevel.getBasebass()+90+(this.jalmus.game.noteLevel.getNbnotesupper()*5));
+          basenoteb2.updateNote(this.jalmus.game.noteLevel, this.jalmus.ui.scoreYpos, this.jalmus.ui.bundle);
         }
 
-        if (this.jalmus.noteLevel.isLearninggame()) {
-          if (this.jalmus.noteLevel.isNotesgame() || this.jalmus.noteLevel.isAccidentalsgame() || this.jalmus.noteLevel.isCustomNotesgame()) {
+        if (this.jalmus.game.noteLevel.isLearninggame()) {
+          if (this.jalmus.game.noteLevel.isNotesgame() || this.jalmus.game.noteLevel.isAccidentalsgame() || this.jalmus.game.noteLevel.isCustomNotesgame()) {
             this.jalmus.piano.paint(g, d.width, !this.jalmus.isLessonMode & !this.jalmus.gameStarted, basenotet1.getPitch(), basenotet2.getPitch(),
-                basenoteb1.getPitch(), basenoteb2.getPitch(), this.jalmus.currentNote.getPitch(), 0, 0, this.jalmus.noteLevel.isCustomNotesgame(), this.jalmus.noteLevel.getPitcheslist());
-          } else if (this.jalmus.noteLevel.isIntervalsgame()) {
+                basenoteb1.getPitch(), basenoteb2.getPitch(), this.jalmus.currentNote.getPitch(), 0, 0, this.jalmus.game.noteLevel.isCustomNotesgame(), this.jalmus.game.noteLevel.getPitcheslist());
+          } else if (this.jalmus.game.noteLevel.isIntervalsgame()) {
             this.jalmus.piano.paint(g, d.width, false, basenotet1.getPitch(), basenotet2.getPitch(),basenoteb1.getPitch(), 
                 basenoteb2.getPitch(), this.jalmus.currentInterval.getNote(0).getPitch(),
-                this.jalmus.currentInterval.getNote(1).getPitch(), 0,this.jalmus.noteLevel.isCustomNotesgame(), this.jalmus.noteLevel.getPitcheslist());
-          } else if (this.jalmus.noteLevel.isChordsgame()) {
+                this.jalmus.currentInterval.getNote(1).getPitch(), 0,this.jalmus.game.noteLevel.isCustomNotesgame(), this.jalmus.game.noteLevel.getPitcheslist());
+          } else if (this.jalmus.game.noteLevel.isChordsgame()) {
             this.jalmus.piano.paint(g, d.width, false, basenotet1.getPitch(), basenotet2.getPitch(),basenoteb1.getPitch(), 
                 basenoteb2.getPitch(), this.jalmus.currentChord.getNote(0).getPitch(),
                 this.jalmus.currentChord.getNote(1).getPitch(),
                 this.jalmus.currentChord.getNote(2).getPitch(),
-                this.jalmus.noteLevel.isCustomNotesgame(), this.jalmus.noteLevel.getPitcheslist());
+                this.jalmus.game.noteLevel.isCustomNotesgame(), this.jalmus.game.noteLevel.getPitcheslist());
           }
           this.jalmus.applyButtonColor();
         } else {
-          this.jalmus.piano.paint(g, d.width, !this.jalmus.isLessonMode && !this.jalmus.gameStarted && (this.jalmus.noteLevel.isNotesgame()|| this.jalmus.noteLevel.isAccidentalsgame()),
+          this.jalmus.piano.paint(g, d.width, !this.jalmus.isLessonMode && !this.jalmus.gameStarted && (this.jalmus.game.noteLevel.isNotesgame()|| this.jalmus.game.noteLevel.isAccidentalsgame()),
               basenotet1.getPitch(), basenotet2.getPitch(),basenoteb1.getPitch(), basenoteb2.getPitch(),  0, 0, 0,
-              this.jalmus.noteLevel.isCustomNotesgame(), this.jalmus.noteLevel.getPitcheslist());
+              this.jalmus.game.noteLevel.isCustomNotesgame(), this.jalmus.game.noteLevel.getPitcheslist());
         }
       } else if (this.jalmus.selectedGame == Jalmus.FIRSTSCREEN) {
 
@@ -138,15 +141,15 @@ class Anim extends JPanel {
         this.jalmus.drawTimeSignature(g);
 
         if (this.jalmus.selectedGame == Jalmus.SCOREREADING) {
-          this.jalmus.numberOfRows = ((getSize().height - this.jalmus.scoreYpos - 50) / this.jalmus.rowsDistance)+1;    
-          this.jalmus.scoreLevel.getCurrentTonality().paint(3, this.jalmus.scoreLevel.getKey(), g, this.jalmus.musiSync, this.jalmus.windowMargin + this.jalmus.keyWidth, this.jalmus.scoreYpos, this.jalmus.rowsDistance, this.jalmus.numberOfRows, this, this.jalmus.ui.bundle);
+          this.jalmus.numberOfRows = ((getSize().height - this.jalmus.ui.scoreYpos - 50) / this.jalmus.rowsDistance)+1;    
+          this.jalmus.scoreLevel.getCurrentTonality().paint(3, this.jalmus.scoreLevel.getKey(), g, this.jalmus.musiSync, this.jalmus.ui.windowMargin + this.jalmus.ui.keyWidth, this.jalmus.ui.scoreYpos, this.jalmus.rowsDistance, this.jalmus.numberOfRows, this, this.jalmus.ui.bundle);
         }
         /* Show cursor if enabled */
         if ((this.jalmus.selectedGame == Jalmus.RHYTHMREADING && this.jalmus.rhythmLevel.getMetronomeBeats()) ||
             (this.jalmus.selectedGame == Jalmus.SCOREREADING && this.jalmus.ui.scoreMetronomeShowCheckBox.isSelected())) {
           g.setColor(Color.orange);
-          g.fillRect(this.jalmus.rhythmCursorXStartPos, this.jalmus.rhythmAnswerScoreYpos - 31, 
-              (int) this.jalmus.rhythmCursorXpos - this.jalmus.rhythmCursorXStartPos, 3);
+          g.fillRect(this.jalmus.ui.rhythmCursorXStartPos, this.jalmus.ui.rhythmAnswerScoreYpos - 31, 
+              (int) this.jalmus.ui.rhythmCursorXpos - this.jalmus.ui.rhythmCursorXStartPos, 3);
         }
 
         if (this.jalmus.paintrhythms) {
