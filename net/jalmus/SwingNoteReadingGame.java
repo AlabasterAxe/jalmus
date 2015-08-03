@@ -29,7 +29,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-      if ((ui.jalmus.gameStarted && ui.jalmus.selectedGame == Jalmus.NOTEREADING && !ui.jalmus.paused)) {
+      if ((gameStarted && ui.jalmus.selectedGame == Jalmus.NOTEREADING && !ui.jalmus.paused)) {
         if (!currentNote.getAlteration().equals("")) {  // NOTES AVEC ALTERATION
           if (((JButton)e.getSource()).getText().equals(currentNote.getAlteration())) {
             alterationOk = true;
@@ -694,7 +694,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
   
   @Override
   public void stopGame() {
-	super.stopGame();
+    super.stopGame();
 
     gameStarted = false;
     startButton.setText(ui.bundle.getString("_start"));
@@ -1278,35 +1278,35 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
     Dimension d = ui.getSize();
 
     if (a.getNote(posnote).getX() < d.width-noteMargin &&
-        a.getNote(posnote).getX() >= noteMargin+98 && ui.jalmus.gameStarted) {
+        a.getNote(posnote).getX() >= noteMargin+98 && gameStarted) {
       // NOTE DANS LIMITES
       a.paint(posnote, noteLevel, g, ui.musiSync, accordcourant, ui,
           scoreYpos, ui.bundle);
       //g.drawString("Renv" + a.renvst,100,100);
     } else {
       if (noteLevel.isNormalgame()) {
-        ui.jalmus.currentScore.addPoints(-20);
+        currentScore.addPoints(-20);
 
-        if (ui.jalmus.currentScore.isLost()) {
-          ui.jalmus.gameStarted = false;
+        if (currentScore.isLost()) {
+          gameStarted = false;
           startButton.setText(ui.bundle.getString("_start"));
           ui.midiHelper.stopSound();
           showResult();
         }
 
-        if (ui.jalmus.gameStarted) {
+        if (gameStarted) {
           newChord();
         }
       } else if (noteLevel.isLearninggame()) {
         newChord();
         resetButtonColor();
       } else if (noteLevel.isInlinegame() && 
-          ui.jalmus.gameStarted && noteLevel.isChordsgame() && 
+          gameStarted && noteLevel.isChordsgame() && 
           lineacc[position].getNote(0).getX() < noteMargin+98) {
         // If the current note (except the last) touch the limit
-        ui.jalmus.currentScore.setPoints(0);
-        ui.jalmus.currentScore.setLost();
-        ui.jalmus.gameStarted = false;
+        currentScore.setPoints(0);
+        currentScore.setLost();
+        gameStarted = false;
         startButton.setText(ui.bundle.getString("_start"));
         ui.midiHelper.stopSound();
         showResult();
@@ -1319,7 +1319,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
 
     g.setColor(couleur);
     if (note.getX() < size.width - noteMargin && note.getX() >= noteMargin + 98 
-        && ui.jalmus.gameStarted) { // NOTE DANS LIMITES
+        && gameStarted) { // NOTE DANS LIMITES
       if (noteLevel.isAccidentalsgame() || noteLevel.isCustomNotesgame()) {
         note.paint(noteLevel, g, f, 9, 0, scoreYpos, ui, couleur, ui.bundle);
       } else {
@@ -1327,9 +1327,9 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
       }
     } else {
       if (noteLevel.isNormalgame()) {
-        ui.jalmus.currentScore.addPoints(-20);
-        if (ui.jalmus.currentScore.isLost()) {
-          ui.jalmus.gameStarted = false;
+        currentScore.addPoints(-20);
+        if (currentScore.isLost()) {
+          gameStarted = false;
           startButton.setText(ui.bundle.getString("_start"));
           showResult();
         }
@@ -1337,11 +1337,11 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
       } else if (noteLevel.isLearninggame()) {
         newnote();
         resetButtonColor();
-      } else if (noteLevel.isInlinegame() && ui.jalmus.gameStarted) {
+      } else if (noteLevel.isInlinegame() && gameStarted) {
         if (line[position].getX() < noteMargin+98) { // Si la note courant (sauf la derniï¿½re)dï¿½passe la limite ici marge +25
-          ui.jalmus.currentScore.setPoints(0);
-          ui.jalmus.currentScore.setLost();
-          ui.jalmus.gameStarted = false;
+          currentScore.setPoints(0);
+          currentScore.setLost();
+          gameStarted = false;
           startButton.setText(ui.bundle.getString("_start"));
           showResult();
         }
@@ -1353,35 +1353,34 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
     Dimension size = ui.getSize();
 
     if (inter.getNote(posnote).getX() < size.width - noteMargin &&
-        
-        inter.getNote(posnote).getX() >= noteMargin + 98 && ui.jalmus.gameStarted) {
+        inter.getNote(posnote).getX() >= noteMargin + 98 && gameStarted) {
       // NOTE DANS LIMITES
       inter.paint(posnote, noteLevel, g, ui.musiSync, scoreYpos,
           ui.bundle, Intervallecourant, ui);
       //g.drawString("Renv" + a.renvst,100,100);
     } else {
       if (noteLevel.isNormalgame()) {
-        ui.jalmus.currentScore.addPoints(-20);
-        if (ui.jalmus.currentScore.isLost()) {
-          ui.jalmus.gameStarted = false;
+        currentScore.addPoints(-20);
+        if (currentScore.isLost()) {
+          gameStarted = false;
           startButton.setText(ui.bundle.getString("_start"));
           ui.midiHelper.stopSound();
           showResult();
         }
 
-        if (ui.jalmus.gameStarted) {
+        if (gameStarted) {
           newinterval();
         }
       } else if (noteLevel.isLearninggame()) {
         newinterval();
         resetButtonColor();
       } else if (noteLevel.isInlinegame() 
-             && ui.jalmus.gameStarted 
+             && gameStarted 
              && lineint[position].getNote(0).getX() < noteMargin+98) {
         // Si la note courant dï¿½passe la limite ici marge +25
-        ui.jalmus.currentScore.setPoints(0);
-        ui.jalmus.currentScore.setLost();
-        ui.jalmus.gameStarted = false;
+        currentScore.setPoints(0);
+        currentScore.setLost();
+        gameStarted = false;
         startButton.setText(ui.bundle.getString("_start"));
         ui.midiHelper.stopSound();
         showResult();
@@ -1404,7 +1403,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
   }
   
   void handleStartButtonClicked() {
-    if (ui.jalmus.gameStarted) {
+    if (gameStarted) {
       stopGame();
       initGame(); //stop the game before restart
     } else {
