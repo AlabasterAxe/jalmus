@@ -13,4 +13,12 @@ public interface SwingGame {
   String getPreferencesLocalizable();
 
   void updateLanguage(ResourceBundle bundle);
+  
+  void changeScreen();
+  
+  int[] serializePrefs();
+  
+  void deserializePrefs(int[] prefs);
+  
+  void showResult();
 }

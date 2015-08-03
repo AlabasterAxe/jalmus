@@ -1,7 +1,5 @@
 package net.jalmus;
 
-
-
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -25,8 +23,6 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
-
-
 public class ChooseNotePanel extends JPanel {
     static final long serialVersionUID = 1L;
     private boolean DEBUG = false;
@@ -34,21 +30,28 @@ public class ChooseNotePanel extends JPanel {
     JButton okButton;
     
     private static int NOTEREADING = 1;
-    //private static int RHYTHMREADING = 2;
     private static int SCOREREADING = 3;
     
     public ChooseNotePanel(String key, int leveltype , ResourceBundle bundle) {
+
     	System.out.println(key+leveltype);
     	
-    	if (leveltype == NOTEREADING && key == "treble")     	 table = new JTable(new TableKeyTreble());
-    	else if (leveltype == NOTEREADING && key == "bass")     	 table = new JTable(new TableKeyBass());
-     	else if (leveltype == NOTEREADING && key == "both")     	table = new JTable(new NotesTableModel());
-    	else if (leveltype == SCOREREADING && key == "treble")     	 table = new JTable(new TableKeyScoreTreble());
-    	else if (leveltype == SCOREREADING && key == "bass")     	 table = new JTable(new TableKeyScoreBass());
-    	else table = new JTable(new NotesTableModel());
-    	 
-        table.setPreferredScrollableViewportSize(new Dimension(610, 115));
-        table.setFillsViewportHeight(false);
+    	if (leveltype == NOTEREADING && key == "treble") {
+    	  table = new JTable(new TableKeyTreble());
+    	} else if (leveltype == NOTEREADING && key == "bass") {
+    	  table = new JTable(new TableKeyBass());
+    	} else if (leveltype == NOTEREADING && key == "both") {
+    	  table = new JTable(new NotesTableModel());
+    	} else if (leveltype == SCOREREADING && key == "treble") {
+    	  table = new JTable(new TableKeyScoreTreble());
+    	} else if (leveltype == SCOREREADING && key == "bass") {
+    	  table = new JTable(new TableKeyScoreBass());
+    	} else {
+    	  table = new JTable(new NotesTableModel());
+    	}
+
+      table.setPreferredScrollableViewportSize(new Dimension(610, 115));
+      table.setFillsViewportHeight(false);
 
         
        for (int vColIndex = 1; vColIndex < 13; vColIndex++) {
@@ -69,21 +72,12 @@ public class ChooseNotePanel extends JPanel {
        JButton clearButton=new JButton();
        clearButton.setText(bundle.getString("_buttonclear"));
        clearButton.setIcon(new ImageIcon(getClass().getResource("/images/eraser.png")));
-        
-
-  /*      okButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-            	 if (!atLeast3Pitches()) JOptionPane.showMessageDialog(null, "Choose at least three notes", "Warning", JOptionPane.ERROR_MESSAGE); 
-            	//System.out.println(getFocusCycleRootAncestor());
-            	 else getFocusCycleRootAncestor().setVisible(false);
-            }
-        });*/
-        
-        clearButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                resettable();
-            }
-        });
+       clearButton.addActionListener(new ActionListener() {
+         @Override
+         public void actionPerformed(ActionEvent e) {
+           resettable();
+         }
+       });
         
   
         // Add the scroll pane to this panel  

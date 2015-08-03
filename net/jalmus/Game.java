@@ -6,7 +6,9 @@ public interface Game {
 
   void startGame();
   
+  void startLevel();
+  
   void stopGame();
   
-  void showResult();
+  void nextGame();
 }

@@ -88,11 +88,11 @@ public class Piano {
     return this.length == 61;
   }
 
-  public void Setprevkey(Key k) {
+  public void setPrevKey(Key k) {
     this.prevKey = k;
   }
 
-  public Key Getprevkey() {
+  public Key getPrevKey() {
     return this.prevKey;
   }
 
@@ -143,17 +143,17 @@ public class Piano {
     for (int i = 0; i < whiteKeys.size(); i++) {
       Key key = (Key) whiteKeys.get(i);
       if (onoff == 1 & key.kNum == pitch) {
-        key.on(cc, midiok);
+        key.turnOn(cc, midiok);
       } else if (onoff == 0 & key.kNum == pitch) {
-        key.off(cc, midiok);
+        key.turnOff(cc, midiok);
       }
     }
     for (int i = 0; i < blackKeys.size(); i++) {
       Key key = (Key) blackKeys.get(i);
       if (onoff == 1 & key.kNum == pitch) {
-        key.on(cc, midiok);
+        key.turnOn(cc, midiok);
       } else if (onoff == 0 & key.kNum == pitch) {
-        key.off(cc, midiok);
+        key.turnOff(cc, midiok);
       }
     }
   }
@@ -278,4 +278,3 @@ public class Piano {
     }
   }
 } // End class Piano
-

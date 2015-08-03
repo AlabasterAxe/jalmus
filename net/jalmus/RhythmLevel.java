@@ -24,8 +24,8 @@ import javax.swing.JOptionPane;
  */
 
 public class RhythmLevel implements Level {
-	int Id;
-	String message;
+  int id;
+  String message;
   boolean whole;
   boolean half;
   boolean dottedhalf;
@@ -42,27 +42,26 @@ public class RhythmLevel implements Level {
   
 
   public RhythmLevel() {
-	    this.Id = 0;
-	    this.message = "";
-	    this.whole = true;
-	    this.half = true;
-	    this.dottedhalf = false;
-	    this.quarter = false;
-	    this.eighth = false;
-	    this.silence = true;
-	    this.triplet = false;
-	    
-	    this.timeSignNumerator = 4;
-	    this.timeSignDenominator = 4;
-	    this.timeDivision = 1;     
-	    this.speed = 28;
-	    this.metronome = true;
-	    this.beats = false;
+    this.id = 0;
+    this.message = "";
+    this.whole = true;
+    this.half = true;
+    this.dottedhalf = false;
+    this.quarter = false;
+    this.eighth = false;
+    this.silence = true;
+    this.triplet = false;
     
+    this.timeSignNumerator = 4;
+    this.timeSignDenominator = 4;
+    this.timeDivision = 1;     
+    this.speed = 28;
+    this.metronome = true;
+    this.beats = false;
   }
 
   public void init() {
-	 this.Id = 0;
+	 this.id = 0;
 	    this.message = "";
     this.whole = true;
     this.half = true;
@@ -81,7 +80,7 @@ public class RhythmLevel implements Level {
   }
 
   public void copy(RhythmLevel n) {
-	this.Id = n.Id;
+	this.id = n.id;
     this.message =  n.message;
     this.whole = n.whole;
     this.half = n.half;
@@ -102,11 +101,11 @@ public class RhythmLevel implements Level {
   /********************************/
 
   public void setId(int i) {
-    this.Id = i;
+    this.id = i;
   }
 
   public int getId() {
-    return this.Id;
+    return this.id;
 }
 
   /********************************/
@@ -264,7 +263,7 @@ public void setMetronome(boolean b) {
   }
   
   public void printtest(){
-	   System.out.println("Level n°"+this.Id);
+	   System.out.println("Level nï¿½"+this.id);
 	    System.out.println("Whole note : " + this.whole);
 	  System.out.println("Half note : " + this.half);
 	  System.out.println("DottedHalf note : " + this.dottedhalf);

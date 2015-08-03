@@ -12,13 +12,11 @@ package net.jalmus;
 import java.awt.Rectangle;
 
 public class Key extends Rectangle {
-  /**
-	* 
-	*/
+
   private static final long serialVersionUID = 1L;
 
-  final int ON = 0, OFF = 1;
-  int noteState = OFF;
+  private static enum State { ON, OFF };
+  private State noteState = State.OFF;
   int kNum;
   int offx; // just for black keys since they have an irregular pattern
 
@@ -28,29 +26,29 @@ public class Key extends Rectangle {
     offx = offset;
   }
 
-  public int Getknum(){
+  public int getKNum() {
     return this.kNum;
   }
     
-  public int getXoffset(){
+  public int getXoffset() {
     return this.offx;
   }
 
   public boolean isNoteOn() {
-    return noteState == ON;
+    return noteState == State.ON;
   }
 
-  public void on(net.jalmus.ChannelData cc, boolean midiok) {
-    setNoteState(ON);
+  public void turnOn(ChannelData cc, boolean midiok) {
+    setNoteState(State.ON);
     cc.playNote(midiok, kNum);
   }
 
-  public void off(net.jalmus.ChannelData cc, boolean midiok) {
-    setNoteState(OFF);
+  public void turnOff(ChannelData cc, boolean midiok) {
+    setNoteState(State.OFF);
     cc.stopNote(midiok, kNum);
   }
 
-  public void setNoteState(int state) {
+  public void setNoteState(State state) {
     noteState = state;
   }
 } // End class Key

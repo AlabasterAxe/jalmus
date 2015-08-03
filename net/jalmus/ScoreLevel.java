@@ -136,7 +136,7 @@ public class ScoreLevel implements Level {
   }
 
   /*****************************************/
-  public boolean getRandomtonality(){
+  public boolean getRandomTonality(){
     return this.randomtonality;
   }
 

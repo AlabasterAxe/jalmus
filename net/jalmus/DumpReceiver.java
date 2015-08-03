@@ -11,108 +11,99 @@ class DumpReceiver implements Receiver {
   /**
 	 * 
 	 */
-	private final Jalmus jalmus;
-	public DumpReceiver(Jalmus jalmus) {
-		this.jalmus = jalmus;
-
+	private final SwingJalmus ui;
+	public DumpReceiver(SwingJalmus jalmus) {
+		this.ui = jalmus;
     }
 
     public void send(MidiMessage event, long time) {
 
-      String output = "";
 
-      if (this.jalmus.outputDevice != null)
-      {
+      if (ui.midiHelper.outputDevice != null) {
         try {
-          this.jalmus.outputDevice.getReceiver().send(event, time);
+          ui.midiHelper.outputDevice.getReceiver().send(event, time);
         } catch (MidiUnavailableException e) {
-          // TODO Auto-generated catch block
           e.printStackTrace();
         }
       }
 
-      if (this.jalmus.selectedGame == Jalmus.NOTEREADING || this.jalmus.selectedGame==Jalmus.RHYTHMREADING || this.jalmus.selectedGame==Jalmus.SCOREREADING) {
+      String output = "";
+      if (ui.jalmus.selectedGame == Jalmus.NOTEREADING ||
+          ui.jalmus.selectedGame == Jalmus.RHYTHMREADING ||
+          ui.jalmus.selectedGame == Jalmus.SCOREREADING) {
 
         if (event instanceof ShortMessage) {
-          if (!this.jalmus.open) {
-            this.jalmus.open = true;
-
+          if (!ui.midiHelper.open) {
+            ui.midiHelper.open = true;
           }
-          switch (event.getStatus()&0xf0) {
+
+          switch (event.getStatus() & 0xf0) {
             case 0x90:
-              output = ("   Note On Key: "+((ShortMessage)event).getData1()+
+              output = ("   Note On Key: " + ((ShortMessage)event).getData1() +
                   " Velocity: "+((ShortMessage)event).getData2());
               //pitch de la note jouï¿½e
-              int notejouee = ((ShortMessage)event).getData1()+((Number)this.jalmus.ui.transpositionSpinner.getValue()).intValue();
+              int notejouee = ((ShortMessage)event).getData1() +
+                  ((Number)ui.transpositionSpinner.getValue()).intValue();
 
-              //System.out.println(((ShortMessage)event).getData2());
-
-              // touche C3 pour lancer le jeu au clavier
-
-              if (this.jalmus.selectedGame == Jalmus.NOTEREADING) {
-
-                if (!this.jalmus.gameStarted & (((ShortMessage)event).getData2() != 0) & ((ShortMessage)event).getData1() == 60) {
+              if (ui.jalmus.selectedGame == Jalmus.NOTEREADING) {
+                if (!ui.jalmus.gameStarted && (((ShortMessage)event).getData2() != 0) &&
+                    ((ShortMessage)event).getData1() == 60) {
                   System.out.println("C3");
-                  if (this.jalmus.ui.levelMessage.isVisible()) {
+                  if (ui.levelMessage.isVisible()) {
                     System.out.println("levelmessage");
-
-                    this.jalmus.ui.oklevelMessage.doClick();
-                  } else if (this.jalmus.ui.scoreMessage.isVisible()) {
-
-                    this.jalmus.ui.okscoreMessage.doClick();
-
+                    ui.oklevelMessage.doClick();
+                  } else if (ui.scoreMessage.isVisible()) {
+                    ui.okscoreMessage.doClick();
                   } else {
-                    this.jalmus.ui.requestFocus();
-                    this.jalmus.startNoteGame();
-                    if (!this.jalmus.renderingThread.isAlive()) {
-                      this.jalmus.renderingThread.start();
+                    ui.requestFocus();
+                    ui.jalmus.startNoteGame();
+                    if (!ui.renderingThread.isAlive()) {
+                      ui.renderingThread.start();
                     }
                   }
                 } else {
-                  if (this.jalmus.ui.keyboardsoundCheckBox.isSelected()) {
+                  if (ui.keyboardsoundCheckBox.isSelected()) {
                     if (((ShortMessage)event).getData2() != 0) {
-                      this.jalmus.piano.playNote(this.jalmus.currentChannel, !this.jalmus.midierror, notejouee, 1);
+                      ui.jalmus.piano.playNote(ui.midiHelper.currentChannel,
+                          !ui.midiHelper.midierror, notejouee, 1);
                     } else {
-                      this.jalmus.piano.playNote(this.jalmus.currentChannel, !this.jalmus.midierror, notejouee, 0);
+                      ui.jalmus.piano.playNote(ui.midiHelper.currentChannel,
+                          !ui.midiHelper.midierror, notejouee, 0);
                     }
                   }
 
-                  this.jalmus.ui.repaint();
+                  ui.repaint();
 
-                  if (((ShortMessage)event).getData2() != 0&this.jalmus.gameStarted&!this.jalmus.paused) {
-                    //  System.out.print(((ShortMessage)event).getData1());
-                    //  System.out.println("-"+ncourante.getPitch());
-
-                    if (this.jalmus.isSameNote(((ShortMessage)event).getData1(), this.jalmus.currentNote.getPitch())) {
-                      this.jalmus.rightAnswer();
-                                    } else {
-                        System.out.println("Input:" + ((ShortMessage)event).getData1() +" Correct note:" + this.jalmus.currentNote.getPitch() );
-                        this.jalmus.wrongAnswer();
-                      }
-
-                    this.jalmus.ui.repaint();
+                  if (((ShortMessage)event).getData2() != 0 && ui.jalmus.gameStarted &&
+                      !ui.jalmus.paused) {
+                    if (Note.samePitch(((ShortMessage)event).getData1(), 
+                        ui.jalmus.noteGame.currentNote.getPitch(),
+                        (int) ui.transpositionSpinner.getValue())) {
+                      ui.noteGame.rightAnswer();
+                    } else {
+                      System.out.println("Input:" + ((ShortMessage)event).getData1() +
+                          " Correct note:" + ui.jalmus.noteGame.currentNote.getPitch() );
+                      ui.noteGame.wrongAnswer();
+                    }
+                    ui.repaint();
                   }
                 }
               }
 
-              if (this.jalmus.selectedGame == Jalmus.RHYTHMREADING && this.jalmus.gameStarted) {
+              if (ui.jalmus.selectedGame == Jalmus.RHYTHMREADING && ui.jalmus.gameStarted) {
                 if (((ShortMessage)event).getData2() != 0)
-                  this.jalmus.rhythmKeyPressed(71);
+                  ui.rhythmGame.rhythmKeyPressed(71);
                 else  {
-                  this.jalmus.rhythmKeyReleased(71);
-                  // System.out.println ("released");
+                  ui.rhythmGame.rhythmKeyReleased(71);
                 }
-
               }
 
-              if (this.jalmus.selectedGame == Jalmus.SCOREREADING && this.jalmus.gameStarted) {
+              if (ui.jalmus.selectedGame == Jalmus.SCOREREADING && ui.jalmus.gameStarted) {
                 if (((ShortMessage)event).getData2() != 0)
-                  this.jalmus.rhythmKeyPressed(((ShortMessage)event).getData1());
+                  ui.rhythmGame.rhythmKeyPressed(((ShortMessage)event).getData1());
                 else  {
-                  this.jalmus.rhythmKeyReleased(((ShortMessage)event).getData1());
-                  //  System.out.println ("released");
+                  ui.rhythmGame.rhythmKeyReleased(((ShortMessage)event).getData1());
                 }
-
               }
 
               break;
@@ -156,8 +147,8 @@ class DumpReceiver implements Receiver {
           output = ("   MetaEvent");
         }
         if (output != "") {
-                    System.out.println(output);
-                }
+          System.out.println(output);
+        }
       }
     }
     public void close() {}

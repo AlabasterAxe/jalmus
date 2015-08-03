@@ -1,8 +1,6 @@
 package net.jalmus;
 
 import java.awt.Dimension;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JFrame;
 
@@ -12,16 +10,17 @@ public final class JalmusMain {
     // Event pour la gestion des Evenements et principalement le message EXIT
     // Constructions de la frame
 
-    SwingNoteReadingGame game = new SwingNoteReadingGame();
-    Jalmus jalmus = new Jalmus(game);
-    JalmusUi ui = new JalmusUi(jalmus, game);
-    game.setUi(ui);
-    jalmus.setUi(ui);
+    SwingNoteReadingGame noteGame = new SwingNoteReadingGame();
+    SwingRhythmReadingGame rhythmGame = new SwingRhythmReadingGame();
+    SwingScoreReadingGame scoreGame = new SwingScoreReadingGame();
+    Jalmus jalmus = new Jalmus(noteGame, rhythmGame, scoreGame);
+    SwingJalmus ui = new SwingJalmus(jalmus, noteGame, rhythmGame, scoreGame);
+
     // Initialization
     if (args.length == 0) {
-      jalmus.init("");
+      ui.init("");
     } else {
-      jalmus.init(args[0]);
+      ui.init(args[0]);
     }
 
     // Force the window size
