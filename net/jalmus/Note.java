@@ -81,13 +81,14 @@ public class Note {
   public void paint(NoteLevel nrlevel, Graphics g, Font f, int decalagea, int decalagen,
       int dportee, Component j, Color color, ResourceBundle b) {
 
-    int i;   // compteur
+    int i;
 
     g.setFont(f.deriveFont(50f));
     g.setColor(color);
 
     g.drawString("w", this.X+decalagen, this.Height + 11);
-    if ((!this.Alteration.equals("") & !this.accidentalInTonality(nrlevel.getCurrentTonality(),b)) | (this.Alteration.equals("n"))) {
+    if ((!this.Alteration.equals("") && !this.accidentalInTonality(nrlevel.getCurrentTonality(),b))
+        || (this.Alteration.equals("n"))) {
       if (this.Alteration.equals("#")) {
         g.drawString("B", this.X-decalagea, this.Height + 10);
       } else if (this.Alteration.equals("b")) {
@@ -454,7 +455,7 @@ public class Note {
 
     }
 
-    else if (nrlevel.isCurrentKeyBass() || (nrlevel.isCurrentKeyBoth() & this.Pitch < 57)) {
+    else if (nrlevel.isCurrentKeyBass() || (nrlevel.isCurrentKeyBoth() && this.Pitch < 57)) {
 
 
 
@@ -512,11 +513,12 @@ public class Note {
           if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) this.Alteration = ""; else this.Alteration = "#"; }          		
       }	
 
-      else   if (this.samenotePitch(11)) { this.Nom = SI; this.Height = (71-this.Pitch)*35/12 + dportee-45+heigth2staff;  
-        if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) this.Alteration = "n"; else this.Alteration = ""; }
-
-
-
+      else if (this.samenotePitch(11)) { this.Nom = SI; this.Height = (71-this.Pitch)*35/12 + dportee-45+heigth2staff;  
+        if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) {
+          this.Alteration = "n";
+        } else {
+          this.Alteration = ""; }
+        }
     }
   }
 }

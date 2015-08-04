@@ -665,7 +665,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
     if (noteLevel.isNormalgame() || noteLevel.isLearninggame()) {
       if (noteLevel.isNotesgame() || noteLevel.isAccidentalsgame() ||
           noteLevel.isCustomNotesgame()) {
-        newnote();
+        newNote();
       } else if (noteLevel.isChordsgame()) {
         newChord();
       } else if (noteLevel.isIntervalsgame()) {
@@ -713,7 +713,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
         startButton.setText(ui.bundle.getString("_start"));
         ui.jalmus.nextLevel();
       } else {
-        newnote();
+        newNote();
       }
       resetButtonColor();
     } else {
@@ -742,7 +742,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
       if (noteLevel.isChordsgame() || noteLevel.isIntervalsgame()) {
         nextnote();
       } else {
-        newnote();
+        newNote();
       }
     }
   }
@@ -852,7 +852,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
 	    }
 	  }
 
-  void newnote() {
+  void newNote() {
 	    if ((noteLevel.isNormalgame() || noteLevel.isLearninggame()) & gameStarted) {
 	      notecounter++;
 	      if (prevNote != 0 & ui.soundOnCheckBox.isSelected()) {
@@ -868,9 +868,8 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
 	                                  noteLevel.getNbnotesunder()));
 	        while (currentNote.getHeight() == prevNote) {
 	          currentNote.setHeight(setNoteHeight(noteLevel.getNbnotesupper(),
-	                                        noteLevel.getNbnotesunder(),
-	                                        noteLevel.getNbnotesupper(),
-	                                        noteLevel.getNbnotesunder()));
+	              noteLevel.getNbnotesunder(), noteLevel.getNbnotesupper(),
+	              noteLevel.getNbnotesunder()));
 	        }
 	        currentNote.updateNote(noteLevel, ui.scoreYpos, ui.bundle);
 	        currentNote.updateAccidental(noteLevel, ui.bundle);
@@ -1300,8 +1299,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
       } else if (noteLevel.isLearninggame()) {
         newChord();
         resetButtonColor();
-      } else if (noteLevel.isInlinegame() && 
-          gameStarted && noteLevel.isChordsgame() && 
+      } else if (noteLevel.isInlinegame() && gameStarted && noteLevel.isChordsgame() && 
           lineacc[position].getNote(0).getX() < noteMargin+98) {
         // If the current note (except the last) touch the limit
         currentScore.setPoints(0);
@@ -1318,8 +1316,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
     Dimension size = ui.getSize();
 
     g.setColor(couleur);
-    if (note.getX() < size.width - noteMargin && note.getX() >= noteMargin + 98 
-        && gameStarted) { // NOTE DANS LIMITES
+    if (note.getX() < size.width - noteMargin && note.getX() >= noteMargin + 98 && gameStarted) { // NOTE DANS LIMITES
       if (noteLevel.isAccidentalsgame() || noteLevel.isCustomNotesgame()) {
         note.paint(noteLevel, g, f, 9, 0, scoreYpos, ui, couleur, ui.bundle);
       } else {
@@ -1333,9 +1330,9 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
           startButton.setText(ui.bundle.getString("_start"));
           showResult();
         }
-        newnote();
+        newNote();
       } else if (noteLevel.isLearninggame()) {
-        newnote();
+        newNote();
         resetButtonColor();
       } else if (noteLevel.isInlinegame() && gameStarted) {
         if (line[position].getX() < noteMargin+98) { // Si la note courant (sauf la derniï¿½re)dï¿½passe la limite ici marge +25

@@ -1753,6 +1753,28 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
     midiOptionsDialog.setVisible(false);
     jalmus.paused = false;
   }
+  
+  boolean gameStarted() {
+    switch (jalmus.selectedGame) {
+    case Jalmus.NOTEREADING:
+      return noteGame.gameStarted;
+    case Jalmus.RHYTHMREADING:
+    case Jalmus.SCOREREADING:
+    default:
+      return jalmus.gameStarted;
+    }
+  }
+  
+  JPanel activePanel() {
+    switch (jalmus.selectedGame) {
+    case Jalmus.NOTEREADING:
+      return noteGame.animationPanel;
+    case Jalmus.RHYTHMREADING:
+    case Jalmus.SCOREREADING:
+    default:
+      return panelanim;
+    }
+  }
 
   void handleStartButtonClicked() {
     midiHelper.stopSound();

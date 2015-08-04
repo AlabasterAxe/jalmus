@@ -85,10 +85,10 @@ public class Jalmus {
   // Main variables
 
   int selectedGame = FIRSTSCREEN; // FIRSTSCREEN, NOTEREADING, RHYTHMREADING, SCOREREADING
-  static int FIRSTSCREEN = 0;
-  static int NOTEREADING = 1;
-  static int RHYTHMREADING = 2;
-  static int SCOREREADING = 3;
+  static final int FIRSTSCREEN = 0;
+  static final int NOTEREADING = 1;
+  static final int RHYTHMREADING = 2;
+  static final int SCOREREADING = 3;
   //----------------------------------------------------------------
   // Lesson variables
   Lessons currentLesson = new Lessons();

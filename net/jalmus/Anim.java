@@ -43,7 +43,7 @@ class Anim extends JPanel {
         g.setColor(Color.white);
         g.fillRect(0, 0, d.width, d.height);
 
-        if (this.ui.jalmus.gameStarted && !this.ui.jalmus.paused && (this.ui.noteGame.noteLevel.isNormalgame() || this.ui.noteGame.noteLevel.isLearninggame())) {
+        if (this.ui.gameStarted() && !this.ui.jalmus.paused && (this.ui.noteGame.noteLevel.isNormalgame() || this.ui.noteGame.noteLevel.isLearninggame())) {
           if (this.ui.noteGame.noteLevel.isNotesgame() || this.ui.noteGame.noteLevel.isAccidentalsgame() || this.ui.noteGame.noteLevel.isCustomNotesgame()) {
             this.ui.noteGame.drawNote(this.ui.noteGame.currentNote, g, this.ui.musiSync, Color.black);
           } else if (this.ui.noteGame.noteLevel.isChordsgame()) {
@@ -52,7 +52,7 @@ class Anim extends JPanel {
           } else if (this.ui.noteGame.noteLevel.isIntervalsgame()) {
             this.ui.noteGame.drawInterval(this.ui.noteGame.currentInterval, g, true);
           }
-        } else if ((this.ui.jalmus.gameStarted && !this.ui.jalmus.paused && this.ui.noteGame.noteLevel.isInlinegame())) {
+        } else if ((this.ui.gameStarted() && !this.ui.jalmus.paused && this.ui.noteGame.noteLevel.isInlinegame())) {
           this.ui.noteGame.drawInlineNotes(g, this.ui.musiSync);
         }
 
@@ -95,8 +95,10 @@ class Anim extends JPanel {
         }
 
         if (this.ui.noteGame.noteLevel.isLearninggame()) {
-          if (this.ui.noteGame.noteLevel.isNotesgame() || this.ui.noteGame.noteLevel.isAccidentalsgame() || this.ui.noteGame.noteLevel.isCustomNotesgame()) {
-            this.ui.jalmus.piano.paint(g, d.width, !this.ui.jalmus.isLessonMode & !this.ui.jalmus.gameStarted, basenotet1.getPitch(), basenotet2.getPitch(),
+          if (this.ui.noteGame.noteLevel.isNotesgame() ||
+              this.ui.noteGame.noteLevel.isAccidentalsgame() ||
+              this.ui.noteGame.noteLevel.isCustomNotesgame()) {
+            this.ui.jalmus.piano.paint(g, d.width, !this.ui.jalmus.isLessonMode & !this.ui.gameStarted(), basenotet1.getPitch(), basenotet2.getPitch(),
                 basenoteb1.getPitch(), basenoteb2.getPitch(), this.ui.noteGame.currentNote.getPitch(), 0, 0, this.ui.noteGame.noteLevel.isCustomNotesgame(), this.ui.noteGame.noteLevel.getPitcheslist());
           } else if (this.ui.noteGame.noteLevel.isIntervalsgame()) {
             this.ui.jalmus.piano.paint(g, d.width, false, basenotet1.getPitch(), basenotet2.getPitch(),basenoteb1.getPitch(), 
@@ -111,7 +113,7 @@ class Anim extends JPanel {
           }
           this.ui.noteGame.applyButtonColor();
         } else {
-          this.ui.jalmus.piano.paint(g, d.width, !this.ui.jalmus.isLessonMode && !this.ui.jalmus.gameStarted && (this.ui.noteGame.noteLevel.isNotesgame()|| this.ui.noteGame.noteLevel.isAccidentalsgame()),
+          this.ui.jalmus.piano.paint(g, d.width, !this.ui.jalmus.isLessonMode && !this.ui.gameStarted() && (this.ui.noteGame.noteLevel.isNotesgame()|| this.ui.noteGame.noteLevel.isAccidentalsgame()),
               basenotet1.getPitch(), basenotet2.getPitch(),basenoteb1.getPitch(), basenoteb2.getPitch(),  0, 0, 0,
               this.ui.noteGame.noteLevel.isCustomNotesgame(), this.ui.noteGame.noteLevel.getPitcheslist());
         }
@@ -127,8 +129,8 @@ class Anim extends JPanel {
         g.drawString("Java Lecture Musicale", (d.width/2) - 155, (d.height / 2) + 15);
         g.setFont(new Font("Arial", Font.BOLD, 15));
         g.drawString("Copyright (C) 2003-2011 RICHARD Christophe", 10, d.height - 40);
-      } else if (this.ui.jalmus.selectedGame == Jalmus.RHYTHMREADING || this.ui.jalmus.selectedGame==Jalmus.SCOREREADING) {
-
+      } else if (this.ui.jalmus.selectedGame == Jalmus.RHYTHMREADING ||
+          this.ui.jalmus.selectedGame==Jalmus.SCOREREADING) {
         g.setColor(Color.white);
         g.fillRect(0, 0, d.width, d.height);
         this.ui.gameButtonPanel.setBackground(Color.white);

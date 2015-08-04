@@ -36,7 +36,7 @@ class RenderingThread extends Thread {
           else sleep(this.ui.jalmus.noteGame.noteLevel.getSpeed()+18);
         }
 
-          if (this.ui.jalmus.gameStarted && !this.ui.jalmus.paused) {
+          if (this.ui.gameStarted() && !this.ui.jalmus.paused) {
             if ((this.ui.jalmus.noteGame.noteLevel.isNormalgame() || this.ui.jalmus.noteGame.noteLevel.isLearninggame()) &&
                 (this.ui.jalmus.noteGame.noteLevel.isNotesgame() || this.ui.jalmus.noteGame.noteLevel.isAccidentalsgame() || this.ui.jalmus.noteGame.noteLevel.isCustomNotesgame())) {
               this.ui.jalmus.noteGame.currentNote.setX(this.ui.jalmus.noteGame.currentNote.getX()+1);
@@ -66,7 +66,7 @@ class RenderingThread extends Thread {
             }
           }
 
-          this.ui.panelanim.repaint();
+          this.ui.activePanel().repaint();
 
           int tmpdiv = 1; 
           //thread for rhythm game move the rhythm cursor according to tempo
