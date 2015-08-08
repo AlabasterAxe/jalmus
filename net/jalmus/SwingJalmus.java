@@ -88,14 +88,6 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
   String minor;
   String major;
 
-  String DO;
-  String RE;
-  String MI;
-  String FA;
-  String SOL;
-  String LA;
-  String SI;
-
   String tlicence;
   String tcredits;
 
@@ -375,7 +367,6 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
     /***********************************************************************/
     preferencesDialog = buildPreferencesDialog();
 
-
     aboutDialog = new JDialog(this, true);
     //aboutDialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
     aboutDialog.setResizable(false);
@@ -654,7 +645,6 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
     }
 
     languages.setIcon(new ImageIcon(getClass().getResource("/images/language.png")));
-
     languages.addActionListener(this);
     languages.setMnemonic(KeyEvent.VK_L);
 
@@ -1214,14 +1204,6 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
     bfermer.setText(bundle.getString("_buttonclose"));
     bcredits.setText(bundle.getString("_buttoncredits"));
     blicence.setText(bundle.getString("_buttonlicense"));
-
-    DO = bundle.getString("_do");
-    RE = bundle.getString("_re");
-    MI = bundle.getString("_mi");
-    FA = bundle.getString("_fa");
-    SOL = bundle.getString("_sol");
-    LA = bundle.getString("_la");
-    SI = bundle.getString("_si");
   }
 
   void savesettings() {
@@ -1507,52 +1489,8 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
   /** FONCTIONS POUR SAISIE AU CLAVIER */
   @Override
   public void keyTyped(KeyEvent evt) {
-    char ch = evt.getKeyChar();  // The character typed.
-
-    if (jalmus.selectedGame == Jalmus.NOTEREADING && jalmus.gameStarted) {
-      if (ch == 'P' || ch == 'p') {
-        jalmus.paused = true;
-
-        int n = JOptionPane.showConfirmDialog(this, "",
-            this.bundle.getString("_gamepaused"), JOptionPane.DEFAULT_OPTION,
-            JOptionPane.PLAIN_MESSAGE);
-
-        if (n == 0) {
-          jalmus.paused = false;
-        }
-      }
-    }
-
-    if (jalmus.selectedGame == Jalmus.NOTEREADING && jalmus.gameStarted && !jalmus.paused &&
-        noteGame.noteLevel.isNotesgame()) {
-
-      if (ch == 'Q' || ch=='q' || ch=='A' || ch=='a' || ch=='S' || ch=='s' || ch == 'D' ||
-          ch=='d' || ch=='F' || ch=='f' || ch=='G' || ch=='g' || ch == 'H' || ch=='h' || ch=='J' ||
-          ch=='j' || ch=='K' || ch=='k') {
-
-        if (((language == "fr" && (ch=='Q' || ch=='q'))
-              || ((language == "en" || language =="es" || language =="de") && (ch=='A' || ch=='a')))
-            && jalmus.noteGame.currentNote.getNom() == DO)
-        {
-          noteGame.rightAnswer();
-        } else if ((ch == 'S' || ch=='s') && jalmus.noteGame.currentNote.getNom().equals(RE)) {
-          noteGame.rightAnswer();
-        } else if ((ch == 'D' || ch=='d') && jalmus.noteGame.currentNote.getNom().equals(MI)) {
-          noteGame.rightAnswer();
-        } else if ((ch == 'F' || ch=='f') && jalmus.noteGame.currentNote.getNom().equals(FA)) {
-          noteGame.rightAnswer();
-        } else if ((ch == 'G' || ch=='g') && jalmus.noteGame.currentNote.getNom().equals(SOL)) {
-          noteGame.rightAnswer();
-        } else if ((ch == 'H' || ch=='h') && jalmus.noteGame.currentNote.getNom().equals(LA)) {
-          noteGame.rightAnswer();
-        } else if ((ch == 'J' || ch=='j') && jalmus.noteGame.currentNote.getNom().equals(SI)) {
-          noteGame.rightAnswer();
-        } else if ((ch == 'K' || ch=='k') && jalmus.noteGame.currentNote.getNom().equals(DO)) {
-          noteGame.rightAnswer();
-        } else {
-          noteGame.wrongAnswer();
-        }
-          }
+    if (jalmus.selectedGame == Jalmus.NOTEREADING) {
+      noteGame.handleKeyTyped(evt);
     }
   }  // end keyTyped()
   

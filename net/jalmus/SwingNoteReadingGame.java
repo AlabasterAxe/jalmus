@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
 import java.util.ResourceBundle;
 
 import javax.swing.JButton;
@@ -24,7 +25,6 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
 
   private SwingJalmus ui;
 
-  
   private final ActionListener noteButtonActionListener = new ActionListener() {
 
     @Override
@@ -51,6 +51,14 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
     }
     
   };
+
+  String DO;
+  String RE;
+  String MI;
+  String FA;
+  String SOL;
+  String LA;
+  String SI;
 
   final JButton doButton1 = new JButton();
   final JButton reButton = new JButton();
@@ -561,6 +569,14 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
     chordTypeComboBox.addItem(bundle.getString("_inversion"));
 
     notesDialog.setTitle("Choose notes to study");
+
+    DO = bundle.getString("_do");
+    RE = bundle.getString("_re");
+    MI = bundle.getString("_mi");
+    FA = bundle.getString("_fa");
+    SOL = bundle.getString("_sol");
+    LA = bundle.getString("_la");
+    SI = bundle.getString("_si");
 
     doButton1.setText(bundle.getString("_do"));
     reButton.setText(bundle.getString("_re"));
@@ -1414,5 +1430,52 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
   
   public JPanel getGamePanel() {
     return principal;
+  }
+  
+  public void handleKeyTyped(KeyEvent evt) {
+    char ch = evt.getKeyChar();  // The character typed.
+    
+    if (gameStarted) {
+      if (ch == 'P' || ch == 'p') {
+        paused = true;
+
+        int n = JOptionPane.showConfirmDialog(ui, "", ui.bundle.getString("_gamepaused"),
+            JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+        if (n == 0) {
+          paused = false;
+        }
+      }
+
+      if (!paused && noteLevel.isNotesgame()) {
+        if (ch == 'Q' || ch=='q' || ch=='A' || ch=='a' || ch=='S' || ch=='s' || ch == 'D' ||
+            ch=='d' || ch=='F' || ch=='f' || ch=='G' || ch=='g' || ch == 'H' || ch=='h' || ch=='J' ||
+            ch=='j' || ch=='K' || ch=='k') {
+
+          if (((ui.language == "fr" && (ch=='Q' || ch=='q'))
+                || ((ui.language == "en" || ui.language =="es" || ui.language =="de") && (ch=='A' || ch=='a')))
+              && currentNote.getNom() == DO)
+          {
+            rightAnswer();
+          } else if ((ch == 'S' || ch=='s') && currentNote.getNom().equals(RE)) {
+            rightAnswer();
+          } else if ((ch == 'D' || ch=='d') && currentNote.getNom().equals(MI)) {
+            rightAnswer();
+          } else if ((ch == 'F' || ch=='f') && currentNote.getNom().equals(FA)) {
+            rightAnswer();
+          } else if ((ch == 'G' || ch=='g') && currentNote.getNom().equals(SOL)) {
+            rightAnswer();
+          } else if ((ch == 'H' || ch=='h') && currentNote.getNom().equals(LA)) {
+            rightAnswer();
+          } else if ((ch == 'J' || ch=='j') && currentNote.getNom().equals(SI)) {
+            rightAnswer();
+          } else if ((ch == 'K' || ch=='k') && currentNote.getNom().equals(DO)) {
+            rightAnswer();
+          } else {
+            wrongAnswer();
+          }
+        }
+      }
+    }
   }
 }
