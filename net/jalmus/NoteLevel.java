@@ -174,7 +174,7 @@ public class NoteLevel implements Level {
     return this.gametype.equals("inline");
   }
 
-  public boolean isLearninggame() {
+  public boolean isLearningGame() {
     return this.gametype.equals("learning");
   }
 
@@ -281,7 +281,7 @@ public class NoteLevel implements Level {
     return this.chordtype.equals("root");
   }
 
-  public boolean isChordtypeInversion() {
+  public boolean isChordTypeInversion() {
     return this.chordtype.equals("inversion");
   }
 
@@ -414,7 +414,7 @@ public class NoteLevel implements Level {
       fileContent.append("<levels>"+newline+"<notereading id = '0'>"+newline);
       fileContent.append("<message>"+message+"</message>"+newline);
       fileContent.append("<game>"+this.gametype+"</game>"+newline);
-      if (this.isLearninggame()) fileContent.append("<learningduration>30<learningduration>"+newline);
+      if (this.isLearningGame()) fileContent.append("<learningduration>30<learningduration>"+newline);
       fileContent.append("<clef>"+this.currentKey+"</clef>"+newline);
       if (this.randomtonality) fileContent.append("<tonality>random</tonality>"+newline);
       else  if (this.currenttonality.getAlterationsNumber()!=0) fileContent.append("<tonality>"+this.currenttonality.getAlterationsNumber()+this.currenttonality.getAlteration()+ "</tonality>"+newline);

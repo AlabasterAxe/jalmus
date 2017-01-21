@@ -2,7 +2,7 @@ package net.jalmus;
 
 import java.awt.Dimension;
 
-public class NoteReadingGame implements Game {
+public abstract class NoteReadingGame implements Game {
 
   NoteLevel noteLevel = new NoteLevel();
   

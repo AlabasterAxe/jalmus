@@ -23,26 +23,26 @@ public class Piano {
   Vector<Key> blackKeys = new Vector<Key>();
   Vector<Key> keys = new Vector<Key>();
   Vector<Key> whiteKeys = new Vector<Key>();
-  Color jfcBlue = new Color(204, 204, 255);
-  Color red = new Color(242, 179, 112);
-  Color pink = new Color(255, 175, 175);
+  private static final Color JFC_BLUE = new Color(204, 204, 255);
+  private static final Color RED = new Color(242, 179, 112);
 
   Key prevKey;
-  final int kw = 16, kh = 80;
+  private static final int KEY_WIDTH = 16;
+  private static final int KEY_HEIGHT = 80;
   final int ypos = 315;
   int marge = 43;
   int length = 73;
 
-  public Piano(int l, int m) {
+  public Piano(int length, int m) {
 
     int octavanumber;
     int transpose;
     int offset = 0;
 
     this.marge = m;
-    this.length = l;
+    this.length = length;
 
-    if (length == 61) {
+    if (this.length == 61) {
       octavanumber = 5;
       transpose = 36;
     } else {
@@ -56,25 +56,25 @@ public class Piano {
     int whiteIDs[] = { 0, 2, 4, 5, 7, 9, 11 };
 
     for (int i = 0, x = 0; i < octavanumber; i++) {
-      for (int j = 0; j < 7; j++, x += kw) {
+      for (int j = 0; j < 7; j++, x += KEY_WIDTH) {
         int keyNum = i * 12 + whiteIDs[j] + transpose;
-        whiteKeys.add(new Key(x + marge, ypos, kw-1, kh, keyNum, 0));
+        whiteKeys.add(new Key(x + marge, ypos, KEY_WIDTH -1, KEY_HEIGHT, keyNum, 0));
       }
     }
 
-    whiteKeys.add(new Key(7 * octavanumber * kw + marge + 3, ypos, kw, kh,
+    whiteKeys.add(new Key(7 * octavanumber * KEY_WIDTH + marge + 3, ypos, KEY_WIDTH, KEY_HEIGHT,
                           octavanumber * 12 + transpose, 0));
 
-    for (int i = 0, x = 0; i < octavanumber; i++, x += kw) {
+    for (int i = 0, x = 0; i < octavanumber; i++, x += KEY_WIDTH) {
       int keyNum = i * 12 + transpose;
-      blackKeys.add(new Key( (x += kw) - 1 + marge, ypos, kw / 2, kh / 2 + 11, keyNum + 1, offset));
-      blackKeys.add(new Key( (x += kw) - 1 + marge, ypos, kw / 2, kh / 2 + 11, keyNum + 3, offset));
-      x += kw;
-      offset +=kw;
-      blackKeys.add(new Key( (x += kw) - 1 + marge, ypos, kw / 2, kh / 2 + 11, keyNum + 6, offset));
-      blackKeys.add(new Key( (x += kw) - 1 + marge, ypos, kw / 2, kh / 2 + 11, keyNum + 8, offset));
-      blackKeys.add(new Key( (x += kw) - 1 + marge, ypos, kw / 2, kh / 2 + 11, keyNum + 10, offset));
-      offset += kw;
+      blackKeys.add(new Key( (x += KEY_WIDTH) - 1 + marge, ypos, KEY_WIDTH / 2, KEY_HEIGHT / 2 + 11, keyNum + 1, offset));
+      blackKeys.add(new Key( (x += KEY_WIDTH) - 1 + marge, ypos, KEY_WIDTH / 2, KEY_HEIGHT / 2 + 11, keyNum + 3, offset));
+      x += KEY_WIDTH;
+      offset += KEY_WIDTH;
+      blackKeys.add(new Key( (x += KEY_WIDTH) - 1 + marge, ypos, KEY_WIDTH / 2, KEY_HEIGHT / 2 + 11, keyNum + 6, offset));
+      blackKeys.add(new Key( (x += KEY_WIDTH) - 1 + marge, ypos, KEY_WIDTH / 2, KEY_HEIGHT / 2 + 11, keyNum + 8, offset));
+      blackKeys.add(new Key( (x += KEY_WIDTH) - 1 + marge, ypos, KEY_WIDTH / 2, KEY_HEIGHT / 2 + 11, keyNum + 10, offset));
+      offset += KEY_WIDTH;
     }
     keys.addAll(blackKeys);
     keys.addAll(whiteKeys);
@@ -114,14 +114,14 @@ public class Piano {
     return null;
   }
   
-  public boolean rightbuttonpressed(Point point, int width) {
+  public boolean rightButtonPressed(Point point, int width) {
 	  int offx = (width/2) - 390;
 	    
 	  Rectangle rec = new Rectangle(740 + offx, 440, 30 ,30); 
   	return (rec.contains(point));  
   }
   
-  public boolean leftbuttonpressed(Point point, int width) {
+  public boolean leftButtonPressed(Point point, int width) {
 	  int offx = (width/2) - 390;
 	    
 	  Rectangle rec = new Rectangle(5 + offx, 440, 30 ,30); 
@@ -202,12 +202,12 @@ public class Piano {
     //System.out.println (basenotepitch1);
     //System.out.println (basenotepitch2);
     g2.setColor(Color.black);
-    // g2.drawRect(marge+3,ypos,42*kw,kh);
+    // g2.drawRect(marge+3,ypos,42*KEY_WIDTH,kh);
     for (int i = 0; i < whiteKeys.size(); i++) {
       Key key = (Key) whiteKeys.get(i);
-      key.x = 2 + marge + offx + (kw * i);
+      key.x = 2 + marge + offx + (KEY_WIDTH * i);
       if (key.isNoteOn()) {
-        g2.setColor(jfcBlue);
+        g2.setColor(JFC_BLUE);
         g2.fill(key);
       }
       else if ( !iscustom && paintbutton & ((key.kNum <= basenotepitch1  & key.kNum >= basenotepitch2) | 
@@ -226,7 +226,7 @@ public class Piano {
       
       else if (key.kNum == pitchcourant0 | key.kNum == pitchcourant1 |
                key.kNum == pitchcourant2) {
-          g2.setColor(red);
+          g2.setColor(RED);
           g2.fill(key);
       }
 
@@ -246,16 +246,16 @@ public class Piano {
     	//  key.x = marge + offx + (11 * i);
       //else if ((i+1)%2 == 0)
     	//  key.x = marge + offx + (11 * i);
-      key.x = marge + offx + key.getXoffset() - 2 + ((i+1) * kw); 
+      key.x = marge + offx + key.getXoffset() - 2 + ((i+1) * KEY_WIDTH);
       
       if (key.isNoteOn()) {
-        g2.setColor(jfcBlue);
+        g2.setColor(JFC_BLUE);
         g2.fill(key);
         g2.setColor(Color.black);
         g2.draw(key);
       } else if (key.kNum == pitchcourant0 | key.kNum == pitchcourant1 |
                  key.kNum == pitchcourant2) {
-        g2.setColor(red);
+        g2.setColor(RED);
         g2.fill(key);
         g2.setColor(Color.black);
         g2.draw(key);

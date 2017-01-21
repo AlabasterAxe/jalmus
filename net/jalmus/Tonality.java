@@ -75,7 +75,8 @@ public class Tonality {
 	  g.drawString(type, x + 2, y + 22);
   }
 
-  public void paint(int gametype, String key, Graphics g, Font f, int marge, int rowYpos, int rowDistance, int nbline, Component j, ResourceBundle bundle) {
+  public void paint(int gametype, String key, Graphics g, Font f, int marge, int rowYpos, int rowDistance, int nbline,
+                    Component j, ResourceBundle bundle) {
 
     int keyDistance = 0;
 

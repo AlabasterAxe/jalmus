@@ -83,7 +83,7 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
   ResourceBundle bundle;
   final Collection<Localizable> localizables = new ArrayList<Localizable>();
 
-  Font musiSync; // font used to render scores 
+  Font musiSync; // font used to render scores
 
   String minor;
   String major;
@@ -91,18 +91,20 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
   String tlicence;
   String tcredits;
 
-  int alterationWidth = 0; // width of alterations symbols. None by default
   int windowMargin = 50; // margin from the window border
   int keyWidth = 30; // width of score keys
   int noteMargin = 220; // margin for note reading
-  int timeSignWidth = 30; // width of current score time signature symbol. This includes also the first note margin
-  int notesShift = 10; // space in pixel to align notes to the score layout
-  int noteDistance = 72; // distance in pixel between 1/4 notes
-  int firstNoteXPos = windowMargin + keyWidth + alterationWidth + timeSignWidth + notesShift;
-  int rhythmAnswerScoreYpos = 100; //distance to paint answer
-  float rhythmCursorXpos = firstNoteXPos - noteDistance; // X position of the cursor on the score during rhythm game
-  int rhythmCursorXStartPos = firstNoteXPos - noteDistance;
-  int rhythmCursorXlimit;
+
+  // width of current score time signature symbol. This includes also the first note margin
+  int timeSignWidth = 30;
+
+  // space in pixel to align notes to the score layout
+  int notesShift = 10;
+
+  // distance in pixel between 1/4 notes
+  int noteDistance = 72;
+
+  int firstNoteXPos = windowMargin + keyWidth + timeSignWidth + notesShift;
 
   int scoreYpos = 110; // Y coordinate of the first row of the score
   int metronomeYPos = 100;
@@ -121,7 +123,7 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
   JMenu lessonsMenu;
   private JMenu[] lessonsMenuDir = new JMenu[16];
   JMenuItem[][] lessonsMenuItem = new JMenuItem[16][26];
-  
+
   RenderingThread renderingThread;
   Anim panelanim;
   Image jbackground;
@@ -223,7 +225,7 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
   JComboBox<String> midiInComboBox;
   JComboBox<String> midiOutComboBox;
 
-  DefaultComboBoxModel<String> midiOutComboBoxModel = new DefaultComboBoxModel<String>();    
+  DefaultComboBoxModel<String> midiOutComboBoxModel = new DefaultComboBoxModel<String>();
   DefaultComboBoxModel<String> midiInComboBoxModel = new DefaultComboBoxModel<String>();
 
   //----
@@ -262,7 +264,6 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
     this.jalmus = jalmus;
     this.panelanim = new Anim(this);
     this.renderingThread = new RenderingThread(this);
-    rhythmCursorXlimit = firstNoteXPos + (4 * numberOfMeasures * noteDistance);
     this.noteGame = noteGame;
     this.noteGame.setUi(this);
     this.rhythmGame = rhythmGame;
@@ -274,7 +275,7 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
 
   void init(String paramlanguage) {
     jalmus.init(paramlanguage);
-    
+
     try {
       InputStream fInput = this.getClass().getResourceAsStream("/images/MusiSync.ttf");
       musiSync = Font.createFont(Font.PLAIN, fInput);
@@ -283,7 +284,6 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
       System.exit(1);
     }
 
-    
     if (!midiHelper.initialize()) {
       return;
     }
@@ -414,7 +414,7 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
     blicence = new JButton();
     blicence.setIcon(new ImageIcon(getClass().getResource("/images/licence.png")));
     blicence.addActionListener(this);
-    
+
     bfermer = new JButton();
     bfermer.setIcon(new ImageIcon(getClass().getResource("/images/cancel.png")));
     bfermer.addActionListener(this);
@@ -485,8 +485,8 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
     scoreMessage.setModal(false);
     scoreMessage.setVisible(false);
 
-    labelPanel.add( new JLabel(bundle.getString("_name"), JLabel.RIGHT));
-    labelPanel.add( new JLabel(bundle.getString("_description"), JLabel.RIGHT));
+    labelPanel.add(new JLabel(bundle.getString("_name"), JLabel.RIGHT));
+    labelPanel.add(new JLabel(bundle.getString("_description"), JLabel.RIGHT));
 
     fieldPanel.add(lessonName);
     fieldPanel.add(lessonMessage);
@@ -524,7 +524,7 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
 
     ButtonGroup group = new ButtonGroup();
 
-    rblanguagefr = new JRadioButtonMenuItem("Fran"+"\u00E7"+"ais");
+    rblanguagefr = new JRadioButtonMenuItem("Fran" + "\u00E7" + "ais");
     rblanguagefr.setMnemonic(KeyEvent.VK_F);
     group.add(rblanguagefr);
     rblanguagefr.addActionListener(this);
@@ -631,7 +631,7 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
       language = "eo";
     } else if ("pl".equals(paramlanguage)) {
       rblanguagepl.setSelected(true);
-      language = "pl"; 
+      language = "pl";
     } else if ("iw".equals(paramlanguage)) {
       rblanguageiw.setSelected(true);
       language = "iw";
@@ -668,11 +668,11 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
         if (jalmus.selectedGame == Jalmus.NOTEREADING) {
           Key key = jalmus.piano.getKey(e.getPoint());
 
-          if (jalmus.piano.getPrevKey() != null && jalmus.piano.getPrevKey()!=key) {
-            jalmus.piano.getPrevKey().turnOff(midiHelper.currentChannel, soundOnCheckBox.isSelected() &&
-                !midiHelper.midierror);
+          if (jalmus.piano.getPrevKey() != null && jalmus.piano.getPrevKey() != key) {
+            jalmus.piano.getPrevKey().turnOff(midiHelper.currentChannel,
+              soundOnCheckBox.isSelected() && !midiHelper.midierror);
           }
-          if (key != null && jalmus.piano.getPrevKey()!=key) {
+          if (key != null && jalmus.piano.getPrevKey() != key) {
             key.turnOn(midiHelper.currentChannel, false);
           }
           jalmus.piano.setPrevKey(key);
@@ -680,13 +680,13 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
         }
       }
     });
-    
+
     addComponentListener(new ComponentAdapter() {
       @Override
       public void componentResized(ComponentEvent e) {
         System.out.println("Jalmus has been resized !");
         if (jalmus.selectedGame == Jalmus.RHYTHMREADING ||
-            jalmus.selectedGame==Jalmus.SCOREREADING) {
+            jalmus.selectedGame == Jalmus.SCOREREADING) {
           handleNewButtonClicked();
         }
       }
@@ -700,10 +700,10 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
         Dimension d = getSize();
 
         if (jalmus.selectedGame == Jalmus.NOTEREADING) {
-          if (jalmus.piano.rightbuttonpressed(e.getPoint(), d.width)) {
+          if (jalmus.piano.rightButtonPressed(e.getPoint(), d.width)) {
             noteGame.noteLevel.basenotetoRight(jalmus.piano);
           }
-          if (jalmus.piano.leftbuttonpressed(e.getPoint(), d.width)) {
+          if (jalmus.piano.leftButtonPressed(e.getPoint(), d.width)) {
             noteGame.noteLevel.basenotetoLeft(jalmus.piano);
           }
 
@@ -723,7 +723,8 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
                 renderingThread.start();
               }
             } else if (key != null && jalmus.gameStarted && !jalmus.paused) {
-              key.turnOn(midiHelper.currentChannel, soundOnCheckBox.isSelected() && !midiHelper.midierror);
+              key.turnOn(midiHelper.currentChannel,
+                  soundOnCheckBox.isSelected() && !midiHelper.midierror);
               repaint();
 
               if (key.getKNum() == jalmus.noteGame.currentNote.getPitch()) {
@@ -740,7 +741,8 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
       public void mouseReleased(MouseEvent e) {
         if (jalmus.selectedGame == Jalmus.NOTEREADING) {
           if (jalmus.piano.getPrevKey() != null) {
-            jalmus.piano.getPrevKey().turnOff(midiHelper.currentChannel, soundOnCheckBox.isSelected() && !midiHelper.midierror);
+            jalmus.piano.getPrevKey().turnOff(midiHelper.currentChannel,
+                soundOnCheckBox.isSelected() && !midiHelper.midierror);
             repaint();
           }
         }
@@ -750,7 +752,8 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
       public void mouseExited(MouseEvent e) {
         if (jalmus.selectedGame == Jalmus.NOTEREADING) {
           if (jalmus.piano.getPrevKey() != null) {
-            jalmus.piano.getPrevKey().turnOff(midiHelper.currentChannel, soundOnCheckBox.isSelected() && !midiHelper.midierror);
+            jalmus.piano.getPrevKey().turnOff(midiHelper.currentChannel,
+                soundOnCheckBox.isSelected() && !midiHelper.midierror);
             repaint();
             jalmus.piano.setPrevKey(null);
           }
@@ -761,14 +764,14 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
     addWindowListener(new WindowAdapter() {
       @Override
       public void windowClosed(WindowEvent evt) {
-        savesettings();
+        saveSettings();
         dispose();
         System.exit(0);
       }
 
       @Override
       public void windowClosing(WindowEvent evt) {
-        savesettings();
+        saveSettings();
         dispose();
         System.exit(0);
       }
@@ -778,15 +781,15 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
     try {
       settings.load(new FileInputStream("settings.properties"));
       if ("on".equals(settings.getProperty("sound"))) {
-    	  soundOnCheckBox.setSelected(true);
+        soundOnCheckBox.setSelected(true);
       } else if ("off".equals(settings.getProperty("sound"))) {
-    	  soundOnCheckBox.setSelected(false);
+        soundOnCheckBox.setSelected(false);
       }
 
       if ("on".equals(settings.getProperty("keyboardsound"))) {
-    	  keyboardsoundCheckBox.setSelected(true);
+        keyboardsoundCheckBox.setSelected(true);
       } else if ("off".equals(settings.getProperty("keyboardsound"))) {
-    	  keyboardsoundCheckBox.setSelected(false);
+        keyboardsoundCheckBox.setSelected(false);
       }
 
       int ins = Integer.parseInt(settings.getProperty("instrument"));
@@ -795,14 +798,14 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
       }
 
       int k = Integer.parseInt(settings.getProperty("keyboard"));
-      if (k> 0 & k < midiInComboBox.getItemCount()) {
+      if (k > 0 & k < midiInComboBox.getItemCount()) {
         midiInComboBox.setSelectedIndex(k);
         midiInComboBoxModel.setSelectedItem(midiInComboBoxModel.getElementAt(k));
         System.out.println(midiInComboBox.getSelectedItem());
       }
 
       int ko = Integer.parseInt(settings.getProperty("midiout"));
-      if (ko> 0 & ko < midiOutComboBox.getItemCount()) {
+      if (ko > 0 & ko < midiOutComboBox.getItemCount()) {
         midiOutComboBox.setSelectedIndex(ko);
         midiOutComboBoxModel.setSelectedItem(midiOutComboBoxModel.getElementAt(ko));
         System.out.println(midiOutComboBox.getSelectedItem());
@@ -810,9 +813,9 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
 
       int kl = Integer.parseInt(settings.getProperty("keyboardlength"));
       if (kl == 61) {
-    	  keyboardLengthComboBox.setSelectedIndex(1);
+        keyboardLengthComboBox.setSelectedIndex(1);
       } else if (kl == 73) {
-    	  keyboardLengthComboBox.setSelectedIndex(0);
+        keyboardLengthComboBox.setSelectedIndex(0);
       }
 
       int kt = Integer.parseInt(settings.getProperty("transposition"));
@@ -822,13 +825,14 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
     } catch (Exception e) {
       System.out.println(e);
     }
-    
+
     changeLanguage();
   }
   //----------------------------------------------------------------
 
   JMenu buildExercisesMenu() {
-    JMenuItem noteReadingMenuItem = new JMenuItem(new ImageIcon(getClass().getResource("/images/note.png")));
+    JMenuItem noteReadingMenuItem =
+        new JMenuItem(new ImageIcon(getClass().getResource("/images/note.png")));
     localizables.add(new Localizable.Button(noteReadingMenuItem, "_menuNotereading"));
     noteReadingMenuItem.addActionListener(new ActionListener() {
       @Override
@@ -837,7 +841,8 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
       }
     });
 
-    JMenuItem rhythmReadingMenuItem = new JMenuItem(new ImageIcon(getClass().getResource("/images/rhythm.png")));
+    JMenuItem rhythmReadingMenuItem =
+        new JMenuItem(new ImageIcon(getClass().getResource("/images/rhythm.png")));
     localizables.add(new Localizable.Button(rhythmReadingMenuItem, "_menuRythmreading"));
     rhythmReadingMenuItem.addActionListener(new ActionListener() {
       @Override
@@ -846,7 +851,8 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
       }
     });
 
-    JMenuItem scoreReadingMenuItem = new JMenuItem(new ImageIcon(getClass().getResource("/images/score.png")));
+    JMenuItem scoreReadingMenuItem =
+        new JMenuItem(new ImageIcon(getClass().getResource("/images/score.png")));
     localizables.add(new Localizable.Button(scoreReadingMenuItem, "_menuScorereading"));
     scoreReadingMenuItem.addActionListener(new ActionListener() {
       @Override
@@ -855,7 +861,8 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
       }
     });
 
-    JMenuItem exitMenuItem = new JMenuItem(new ImageIcon(getClass().getResource("/images/exit.png")));
+    JMenuItem exitMenuItem =
+        new JMenuItem(new ImageIcon(getClass().getResource("/images/exit.png")));
     localizables.add(new Localizable.Button(exitMenuItem, "_menuExit"));
     exitMenuItem.addActionListener(new ActionListener() {
       @Override
@@ -868,9 +875,8 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
     localizables.add(new Localizable.Button(exercisesMenu, "_menuExercises"));
     exercisesMenu.setMnemonic(KeyEvent.VK_E);
     exercisesMenu.add(noteReadingMenuItem);
-    exercisesMenu.add(rhythmReadingMenuItem);  
+    exercisesMenu.add(rhythmReadingMenuItem);
     exercisesMenu.add(scoreReadingMenuItem);
-    //  exercisesMenu.add(lessonsMenuItem);
     exercisesMenu.addSeparator();
     exercisesMenu.add(exitMenuItem);
     return exercisesMenu;
@@ -892,14 +898,15 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
           lessonsMenuDir[i] = new JMenu(listsp[i].getName());
           result.add(lessonsMenuDir[i]);
 
-          pathsubdir[i] = path+File.separator+listsp[i].getName();
+          pathsubdir[i] = path + File.separator + listsp[i].getName();
           File repertoire = new File(pathsubdir[i]);
           File[] list = repertoire.listFiles();
           Arrays.sort(list);
           if (list != null && list.length <=25) { //25 lessons max
-            for (int i1 = 0; i1<list.length; i1++) {
+            for (int i1 = 0; i1 < list.length; i1++) {
               if ("xml".equals(FileTools.getFileExtension(list[i1]))) {
-                lessonsMenuItem[i][i1] = new JMenuItem(FileTools.getFileNameWithoutExtension(list[i1]));
+                lessonsMenuItem[i][i1] =
+                    new JMenuItem(FileTools.getFileNameWithoutExtension(list[i1]));
                 lessonsMenuItem[i][i1].addActionListener(this);
                 lessonsMenuDir[i].add(lessonsMenuItem[i][i1]);
               }
@@ -908,7 +915,7 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
         }
       }
     } else {
-      System.err.println(subdir+" : Reading lessons files error.");
+      System.err.println(subdir + " : Reading lessons files error.");
     }
 
     // final Desktop desktop = null;
@@ -918,7 +925,8 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
 
     result.addSeparator();
 
-    JMenuItem manageMenuItem = new JMenuItem(new ImageIcon(getClass().getResource("/images/folder.png")));
+    JMenuItem manageMenuItem =
+        new JMenuItem(new ImageIcon(getClass().getResource("/images/folder.png")));
     localizables.add(new Localizable.Button(manageMenuItem, "_menuBrowse"));
     manageMenuItem.addActionListener(new ActionListener() {
       @Override
@@ -926,7 +934,7 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
         File subdir = new File(path);
         jalmus.OpenDirectory(subdir);
       }
-    });	
+    });
     result.add(manageMenuItem);
 
     return result;
@@ -940,19 +948,15 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
 
     instrumentsComboBox = new JComboBox<String>();
     if (this.midiHelper.instruments != null) {
-      for (int i = 0; i<20; i++) {
+      for (int i = 0; i < 20; i++) {
         instrumentsComboBox.addItem(this.midiHelper.instruments[i].getName());
       }
     } else {
       instrumentsComboBox.addItem("No instrument available");
-      System.out.println("No soundbank file : http://java.sun.com/products/java-media/sound/soundbanks.html");
+      System.out.println(
+          "No soundbank file : http://java.sun.com/products/java-media/sound/soundbanks.html");
     }
     instrumentsComboBox.addItemListener(this);
-    /*
-       audioDriverComboBox = new JComboBox(AsioDriver.getDriverNames().toArray());
-       audioDriverComboBox.addItem("WDM Java Sound");
-       audioDriverComboBox.addItemListener(this);
-       */
     JPanel soundPanel = new JPanel(); // panel midi keyboard
     localizables.add(new Localizable.NamedGroup(soundPanel, "_sound"));
 
@@ -977,8 +981,7 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
     latencySlider.setPaintLabels(true);
 
     try {
-      latencySlider.setValue(Integer.parseInt(settings.getProperty("latency")));  
-      //speedcursorSlider.setValue(Integer.parseInt(settings.getProperty("speedcursor")));   
+      latencySlider.setValue(Integer.parseInt(settings.getProperty("latency")));
     } catch (Exception e) {
       System.out.println(e);
     }
@@ -989,11 +992,11 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
     midiInComboBoxModel.addElement(pasclavier);
     midiOutComboBoxModel.addElement(pasclavier);
     MidiDevice.Info[] aInfos = MidiSystem.getMidiDeviceInfo();
-    for (int i = 0; i<aInfos.length; i++) {
+    for (int i = 0; i < aInfos.length; i++) {
       try {
         MidiDevice device = MidiSystem.getMidiDevice(aInfos[i]);
-        boolean bAllowsInput = (device.getMaxTransmitters()!=0);
-        boolean bAllowsOutput = (device.getMaxReceivers()!=0);
+        boolean bAllowsInput = (device.getMaxTransmitters() != 0);
+        boolean bAllowsOutput = (device.getMaxReceivers() != 0);
 
         if (bAllowsInput) {
           midiInComboBoxModel.addElement(aInfos[i].getName());
@@ -1094,11 +1097,18 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
     preferencesTabbedPane.addTab(null,
         new ImageIcon(getClass().getResource(noteGame.getPreferencesIconResource())),
         noteGame.getPreferencesPanel());
-    localizables.add(new Localizable.Tab(preferencesTabbedPane, NOTE_READING_TAB, noteGame.getPreferencesLocalizable()));
-    preferencesTabbedPane.addTab(null, new ImageIcon(getClass().getResource(rhythmGame.getPreferencesIconResource())), rhythmGame.getPreferencesPanel());
-    localizables.add(new Localizable.Tab(preferencesTabbedPane, RHYTHM_READING_TAB, rhythmGame.getPreferencesLocalizable()));
-    preferencesTabbedPane.addTab(null, new ImageIcon(getClass().getResource(scoreGame.getPreferencesIconResource())), scoreGame.getPreferencesPanel());
-    localizables.add(new Localizable.Tab(preferencesTabbedPane, SCORE_READING_TAB, scoreGame.getPreferencesLocalizable()));
+    localizables.add(new Localizable.Tab(preferencesTabbedPane, NOTE_READING_TAB,
+          noteGame.getPreferencesLocalizable()));
+    preferencesTabbedPane.addTab(null,
+        new ImageIcon(getClass().getResource(rhythmGame.getPreferencesIconResource())),
+        rhythmGame.getPreferencesPanel());
+    localizables.add(new Localizable.Tab(preferencesTabbedPane, RHYTHM_READING_TAB,
+          rhythmGame.getPreferencesLocalizable()));
+    preferencesTabbedPane.addTab(null,
+        new ImageIcon(getClass().getResource(scoreGame.getPreferencesIconResource())),
+        scoreGame.getPreferencesPanel());
+    localizables.add(new Localizable.Tab(preferencesTabbedPane, SCORE_READING_TAB,
+          scoreGame.getPreferencesLocalizable()));
 
     // buttons below tabs
 
@@ -1181,8 +1191,8 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
     tcredits = bundle.getString("_credits");
 
     keyboardLengthComboBox.removeAllItems();
-    keyboardLengthComboBox.addItem("73 "+bundle.getString("_keys"));
-    keyboardLengthComboBox.addItem("61 "+bundle.getString("_keys"));
+    keyboardLengthComboBox.addItem("73 " + bundle.getString("_keys"));
+    keyboardLengthComboBox.addItem("61 " + bundle.getString("_keys"));
 
     minor = bundle.getString("_minor");
     major = bundle.getString("_major");
@@ -1206,39 +1216,40 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
     blicence.setText(bundle.getString("_buttonlicense"));
   }
 
-  void savesettings() {
-    settings.setProperty("transposition",String.valueOf(transpositionSpinner.getValue())); 
+  private void saveSettings() {
+    settings.setProperty("transposition", String.valueOf(transpositionSpinner.getValue()));
     if (keyboardLengthComboBox.getSelectedIndex() == 1) {
       settings.setProperty("keyboardlength","61");
     } else {
       settings.setProperty("keyboardlength","73");
     }
-    settings.setProperty("keyboard",String.valueOf(midiInComboBox.getSelectedIndex())); 
-    settings.setProperty("midiout",String.valueOf(midiOutComboBox.getSelectedIndex()));
-    settings.setProperty("instrument",String.valueOf(instrumentsComboBox.getSelectedIndex())); 
+    settings.setProperty("keyboard", String.valueOf(midiInComboBox.getSelectedIndex()));
+    settings.setProperty("midiout", String.valueOf(midiOutComboBox.getSelectedIndex()));
+    settings.setProperty("instrument", String.valueOf(instrumentsComboBox.getSelectedIndex()));
 
     if (soundOnCheckBox.isSelected()) {
-      settings.setProperty("sound","on");
+      settings.setProperty("sound", "on");
     } else {
-      settings.setProperty("sound","off"); 
+      settings.setProperty("sound", "off");
     }
 
     if (keyboardsoundCheckBox.isSelected()) {
-      settings.setProperty("keyboardsound","on");
+      settings.setProperty("keyboardsound", "on");
     } else {
-      settings.setProperty("keyboardsound","off"); 
+      settings.setProperty("keyboardsound", "off");
     }
-    settings.setProperty("latency", String.valueOf(latencySlider.getValue())); 
-    //settings.setProperty("speedcursor",String.valueOf(speedcursorSlider.getValue()));
-
+    settings.setProperty("latency", String.valueOf(latencySlider.getValue()));
     settings.setProperty("language", language);
 
-    try { 
-      settings.store(new FileOutputStream("settings.properties"), null); 
+    try {
+      settings.store(new FileOutputStream("settings.properties"), null);
       settings.list(System.out);
-    } catch (IOException e) { } 
+    } catch (IOException e) {
+      // TODO(mattkeller): do we care about this update this comment to reflect
+      //   why not or do something about it if we do.
+    }
   }
-  
+
   @Override
   public void actionPerformed(ActionEvent e) {
     if (e.getSource() == rblanguageen) {
@@ -1280,7 +1291,7 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
     if (e.getSource() == rblanguagefi) {
       language = "fi";
       changeLanguage();
-    } 
+    }
 
     if (e.getSource() == rblanguageko) {
       language = "ko";
@@ -1290,22 +1301,22 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
     if (e.getSource() == rblanguagepl) {
       language = "pl";
       changeLanguage();
-    }   
+    }
 
     if (e.getSource() == rblanguageiw) {
       language = "iw";
       changeLanguage();
-    }   
+    }
 
     if (e.getSource() == rblanguageeo) {
       language = "eo";
       changeLanguage();
-    } 
+    }
 
     if (e.getSource() == rblanguagegr) {
       language = "gr";
       changeLanguage();
-    } 
+    }
 
     for (int i = 0; i < lessonsMenuItem.length; i++) {
       for (int j = 0; j < lessonsMenuItem[0].length; j++) {
@@ -1334,17 +1345,17 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
           options,  //the titles of buttons
           options[0]); //default button title
       if (n == 0) {
-        jalmus.OpenURI("http://www.jalmus.net/pmwiki/pmwiki.php/"+language);
+        jalmus.OpenURI("http://www.jalmus.net/pmwiki/pmwiki.php/" + language);
       }
     } else if (e.getSource() == siteinternet) {
       jalmus.stopGames();
-      jalmus.OpenURI("http://jalmus.net?lang = "+language);
+      jalmus.OpenURI("http://jalmus.net?lang = " + language);
     } else if (e.getSource() == okscoreMessage) {
       scoreMessage.dispose();
       if (jalmus.isLessonMode) {
-        if ((jalmus.currentLesson.isNoteLevel() & jalmus.currentScore.isWin()) 
-             || jalmus.currentLesson.isRhythmLevel() 
-             || jalmus.currentLesson.isScoreLevel()) {
+        if ((jalmus.currentLesson.isNoteLevel() && jalmus.noteGame.currentScore.isWin()) ||
+            jalmus.currentLesson.isRhythmLevel() ||
+            jalmus.currentLesson.isScoreLevel()) {
           jalmus.nextLevel();
         } else {
           jalmus.startLevel();
@@ -1370,13 +1381,9 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
       aboutPanelTextArea.setText(tlicence);
     } else if (e.getSource() == bcredits) {
       aboutPanelTextArea.setText(tcredits);
-    } 
-
-    //  SI LE LABEL DU BOUTON SELECTIONNE EST EGAL A LA NOTE COURANTE   ----> GAGNE
-
-    
+    }
   }
-  
+
   @Override
   public void itemStateChanged(ItemEvent evt) {
     if (evt.getItemSelectable() == this.midiInComboBox && !this.selectmidi_forlang) {
@@ -1387,7 +1394,7 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
           midiHelper.open = false;
         }
 
-        String midimessage = "Initialisation "+smidiin;
+        String midimessage = "Initialisation " + smidiin;
 
         MidiDevice.Info info = MidiCommon.getMidiDeviceInfo(smidiin, false);
         if (info == null) {
@@ -1415,7 +1422,9 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
           midimessage = "End initialisation";
         }
         if (midiHelper.inputDevice.isOpen()) {
-          System.out.println("Midi Device open : play a key, if this key don't change his color at screen, verify the MIDI port name");
+          System.out.println(
+              "Midi Device open : play a key, if this key don't change his " +
+              "color at screen, verify the MIDI port name");
         }
         midiHelper.open = true;
       }
@@ -1501,10 +1510,10 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
         this.getContentPane().add(noteGame.getGamePanel());
         noteGame.startButton.setVisible(false);
         noteGame.preferencesButton.setVisible(false);
-        newButton.setVisible(false);
-        listenButton.setVisible(false);
         menuPrefs.setEnabled(false);
-      } else if (currentlesson.isRhythmLevel() || currentlesson.isScoreLevel()) { 
+      } else if (currentlesson.isRhythmLevel()) {
+        this.getContentPane().add(rhythmGame.getGamePanel());
+      } else if (currentlesson.isScoreLevel()) { 
         this.getContentPane().add(principal);
         gameButtonPanel.add(newButton);
         gameButtonPanel.add(listenButton);
@@ -1512,11 +1521,11 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
         gameButtonPanel.add(preferencesButton);
         scoreYpos = 110;
         if (currentlesson.isScoreLevel()) {
-          alterationWidth = jalmus.scoreGame.scoreLevel.getCurrentTonality().getAlterationsNumber() * 12;
-          firstNoteXPos = windowMargin + keyWidth + alterationWidth + timeSignWidth + notesShift;
+          scoreGame.alterationWidth = jalmus.scoreGame.scoreLevel.getCurrentTonality().getAlterationsNumber() * 12;
+          firstNoteXPos = windowMargin + keyWidth + scoreGame.alterationWidth + timeSignWidth + notesShift;
         } else if (currentlesson.isRhythmLevel()) {
           Dimension size = getSize();
-          int scoreLineWidth = keyWidth + alterationWidth + timeSignWidth;
+          int scoreLineWidth = keyWidth + timeSignWidth;
           numberOfMeasures = (size.width - (windowMargin * 2) - scoreLineWidth) /
               (jalmus.rhythmGame.rhythmLevel.getTimeSignNumerator() * noteDistance);            
         }
@@ -1718,8 +1727,7 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
     midiHelper.stopSound();
     if (jalmus.selectedGame == Jalmus.NOTEREADING) {
       throw new AssertionError("Should not be possible to click the general startbutton during the note reading game!!!!");
-    } else if (jalmus.selectedGame == Jalmus.RHYTHMREADING ||
-        jalmus.selectedGame == Jalmus.SCOREREADING) {
+    } else if (jalmus.selectedGame == Jalmus.RHYTHMREADING) {
       if (jalmus.gameStarted) {
         jalmus.stopRhythmGame();
         jalmus.gameStarted = false;
@@ -1729,6 +1737,8 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
         jalmus.initRhythmGame();
         jalmus.startRhythmGame();
       }
+    } else if (jalmus.selectedGame == Jalmus.SCOREREADING) {
+      throw new AssertionError("Should not be possible to click the general startbutton during the score reading game!!!!");
     }
   }
 
@@ -1753,8 +1763,7 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
       preferencesTabbedPane.setSelectedIndex(SwingJalmus.NOTE_READING_TAB);
     } else if (jalmus.selectedGame == Jalmus.RHYTHMREADING) {
       preferencesTabbedPane.setSelectedIndex(SwingJalmus.RHYTHM_READING_TAB);     
-    }
-    else if (jalmus.selectedGame == Jalmus.SCOREREADING) {
+    } else if (jalmus.selectedGame == Jalmus.SCOREREADING) {
       preferencesTabbedPane.setSelectedIndex(SwingJalmus.SCORE_READING_TAB);     
     }
     menuPrefs.doClick();
@@ -1831,122 +1840,30 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
 
   void drawKeys(Graphics g) {
     if (jalmus.selectedGame == Jalmus.NOTEREADING) {
-      if (noteGame.noteLevel.isCurrentKeyTreble()) {
-        g.setFont(musiSync.deriveFont(70f));
-        g.drawString("G", noteMargin, scoreYpos + 42);
-      } else if (noteGame.noteLevel.isCurrentKeyBass()) {
-        g.setFont(musiSync.deriveFont(60f));
-        g.drawString("?", noteMargin, scoreYpos + 40);
-      } else if (noteGame.noteLevel.isCurrentKeyBoth()) {
-        g.setFont(musiSync.deriveFont(70f));
-        g.drawString("G", noteMargin, scoreYpos+42);
-        g.setFont(musiSync.deriveFont(60f));
-        g.drawString("?", noteMargin, scoreYpos+130);
-      }
+      noteGame.drawKeys(g);
     } else if (jalmus.selectedGame == Jalmus.SCOREREADING ) {
-      if (scoreGame.scoreLevel.isCurrentKeyTreble()) {
-        for (int rowNum = 0; rowNum < numberOfRows; rowNum++) {
-          g.setFont(musiSync.deriveFont(70f));
-          g.drawString("G", windowMargin, scoreYpos+42+rowNum*rowsDistance);
-        }
-      } else if (scoreGame.scoreLevel.isCurrentKeyBass()) {
-        for (int rowNum = 0; rowNum < numberOfRows; rowNum++) {
-          g.setFont(musiSync.deriveFont(60f));
-          g.drawString("?", windowMargin, scoreYpos+40+rowNum*rowsDistance);
-        }
-      }
+      scoreGame.drawKeys(g);
     }
   }
 
   void drawTimeSignature(Graphics g) {
-    g.setFont(musiSync.deriveFont(58f));
-
-    int tmpnum = 4;
-    int tmpden = 4;
     if (jalmus.selectedGame == Jalmus.RHYTHMREADING ) {
-      tmpnum = rhythmGame.rhythmLevel.getTimeSignNumerator();
-      tmpden = rhythmGame.rhythmLevel.getTimeSignDenominator();
+      rhythmGame.drawTimeSignature(g);
     } else if (jalmus.selectedGame == Jalmus.SCOREREADING ) {
-      tmpnum = scoreGame.scoreLevel.getTimeSignNumerator();
-      tmpden = scoreGame.scoreLevel.getTimeSignDenominator();
-    }
-
-    for (int rowNum = 0; rowNum < numberOfRows; rowNum++) {
-      String t = "";
-      if (tmpnum == 4 && tmpden == 4) {
-        t = "$";
-      } else if (tmpnum == 3 && tmpden == 4) {
-        t = "#";
-      } else if (tmpnum == 2 && tmpden == 4) {
-        t = "@";
-      } else if (tmpnum == 6 && tmpden == 8) {
-        t = "P";
-      }
-      g.drawString(t, windowMargin + keyWidth + alterationWidth,
-          scoreYpos+41 + rowNum * rowsDistance);
+      scoreGame.drawTimeSignature(g);
+    } else {
+      throw new IllegalStateException("Tried to draw time signature at an improper time.");
     }
   }
 
   // ROWS
-
-  void drawInlineGame(Graphics g) {
-    Dimension size = getSize();
-    g.setColor(Color.black);
-    int yd;
-
-    for (yd = scoreYpos; yd<=scoreYpos+40; yd+=10) { //  1ere ligne ï¿½ 144;   derniï¿½re ï¿½ 176
-      g.drawLine(noteMargin, yd, size.width-noteMargin, yd);
-    }
-
-    if (noteGame.noteLevel.isCurrentKeyBoth()) {  // dessine la deuxiï¿½me portï¿½e 72 points en dessous
-      for (yd = scoreYpos+90; yd<=scoreYpos+130; yd+=10) {  //  1ere ligne ï¿½ 196;   derniï¿½re ï¿½ 228
-        g.drawLine(noteMargin, yd, size.width-noteMargin, yd);
-      }
-    }
-    if (noteGame.noteLevel.isInlinegame()) {
-      g.setColor(Color.red);
-      g.drawLine(noteMargin+98, scoreYpos-30, noteMargin+98, scoreYpos+70);
-      if (noteGame.noteLevel.isCurrentKeyBoth()) {
-        g.drawLine(noteMargin+98, scoreYpos+20, noteMargin+98, scoreYpos+160);
-      }
-      g.setColor(Color.black);
-    }
-  }
-
   void drawScore(Graphics g) {
-    Dimension size = getSize();
-    g.setColor(Color.black);
-    alterationWidth = scoreGame.scoreLevel.getCurrentTonality().getAlterationsNumber() * 12;
-    int tmpnum = 4;
-    if (jalmus.selectedGame == Jalmus.RHYTHMREADING ) {
-      tmpnum = rhythmGame.rhythmLevel.getTimeSignNumerator();
-    } else if (jalmus.selectedGame == Jalmus.SCOREREADING ) {
-      tmpnum = scoreGame.scoreLevel.getTimeSignNumerator();
-    }
-
-    int scoreLineWidth = keyWidth + alterationWidth + timeSignWidth;
-    firstNoteXPos = windowMargin + keyWidth + alterationWidth + timeSignWidth + notesShift;
-    numberOfMeasures = (size.width - (windowMargin * 2) - scoreLineWidth) / (tmpnum * noteDistance);
-    numberOfRows = (size.height - scoreYpos - 50) / rowsDistance; // 50 = window bottom margin
-    int yPos = scoreYpos;
-    int vXPos = windowMargin + scoreLineWidth + (tmpnum * noteDistance);
-
-    scoreLineWidth += windowMargin + (numberOfMeasures * (tmpnum * noteDistance));
-
-    for (int r = 0; r < numberOfRows; r++) {
-      // draw vertical separators first
-      for (int v = 0; v < numberOfMeasures; v++)
-        g.drawLine(vXPos + v * (tmpnum * noteDistance), yPos, vXPos + v * (tmpnum * noteDistance), yPos+40);
-      // draw the score 5 rows 
-      if (jalmus.selectedGame == Jalmus.SCOREREADING ) {
-        for (int l = 0;l < 5;l++,yPos+=10) {
-          g.drawLine(windowMargin, yPos, scoreLineWidth, yPos);
-        }
-      } else if (jalmus.selectedGame == Jalmus.RHYTHMREADING ) { //only one line
-        g.drawLine(windowMargin, yPos+20, scoreLineWidth, yPos+20);
-        yPos += (rowsDistance - 50);
-      }
-      yPos += (rowsDistance - 50);
+    if(jalmus.selectedGame == Jalmus.RHYTHMREADING) {
+      rhythmGame.drawScore(g);
+    } else if(jalmus.selectedGame == Jalmus.SCOREREADING) {
+      scoreGame.drawScore(g);
+    } else {
+      throw new IllegalStateException("Asked to draw score on note reading game.");
     }
   }
   

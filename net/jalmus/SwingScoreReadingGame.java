@@ -1,6 +1,7 @@
 package net.jalmus;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -16,6 +17,7 @@ import javax.sound.midi.MidiEvent;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Track;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -57,10 +59,69 @@ public class SwingScoreReadingGame extends ScoreReadingGame implements SwingGame
 
   boolean stemup;
 
-  public void setUi(SwingJalmus ui) {
+  JPanel principal = new JPanel(); // panel principal
+
+  JButton startButton;    // button to start or stop game
+  JButton listenButton;    // button for listen exercise in rhythm game
+  JButton newButton;    // button for new exercise in rhythm game
+  JButton preferencesButton;  // button to access game preferences
+  JPanel gameButtonPanel = new JPanel();
+  Anim animationPanel;
+
+  int rhythmAnswerScoreYpos = 100; //distance to paint answer
+  float rhythmCursorXpos; 
+  int rhythmCursorXStartPos; 
+  int rhythmCursorXlimit;
+  int alterationWidth = 0; // width of alterations symbols. None by default
+
+  public void setUi(final SwingJalmus ui) {
     this.ui = ui;
-  }
-  
+    
+    startButton = new JButton();
+    startButton.setFocusable(false);
+    ui.localizables.add(new Localizable.Button(startButton, "_start"));
+    startButton.setPreferredSize(new Dimension(150, 20));
+    startButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        handleStartButtonClicked();
+      }
+    });
+
+    listenButton = new JButton();
+    listenButton.setFocusable(false);
+    ui.localizables.add(new Localizable.Button(listenButton, "_listen"));
+    listenButton.setPreferredSize(new Dimension(150, 20));
+    listenButton.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        handleListenButtonClicked();
+      }
+    });
+
+    newButton = new JButton();
+    newButton.setFocusable(false);
+    ui.localizables.add(new Localizable.Button(newButton, "_new"));
+    newButton.setPreferredSize(new Dimension(150, 20));
+    newButton.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        handleNewButtonClicked();
+      }
+    });
+
+    preferencesButton = new JButton();
+    preferencesButton.setFocusable(false);
+    ui.localizables.add(new Localizable.Button(preferencesButton, "_menuPreferences"));
+    preferencesButton.setPreferredSize(new Dimension(150, 20));
+    preferencesButton.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        ui.handlePreferencesClicked();
+      }
+    });
+
+    rhythmCursorXpos = ui.firstNoteXPos - ui.noteDistance;
+    rhythmCursorXStartPos = ui.firstNoteXPos - ui.noteDistance;
+    }
+
   @Override
   public JPanel getPreferencesPanel() {
 
@@ -577,11 +638,11 @@ public class SwingScoreReadingGame extends ScoreReadingGame implements SwingGame
 
       String textd = "depart";
       ui.midiHelper.addEvent(metronome, TEXT, textd.getBytes(), (int)(tmpnum/tmpdiv) *
-          MidiHelper.pulsesPerQuarterNote);
+          MidiHelper.PULSES_PER_QUARTER_NOTE);
 
       String textdt = "departthread"; //one beat before rhythms
       ui.midiHelper.addEvent(metronome, TEXT, textdt.getBytes(), (int)((tmpnum/tmpdiv)-1) *
-          MidiHelper.pulsesPerQuarterNote);
+          MidiHelper.PULSES_PER_QUARTER_NOTE);
 
       if ((scoreLevel.getMetronome())) {
         nbpulse = (tmpnum * ui.numberOfMeasures * ui.numberOfRows) + tmpnum;
@@ -596,14 +657,14 @@ public class SwingScoreReadingGame extends ScoreReadingGame implements SwingGame
         ShortMessage mess2 = new ShortMessage();
         mess.setMessage(ShortMessage.NOTE_ON, 9, 76, 40); // can use 37 as well, but it has reverb
 
-        metronome.add(new MidiEvent(mess, i*MidiHelper.pulsesPerQuarterNote));
+        metronome.add(new MidiEvent(mess, i*MidiHelper.PULSES_PER_QUARTER_NOTE));
         mess2.setMessage(ShortMessage.NOTE_OFF, 9, 77, 0);
-        metronome.add(new MidiEvent(mess2, (i*MidiHelper.pulsesPerQuarterNote)+1));
+        metronome.add(new MidiEvent(mess2, (i*MidiHelper.PULSES_PER_QUARTER_NOTE)+1));
 
         if ((scoreLevel.getMetronomeBeats()) && i > ((tmpnum / tmpdiv) - 1)) {
           String textb = "beat";
           ui.midiHelper.addEvent(metronome, TEXT, textb.getBytes(), (int)i *
-              MidiHelper.pulsesPerQuarterNote);
+              MidiHelper.PULSES_PER_QUARTER_NOTE);
         }
       }
     } catch (InvalidMidiDataException e) {
@@ -644,27 +705,41 @@ public class SwingScoreReadingGame extends ScoreReadingGame implements SwingGame
     ui.scoreMessage.setLocationRelativeTo(ui);
     ui.scoreMessage.setVisible(true);
   }
-  
+
   void drawNotesAndAnswers(Graphics g, Font f) {
 
-	    // paint answers: red = wrong, green = good
-	    for (int i = 0; i < answers.size(); i++) {
-	      if (!answers.get(i).isnull()) answers.get(i).paint(g);
-	    }
+    // paint answers: red = wrong, green = good
+    for (int i = 0; i < answers.size(); i++) {
+      if (!answers.get(i).isnull()) answers.get(i).paint(g);
+    }
 
-	    for (int i = 0; i < rhythms.size(); i++) {
-	      // System.out.println(i);
-	      if (rhythms.get(i).getDuration() != 0) {
-	        if ((i != rhythmIndex) || (ui.muteRhythms)) { //only paint note in learning mode
-	          rhythms.get(i).paint(g, ui.jalmus.selectedGame, f, scoreLevel, 9, ui.rowsDistance, 
-	        		  false, ui.scoreYpos, ui);
-	        } else {
-	          rhythms.get(i).paint(g, ui.jalmus.selectedGame, f, scoreLevel, 9, ui.rowsDistance, 
-	        		  true, ui.scoreYpos, ui);
-	        }
-	      }
-	    }
-	  }
+    for (int i = 0; i < rhythms.size(); i++) {
+      // System.out.println(i);
+      if (rhythms.get(i).getDuration() != 0) {
+        if ((i != rhythmIndex) || (ui.muteRhythms)) { //only paint note in learning mode
+          rhythms.get(i).paint(g, ui.jalmus.selectedGame, f, scoreLevel, 9, ui.rowsDistance,
+            false, ui.scoreYpos, ui);
+        } else {
+          rhythms.get(i).paint(g, ui.jalmus.selectedGame, f, scoreLevel, 9, ui.rowsDistance,
+            true, ui.scoreYpos, ui);
+        }
+      }
+    }
+  }
+  
+  public void drawKeys(Graphics g) {
+    if (scoreLevel.isCurrentKeyTreble()) {
+      for (int rowNum = 0; rowNum < ui.numberOfRows; rowNum++) {
+        g.setFont(ui.musiSync.deriveFont(70f));
+        g.drawString("G", ui.windowMargin, ui.scoreYpos+42+rowNum*ui.rowsDistance);
+      }
+    } else if (scoreLevel.isCurrentKeyBass()) {
+      for (int rowNum = 0; rowNum < ui.numberOfRows; rowNum++) {
+        g.setFont(ui.musiSync.deriveFont(60f));
+        g.drawString("?", ui.windowMargin, ui.scoreYpos+40+rowNum*ui.rowsDistance);
+      }
+    }
+  }
   
   void rhythmKeyPressed(int pitch) {
 	    int result = 0;
@@ -678,11 +753,11 @@ public class SwingScoreReadingGame extends ScoreReadingGame implements SwingGame
 	    float rhythmCursorXposcorrected;
 
 	    if (cursorstart) {
-	      rhythmCursorXposcorrected = ui.rhythmCursorXStartPos + 
+	      rhythmCursorXposcorrected = rhythmCursorXStartPos + 
 	          ((System.currentTimeMillis() - ui.jalmus.timestart - ui.midiHelper.latency)
 	          * ui.noteDistance) / (60000/ui.jalmus.tempo);
 	    } else {
-	      rhythmCursorXposcorrected = ui.rhythmCursorXpos;
+	      rhythmCursorXposcorrected = rhythmCursorXpos;
 	    }
 
 	    System.out.println ("rhythmCursorXpos" + rhythmCursorXposcorrected);
@@ -720,7 +795,7 @@ public class SwingScoreReadingGame extends ScoreReadingGame implements SwingGame
 	        goodnote = false;
 	      }
 	    }
-	    answers.add(new RhythmAnswer((int)rhythmCursorXposcorrected, ui.rhythmAnswerScoreYpos - 15,
+	    answers.add(new RhythmAnswer((int)rhythmCursorXposcorrected, rhythmAnswerScoreYpos - 15,
 	        goodnote, result));
 	  }
   
@@ -730,7 +805,7 @@ public class SwingScoreReadingGame extends ScoreReadingGame implements SwingGame
 	    int currentTick = 0;
 	    int rowCount = 0; // measures counter
 	    double tpsmes = 0; // number of quarters 
-	    int currentXPos = ui.windowMargin + ui.keyWidth + ui.alterationWidth + ui.timeSignWidth + ui.notesShift;
+	    int currentXPos = ui.windowMargin + ui.keyWidth + alterationWidth + ui.timeSignWidth + ui.notesShift;
 	    int pitch;
 	    // Dimension size = getSize();
 
@@ -744,11 +819,11 @@ public class SwingScoreReadingGame extends ScoreReadingGame implements SwingGame
 	      //tmpden = scoreLevel.getTimeSignDenominator();
 	    int tmpdiv = scoreLevel.getTimeDivision();
 
-	    currentTick = (int)((tmpnum/tmpdiv) * MidiHelper.pulsesPerQuarterNote);
+	    currentTick = (int)((tmpnum/tmpdiv) * MidiHelper.PULSES_PER_QUARTER_NOTE);
 
 	    // INITIALIZE Sequence and tracks
 	    try {
-	      ui.midiHelper.sequence = new Sequence(Sequence.PPQ, MidiHelper.pulsesPerQuarterNote);
+	      ui.midiHelper.sequence = new Sequence(Sequence.PPQ, MidiHelper.PULSES_PER_QUARTER_NOTE);
 	    } catch (InvalidMidiDataException e) {
 	      e.printStackTrace();
 	      System.exit(1);
@@ -842,7 +917,7 @@ public class SwingScoreReadingGame extends ScoreReadingGame implements SwingGame
 
 	      tpsmes = 0;
 	      if ((r % ui.numberOfMeasures) == 0) {
-	        currentXPos = ui.windowMargin + ui.keyWidth + ui.alterationWidth + ui.timeSignWidth + ui.notesShift;
+	        currentXPos = ui.windowMargin + ui.keyWidth + alterationWidth + ui.timeSignWidth + ui.notesShift;
 	        rowCount++;
 	      }
 	  }
@@ -863,14 +938,14 @@ public class SwingScoreReadingGame extends ScoreReadingGame implements SwingGame
 	      silence = false;
 	    }
 
-	    System.out.println("[addRhythm] pitch: " + pitch + "duration: " + duration + "stemup " + stemup);
+	    System.out.println("[addRhythm] pitch: " + pitch + "duration: " + duration + "stemUp " + stemup);
 
 	    double tmpsilence = Math.random();
 	    if (!silence || (silence && tmpsilence < 0.85) || (duration == 3 && tmpnum != 3)) {
 	      rhythms.add(new Rhythm(duration, newXPos, pitch,  row, stemup, false, false, 0));
 	      track.add(MidiHelper.createNoteOnEvent(pitch, velocity, tick));
 	      mutetrack.add(MidiHelper.createNoteOnEvent(pitch, 0, tick));
-	      tick += (int)((duration*tmpdiv)*MidiHelper.pulsesPerQuarterNote);
+	      tick += (int)((duration*tmpdiv)*MidiHelper.PULSES_PER_QUARTER_NOTE);
 	      ui.midiHelper.addEvent(track, TEXT, text.getBytes(), tick);
 	      ui.midiHelper.addEvent(mutetrack, TEXT, text.getBytes(), tick);
 	      track.add(MidiHelper.createNoteOffEvent(pitch, tick));
@@ -879,7 +954,7 @@ public class SwingScoreReadingGame extends ScoreReadingGame implements SwingGame
 	      rhythms.add(new Rhythm(duration, newXPos, pitch, row, false, false, true, 0));
 	      track.add(MidiHelper.createNoteOffEvent(pitch, tick));
 	      mutetrack.add(MidiHelper.createNoteOffEvent(pitch, tick));
-	      tick += (int)((duration*tmpdiv)*MidiHelper.pulsesPerQuarterNote);
+	      tick += (int)((duration*tmpdiv)*MidiHelper.PULSES_PER_QUARTER_NOTE);
 	      ui.midiHelper.addEvent(track, TEXT, text.getBytes(), tick);
 	      ui.midiHelper.addEvent(mutetrack, TEXT, text.getBytes(), tick);
 	    }
@@ -903,10 +978,92 @@ public class SwingScoreReadingGame extends ScoreReadingGame implements SwingGame
           scoreLevel.setPitcheslist(chooseNotePanel.getPitches());
         }
       }
-    });   
+    });
+
+    if (!sameRhythms) {
+      createSequence();
+    }
 
     notesDialog = new JDialog(ui, true);
     //    notesDialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
     notesDialog.setResizable(false);
+  }
+  
+  private void handleStartButtonClicked() {
+    if (gameStarted) {
+      stopGame();
+      gameStarted = false;
+    } else if (ui.paintRhythms) {
+      sameRhythms = true;
+      ui.muteRhythms = true;
+      initGame();
+      startGame();
+    }
+  }
+  
+  private void handleListenButtonClicked() {
+    sameRhythms = true;
+    ui.muteRhythms = false;
+    initGame();
+    startGame();
+  }
+
+  private void handleNewButtonClicked() {
+    sameRhythms = false;
+    ui.muteRhythms = false;
+    initGame();
+    ui.paintRhythms = true; 
+    ui.repaint(); //only to paint exercise
+    gameStarted = false;
+  }
+  
+  void drawScore(Graphics g) {
+    Dimension size = ui.getSize();
+    g.setColor(Color.black);
+    alterationWidth = scoreLevel.getCurrentTonality().getAlterationsNumber() * 12;
+    int tmpnum = scoreLevel.getTimeSignNumerator();
+
+    int scoreLineWidth = ui.keyWidth + alterationWidth + ui.timeSignWidth;
+    ui.firstNoteXPos = ui.windowMargin + ui.keyWidth + alterationWidth + ui.timeSignWidth + ui.notesShift;
+    ui.numberOfMeasures = (size.width - (ui.windowMargin * 2) - scoreLineWidth) / (tmpnum * ui.noteDistance);
+    ui.numberOfRows = (size.height - ui.scoreYpos - 50) / ui.rowsDistance; // 50 = window bottom margin
+    int yPos = ui.scoreYpos;
+    int vXPos = ui.windowMargin + scoreLineWidth + (tmpnum * ui.noteDistance);
+
+    scoreLineWidth += ui.windowMargin + (ui.numberOfMeasures * (tmpnum * ui.noteDistance));
+
+    for (int r = 0; r < ui.numberOfRows; r++) {
+      // draw vertical separators first
+      for (int v = 0; v < ui.numberOfMeasures; v++) {
+        g.drawLine(vXPos + v * (tmpnum * ui.noteDistance), yPos, vXPos + v * (tmpnum * ui.noteDistance), yPos+40);
+      }
+      // draw the score 5 rows 
+      for (int l = 0; l < 5; l++, yPos += 10) {
+        g.drawLine(ui.windowMargin, yPos, scoreLineWidth, yPos);
+      }
+      yPos += (ui.rowsDistance - 50);
+    }
+  }
+  
+  void drawTimeSignature(Graphics g) {
+    g.setFont(ui.musiSync.deriveFont(58f));
+
+    int tmpnum = scoreLevel.getTimeSignNumerator();
+    int tmpden = scoreLevel.getTimeSignDenominator();
+
+    for (int rowNum = 0; rowNum < ui.numberOfRows; rowNum++) {
+      String t = "";
+      if (tmpnum == 4 && tmpden == 4) {
+        t = "$";
+      } else if (tmpnum == 3 && tmpden == 4) {
+        t = "#";
+      } else if (tmpnum == 2 && tmpden == 4) {
+        t = "@";
+      } else if (tmpnum == 6 && tmpden == 8) {
+        t = "P";
+      }
+      g.drawString(t, ui.windowMargin + ui.keyWidth + alterationWidth,
+          ui.scoreYpos+41 + rowNum * ui.rowsDistance);
+    }
   }
 }

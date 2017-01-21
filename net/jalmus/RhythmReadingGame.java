@@ -2,8 +2,11 @@ package net.jalmus;
 
 import java.util.ArrayList;
 
-public class RhythmReadingGame implements Game {
+public abstract class RhythmReadingGame implements Game {
 
+  boolean gameStarted;
+  boolean paused;
+  boolean sameRhythms = false;
   RhythmLevel rhythmLevel = new RhythmLevel();
   protected ArrayList<Rhythm> rhythms = new ArrayList<Rhythm>(); 
   int rhythmIndex;

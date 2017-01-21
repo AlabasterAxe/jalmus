@@ -46,7 +46,7 @@ public class Note {
     this.Pitch = n.Pitch;
   }
 
-  public String getNom() {
+  public String getName() {
     return this.Nom;
   }
 
@@ -240,8 +240,6 @@ public class Note {
     } else {
       this.Alteration = "";
     }
-
-    //System.out.println(this.Alteration);
 
     // MODIFY PITCH ACCORDING TO ACCIDENTAL
     if (this.Alteration.equals("#")) {

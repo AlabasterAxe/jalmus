@@ -17,9 +17,9 @@ import javax.sound.midi.Track;
 
 public class MidiHelper {
   
-  static final int pulsesPerQuarterNote = 1000;
+  static final int PULSES_PER_QUARTER_NOTE = 1000;
   Sequence sequence;
-  Sequencer sm_sequencer;
+  Sequencer smSequencer;
   long latency; // synthesizer latency
   boolean midierror;
   

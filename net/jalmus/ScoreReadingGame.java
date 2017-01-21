@@ -2,9 +2,11 @@ package net.jalmus;
 
 import java.util.ArrayList;
 
-public class ScoreReadingGame implements Game {
+public abstract class ScoreReadingGame implements Game {
 
   ScoreLevel scoreLevel = new ScoreLevel();
+  boolean gameStarted = false;
+  boolean sameRhythms = true;
   int rhythmIndex;
   boolean cursorstart = false;
   protected int precision = 10; //precision on control between note and answer
@@ -14,25 +16,21 @@ public class ScoreReadingGame implements Game {
   @Override
   public void initGame() {
     // TODO Auto-generated method stub
-    
   }
 
   @Override
   public void startGame() {
     // TODO Auto-generated method stub
-    
   }
 
   @Override
   public void stopGame() {
     // TODO Auto-generated method stub
-    
   }
 
 @Override
 public void startLevel() {
 	// TODO Auto-generated method stub
-	
 }
 
 void updateTonality() {

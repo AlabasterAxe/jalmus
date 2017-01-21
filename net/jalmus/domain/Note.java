@@ -4,7 +4,7 @@ package net.jalmus.domain;
  * The note class is the association of a frequency
  * or a pitch with a duration in beats.
  */
-public class Note implements Schedulable{
+public class Note implements Schedulable {
 
   private final Pitch pitch;
     

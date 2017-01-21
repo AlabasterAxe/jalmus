@@ -17,17 +17,19 @@ import java.awt.Graphics;
  * @version 1.0
  */
 public class Score {
+
+  private enum Status {NO_RESULT, WON, LOST}
   int nbtrue;
   int nbfalse;
   int points;
-  int win; /* 0 no result 1 win 2 lost */
+  Status status;
   static int maxpoints = 500;
 
   public Score() {
     this.nbtrue = 0;
     this.nbfalse  = 0;
     this.points = 100;
-    win = 0;
+    status = Status.NO_RESULT;
   }
 
   public int getNbtrue(){
@@ -59,30 +61,30 @@ public class Score {
   }
 
   public void setWin(){
-    this.win = 1;
+    this.status = Status.WON;
   }
 
   public void setLost(){
-    this.win = 2;
+    this.status = Status.LOST;
 
   }
   public boolean isWin() {
-    return this.win == 1;
+    return this.status == Status.WON;
   }
 
   public boolean isLost() {
-  return this.win == 2;
+  return this.status == Status.LOST;
 }
 
   public boolean isUnknown() {
-    return this.win == 0;
+    return this.status == Status.NO_RESULT;
   }
 
   public void initScore() {
     this.nbtrue = 0;
     this.nbfalse = 0;
     this.points = 100;
-    win = 0;
+    status = Status.NO_RESULT;
   }
 
   /**
@@ -90,7 +92,7 @@ public class Score {
      *
      * @param i for the number of points to add (if i>0) or substract (if i<0)
      *
-     * If new number of points reach the max points or 0 update the win parameter
+     * If new number of points reach the max points or 0 update the status parameter
    */
 
   public void addPoints(int i) {
@@ -112,17 +114,16 @@ public class Score {
   }
 
   public void paint(Graphics g, int width) {
-
-	int xpos = (width - 251) / 2;
+	int xPos = (width - 251) / 2;
     g.setColor(Color.black);
-    g.draw3DRect(xpos, 420, 251, 20, true);
+    g.draw3DRect(xPos, 420, 251, 20, true);
     for (int tmp = 0; tmp < this.points; tmp = tmp + 10) {
       if (tmp < 100) {
         g.setColor(new Color(60 + (tmp + 10) / 2, 26, 26));
       } else {
         g.setColor(new Color(110, 26 + (tmp - 90) / 2, 26));
-        g.fillRect(xpos + 1 + tmp / 2, 421, 5, 19);
       }
+      g.fillRect(xPos + 1 + tmp / 2, 421, 5, 19);
     }
   }
 }
