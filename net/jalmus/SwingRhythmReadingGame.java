@@ -120,8 +120,11 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
 
     principal.setLayout(new BorderLayout());
     animationPanel = new Anim(ui);
+    animationPanel.setBackground(Color.white);
+    animationPanel.setVisible(true);
     principal.add(gameButtonPanel, BorderLayout.NORTH);
     principal.add(animationPanel, BorderLayout.CENTER);
+    principal.setVisible(true);
   }
 
   @Override
@@ -355,8 +358,6 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
 
   @Override
   public void updateLanguage(ResourceBundle bundle) {
-    // TODO Auto-generated method stub
-
     wholeCheckBox.setText(bundle.getString("_wholenote"));
     halfCheckBox.setText(bundle.getString("_halfnote"));
     dottedhalfCheckBox.setText(bundle.getString("_dottedhalfnote"));
@@ -537,11 +538,14 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
 
   @Override
   public void changeScreen() {
-    ui.gameButtonPanel.setVisible(true);
+    gameButtonPanel.setVisible(true);
     ui.noteGame.noteButtonPanel.setVisible(false);
-    ui.newButton.setVisible(true);
-    ui.listenButton.setVisible(true);
-    ui.principal.setVisible(true);
+    newButton.setVisible(true);
+    listenButton.setVisible(true);
+    animationPanel.setVisible(true);
+    principal.setVisible(true);
+    principal.repaint();
+    principal.revalidate();
   }
 
   @Override

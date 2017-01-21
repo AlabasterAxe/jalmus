@@ -51,54 +51,48 @@ class Anim extends JPanel {
         g.drawString("Java Lecture Musicale", (d.width / 2) - 155, (d.height / 2) + 15);
         g.setFont(new Font("Arial", Font.BOLD, 15));
         g.drawString("Copyright (C) 2003-2011 RICHARD Christophe", 10, d.height - 40);
-      } else if (this.ui.jalmus.selectedGame == Jalmus.RHYTHMREADING ||
-          this.ui.jalmus.selectedGame==Jalmus.SCOREREADING) {
+      } else if (this.ui.jalmus.selectedGame == Jalmus.RHYTHMREADING) {
         g.setColor(Color.white);
         g.fillRect(0, 0, d.width, d.height);
         this.ui.gameButtonPanel.setBackground(Color.white);
-
-        if ((this.ui.jalmus.selectedGame == Jalmus.RHYTHMREADING &&
-             this.ui.jalmus.rhythmGame.rhythmLevel.getTriplet()) ||
-            (this.ui.jalmus.selectedGame == Jalmus.SCOREREADING &&
-             this.ui.jalmus.scoreGame.scoreLevel.getTriplet())) {
-          //rowsDistance = 130;
-          this.ui.rowsDistance = 100;
-        } else {
-          this.ui.rowsDistance = 100;
-        }
 
         this.ui.drawScore(g);
         this.ui.drawKeys(g);
         this.ui.drawTimeSignature(g);
 
-        if (this.ui.jalmus.selectedGame == Jalmus.SCOREREADING) {
-          ui.numberOfRows = ((getSize().height - ui.scoreYpos - 50) / ui.rowsDistance)+1;
-          ui.jalmus.scoreGame.scoreLevel.getCurrentTonality().paint(3,
-              ui.jalmus.scoreGame.scoreLevel.getKey(), g, ui.musiSync,
-              ui.windowMargin + ui.keyWidth, ui.scoreYpos, ui.rowsDistance,
-              ui.numberOfRows, this, ui.bundle);
-        }
         /* Show cursor if enabled */
-        if ((this.ui.jalmus.selectedGame == Jalmus.RHYTHMREADING &&
-             this.ui.jalmus.rhythmGame.rhythmLevel.getMetronomeBeats())) {
-          g.setColor(Color.orange);
-          g.fillRect(this.ui.rhythmGame.rhythmCursorXStartPos, this.ui.rhythmGame.rhythmAnswerScoreYpos - 31, 
-              (int) this.ui.rhythmGame.rhythmCursorXpos - this.ui.rhythmGame.rhythmCursorXStartPos, 3);
-        } else if (this.ui.jalmus.selectedGame == Jalmus.SCOREREADING &&
-             this.ui.scoreGame.metronomeShowCheckBox.isSelected()) {
+        if (this.ui.jalmus.rhythmGame.rhythmLevel.getMetronomeBeats()) {
           g.setColor(Color.orange);
           g.fillRect(this.ui.rhythmGame.rhythmCursorXStartPos, this.ui.rhythmGame.rhythmAnswerScoreYpos - 31, 
               (int) this.ui.rhythmGame.rhythmCursorXpos - this.ui.rhythmGame.rhythmCursorXStartPos, 3);
         }
 
         if (this.ui.paintRhythms) {
-          if (this.ui.jalmus.selectedGame == Jalmus.SCOREREADING) {
-            this.ui.scoreGame.drawNotesAndAnswers(g, this.ui.musiSync);
-          } else if (this.ui.jalmus.selectedGame == Jalmus.RHYTHMREADING) {
             this.ui.rhythmGame.drawNotesAndAnswers(g, this.ui.musiSync);
-          } else {
-            throw new AssertionError("What's going on here?!");
-          }
+        }
+      } else if (this.ui.jalmus.selectedGame == Jalmus.SCOREREADING) {
+        g.setColor(Color.white);
+        g.fillRect(0, 0, d.width, d.height);
+        this.ui.gameButtonPanel.setBackground(Color.white);
+
+        this.ui.drawScore(g);
+        this.ui.drawKeys(g);
+        this.ui.drawTimeSignature(g);
+
+        ui.numberOfRows = ((getSize().height - ui.scoreYpos - 50) / ui.rowsDistance)+1;
+        ui.jalmus.scoreGame.scoreLevel.getCurrentTonality().paint(3,
+          ui.jalmus.scoreGame.scoreLevel.getKey(), g, ui.musiSync,
+          ui.windowMargin + ui.keyWidth, ui.scoreYpos, ui.rowsDistance,
+          ui.numberOfRows, this, ui.bundle);
+
+        if (this.ui.scoreGame.metronomeShowCheckBox.isSelected()) {
+          g.setColor(Color.orange);
+          g.fillRect(this.ui.rhythmGame.rhythmCursorXStartPos, this.ui.rhythmGame.rhythmAnswerScoreYpos - 31,
+            (int) this.ui.rhythmGame.rhythmCursorXpos - this.ui.rhythmGame.rhythmCursorXStartPos, 3);
+        }
+
+        if (this.ui.paintRhythms) {
+          this.ui.scoreGame.drawNotesAndAnswers(g, this.ui.musiSync);
         }
       }
     }

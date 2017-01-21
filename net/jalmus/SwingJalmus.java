@@ -125,12 +125,12 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
   JMenuItem[][] lessonsMenuItem = new JMenuItem[16][26];
 
   RenderingThread renderingThread;
-  Anim panelanim;
+  Anim animationPanel;
   Image jbackground;
 
   String pasclavier = "Pas de clavier MIDI             ";
 
-  JMenuBar maBarre = new JMenuBar();
+  JMenuBar mainToolBar = new JMenuBar();
   private JMenu menuParameters = new JMenu();
   JMenuItem menuPrefs =
       new JMenuItem(new ImageIcon(getClass().getResource("/images/prefs.png")));
@@ -262,7 +262,7 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
   SwingJalmus(Jalmus jalmus, SwingNoteReadingGame noteGame, SwingRhythmReadingGame rhythmGame,
       SwingScoreReadingGame scoreGame) {
     this.jalmus = jalmus;
-    this.panelanim = new Anim(this);
+    this.animationPanel = new Anim(this);
     this.renderingThread = new RenderingThread(this);
     this.noteGame = noteGame;
     this.noteGame.setUi(this);
@@ -394,14 +394,14 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
 
     aboutMenuItem.addActionListener(this);
 
-    maBarre.add(buildExercisesMenu());
+    mainToolBar.add(buildExercisesMenu());
     lessonsMenu = buildLessonsMenu();
-    maBarre.add(lessonsMenu);
-    maBarre.add(menuParameters);
-    maBarre.add(helpMenu);
+    mainToolBar.add(lessonsMenu);
+    mainToolBar.add(menuParameters);
+    mainToolBar.add(helpMenu);
 
-    this.setJMenuBar(maBarre);
-    maBarre.setVisible(true);
+    this.setJMenuBar(mainToolBar);
+    mainToolBar.setVisible(true);
 
     /**************************************************************/
     /***************** FENETRE A PROPOS ***************************/
@@ -513,14 +513,14 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
     principal.setLayout(new BorderLayout());
 
     principal.add(gameButtonPanel, BorderLayout.NORTH);
-    principal.add(panelanim, BorderLayout.CENTER);
+    principal.add(animationPanel, BorderLayout.CENTER);
 
     principal.setVisible(true);
     gameButtonPanel.setVisible(false);
     this.getContentPane().add(principal);
 
-    panelanim.setVisible(true);
-    panelanim.setBackground(Color.white);
+    animationPanel.setVisible(true);
+    animationPanel.setBackground(Color.white);
 
     ButtonGroup group = new ButtonGroup();
 
@@ -1537,9 +1537,10 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
     }
 
     if (selectedGame == Jalmus.NOTEREADING) {
+      this.getContentPane().add(noteGame.getGamePanel());
       noteGame.changeScreen();
     } else if (selectedGame == Jalmus.RHYTHMREADING) {
-      this.getContentPane().add(principal);
+      this.getContentPane().add(rhythmGame.getGamePanel());
       rhythmGame.changeScreen();
     } else if (selectedGame == Jalmus.SCOREREADING) {
       this.getContentPane().add(principal);
@@ -1639,15 +1640,11 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
   void handleRhythmReadingMenuItem() {
     jalmus.stopGames();
 
-    gameButtonPanel.add(newButton);
-    gameButtonPanel.add(listenButton);
-    gameButtonPanel.add(startButton);
-    gameButtonPanel.add(preferencesButton);
     scoreYpos = 110;
     repaint();
 
     jalmus.selectedGame = Jalmus.RHYTHMREADING;
-    newButton.doClick();
+    rhythmGame.newButton.doClick();
     if (jalmus.isLessonMode) {
       noteGame.noteLevel.init();
     }
@@ -1676,10 +1673,6 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
 
   void handleNoteReadingMenuItem() {
     jalmus.stopGames();
-    noteGame.gameButtonPanel.removeAll();
-    noteGame.gameButtonPanel.add(noteGame.startButton);
-    noteGame.gameButtonPanel.add(noteGame.noteButtonPanel);
-    noteGame.gameButtonPanel.add(noteGame.preferencesButton);
 
     noteGame.initGame();
     if (jalmus.isLessonMode) {
@@ -1717,9 +1710,10 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
     case Jalmus.NOTEREADING:
       return noteGame.animationPanel;
     case Jalmus.RHYTHMREADING:
+      return rhythmGame.animationPanel;
     case Jalmus.SCOREREADING:
     default:
-      return panelanim;
+      return animationPanel;
     }
   }
 
@@ -1807,9 +1801,9 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
 
         saveDialog.setVisible(false);
 
-        maBarre.remove(lessonsMenu);
+        mainToolBar.remove(lessonsMenu);
         lessonsMenu = buildLessonsMenu();
-        maBarre.add(lessonsMenu, 1);
+        mainToolBar.add(lessonsMenu, 1);
       } else {
         JOptionPane.showMessageDialog(null, "Give the name of the lesson", "Warning", JOptionPane.ERROR_MESSAGE); 
       }

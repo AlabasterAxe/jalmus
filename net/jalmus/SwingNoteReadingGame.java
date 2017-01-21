@@ -190,7 +190,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
     noteButtonPanel.setPreferredSize(new Dimension(450, 40));
     noteButtonPanel.setBackground(Color.white);
 
-    // BOUTONS INVISIBLES EN MODE NORMAL
+    // We only show the accidental buttons if necessary.
     sharpButton1.setVisible(false);
     sharpButton2.setVisible(false);
     flatButton1.setVisible(false);
@@ -209,11 +209,10 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
     
     if (noteLevel.isNormalgame() || noteLevel.isLearningGame()) {
       noteMargin = 220;
-      ui.repaint();
     } else if (noteLevel.isInlinegame()) {
       noteMargin = 30;
-      ui.repaint();
     }
+    ui.repaint();
 
     chooseNoteP = new ChooseNotePanel(noteLevel.getKey(), Jalmus.NOTEREADING, ui.bundle);
     chooseNoteP.setOpaque(true); //content panes must be opaque 
@@ -590,7 +589,6 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
 
   @Override
   public void changeScreen() {
-    ui.getContentPane().add(principal);
     noteButtonPanel.setVisible(true);
     gameButtonPanel.setVisible(true);
     principal.setVisible(true);
