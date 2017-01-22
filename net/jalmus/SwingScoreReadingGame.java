@@ -744,12 +744,12 @@ public class SwingScoreReadingGame extends ScoreReadingGame implements SwingGame
     for (int i = 0; i < rhythms.size(); i++) {
       // System.out.println(i);
       if (rhythms.get(i).getDuration() != 0) {
-        if ((i != rhythmIndex) || (ui.muteRhythms)) { //only paint note in learning mode
-          rhythms.get(i).paint(g, ui.jalmus.selectedGame, f, scoreLevel, 9, ui.rowsDistance,
-            false, ui.scoreYpos, ui);
-        } else {
+        if ((i == rhythmIndex) && !ui.muteRhythms && gameStarted) { //only paint note in learning mode
           rhythms.get(i).paint(g, ui.jalmus.selectedGame, f, scoreLevel, 9, ui.rowsDistance,
             true, ui.scoreYpos, ui);
+        } else {
+          rhythms.get(i).paint(g, ui.jalmus.selectedGame, f, scoreLevel, 9, ui.rowsDistance,
+            false, ui.scoreYpos, ui);
         }
       }
     }
