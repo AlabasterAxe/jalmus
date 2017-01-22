@@ -1816,10 +1816,10 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
       noteGame.initGame();
       noteGame.noteLevel.updatenbnotes(jalmus.piano);
     } else if (jalmus.selectedGame == Jalmus.RHYTHMREADING) {
-      newButton.doClick();
+      rhythmGame.newButton.doClick();
     } else if (jalmus.selectedGame == Jalmus.SCOREREADING) {
       scoreGame.scoreLevel.printtest();
-      newButton.doClick();
+      scoreGame.newButton.doClick();
     }
 
     // update screen

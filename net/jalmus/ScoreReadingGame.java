@@ -7,7 +7,7 @@ public abstract class ScoreReadingGame implements Game {
   ScoreLevel scoreLevel = new ScoreLevel();
   boolean gameStarted = false;
   boolean sameRhythms = true;
-  int rhythmIndex;
+  int rhythmIndex = -1;
   boolean cursorstart = false;
   protected int precision = 10; //precision on control between note and answer
   protected ArrayList<RhythmAnswer> answers = new ArrayList<RhythmAnswer>();

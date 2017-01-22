@@ -7,11 +7,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ResourceBundle;
 
-import javax.sound.midi.InvalidMidiDataException;
-import javax.sound.midi.MidiEvent;
-import javax.sound.midi.Sequence;
-import javax.sound.midi.ShortMessage;
-import javax.sound.midi.Track;
+import javax.sound.midi.*;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -257,7 +253,6 @@ public class SwingScoreReadingGame extends ScoreReadingGame implements SwingGame
             index -= 7;
             modifier = "b";
           }
-
           scoreLevel.getCurrentTonality().init(index, modifier);
         }
       }
@@ -516,7 +511,25 @@ public class SwingScoreReadingGame extends ScoreReadingGame implements SwingGame
   @Override
   public void startGame() {
     super.startGame();
-    
+    ui.midiHelper.smSequencer.start();
+    int tmpdiv = 1;
+
+    tmpdiv = scoreLevel.getTimeDivision();
+
+    if (ui.muteRhythms) {
+      ui.midiHelper.smSequencer.setTrackMute(1, true);
+      ui.midiHelper.smSequencer.setTrackMute(0, false);
+    } else {
+      ui.midiHelper.smSequencer.setTrackMute(1, false);
+      ui.midiHelper.smSequencer.setTrackMute(0, true);
+    }
+
+    ui.jalmus.gameStarted = true; // start game
+    gameStarted = true; // start game
+    ui.startButton.setText(ui.bundle.getString("_stop"));
+    rhythmCursorXpos = ui.firstNoteXPos - (ui.noteDistance * tmpdiv);
+
+    cursorstart = false;
   }
   
   @Override
@@ -995,13 +1008,118 @@ public class SwingScoreReadingGame extends ScoreReadingGame implements SwingGame
       }
     });
 
+    ui.midiHelper.initialize();
+    if (!ui.renderingThread.isAlive()) {
+      ui.renderingThread.start();
+    }
+    stopGame(); // stop previous game
+
     if (!sameRhythms) {
       createSequence();
     }
 
+    try {
+      ui.midiHelper.smSequencer = MidiSystem.getSequencer();
+    } catch (MidiUnavailableException e) {
+      e.printStackTrace();
+      System.exit(1);
+    }
+    if (ui.midiHelper.smSequencer == null) {
+      System.out.println("Can't get a Sequencer");
+      System.exit(1);
+    }
+
+    try {
+      ui.midiHelper.smSequencer.open();
+    } catch (MidiUnavailableException e) {
+      e.printStackTrace();
+      System.exit(1);
+    }
+
+    try {
+      ui.midiHelper.smSequencer.setSequence(ui.midiHelper.sequence);
+    } catch (InvalidMidiDataException e) {
+      e.printStackTrace();
+      System.exit(1);
+    }
+
+    if (!(ui.midiHelper.smSequencer instanceof Synthesizer)) {
+      try {
+        Synthesizer sm_synthesizer = MidiSystem.getSynthesizer();
+        sm_synthesizer.open();
+        Receiver synthReceiver = sm_synthesizer.getReceiver();
+        Transmitter seqTransmitter = ui.midiHelper.smSequencer.getTransmitter();
+        seqTransmitter.setReceiver(synthReceiver);
+        //latency = sm_synthesizer.getLatency()/1000;
+        ui.midiHelper.latency = ui.latencySlider.getValue();
+        System.out.println("MIDI latency " + ui.midiHelper.latency);
+      } catch (MidiUnavailableException e) {
+        e.printStackTrace();
+      }
+    }
+
+    ui.midiHelper.smSequencer.addMetaEventListener(new MetaEventListener() {
+      public void meta(MetaMessage meta) {
+        byte[] abData = meta.getData();
+        String strText = new String(abData);
+
+        int tmpnum = scoreLevel.getTimeSignNumerator();
+        int tmpdiv = scoreLevel.getTimeDivision();
+
+        if ("departthread".equals(strText)) {
+          System.out.println("Cursor started");
+          rhythmCursorXlimit = ui.firstNoteXPos +
+            (tmpnum * ui.numberOfMeasures * ui.noteDistance);
+          cursorstart = true;
+          ui.jalmus.timestart = System.currentTimeMillis();
+        }
+
+        if ("depart".equals(strText)) {
+          System.out.println("Game start");
+          rhythmIndex = 0;
+          ui.repaint();
+        } else if ("beat".equals(strText)) {
+          // show metronome beats
+          answers.add(new RhythmAnswer(ui.firstNoteXPos +
+            (ui.jalmus.metronomeCount%((tmpnum/tmpdiv) * ui.numberOfMeasures)) *
+              (ui.noteDistance * tmpdiv), ui.metronomeYPos - 30, true, 3));
+          ui.jalmus.metronomeCount++;
+          if (ui.jalmus.metronomeCount == ((tmpnum/tmpdiv) * ui.numberOfMeasures) &&
+            ui.metronomeYPos < ui.scoreYpos + (ui.numberOfRows * ui.rowsDistance)) {
+            ui.metronomeYPos += ui.rowsDistance;
+            ui.jalmus.metronomeCount = 0;
+          }
+        } else {
+          nextRhythm();
+          ui.repaint();
+        }
+      }
+    });
+
+    ui.jalmus.tempo = scoreLevel.getspeed();
+
+    ui.midiHelper.smSequencer.setTempoInBPM(ui.jalmus.tempo);
+    System.out.println("[initRhythmGame] tempo : " + ui.jalmus.tempo);
+
+    //init line answers
+    answers.clear();
+
     notesDialog = new JDialog(ui, true);
     //    notesDialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
     notesDialog.setResizable(false);
+  }
+
+  private void nextRhythm() {
+    System.out.println ("rhytm xpos: " + rhythms.get(rhythmIndex).getPosition() +
+      " pitch: " + rhythms.get(rhythmIndex).getPitch() +
+      " index: " + rhythmIndex);
+
+    //if (rhythms.get(rhythmIndex).getDuration() != 0) {
+      if (rhythmIndex < rhythms.size()-1) {
+        rhythmIndex++;
+        ui.repaint();
+      }
+    //}
   }
   
   private void handleStartButtonClicked() {
@@ -1030,6 +1148,18 @@ public class SwingScoreReadingGame extends ScoreReadingGame implements SwingGame
     ui.paintRhythms = true; 
     ui.repaint(); //only to paint exercise
     gameStarted = false;
+  }
+
+  private void handlePreferencesButtonClicked() {
+    if (gameStarted) {
+      stopGame();
+      gameStarted = false;
+    } else if (ui.paintRhythms) {
+      sameRhythms = true;
+      ui.muteRhythms = true;
+      initGame();
+      startGame();
+    }
   }
   
   void drawScore(Graphics g) {

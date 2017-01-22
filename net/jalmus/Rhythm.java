@@ -275,7 +275,7 @@ public class Rhythm {
       }
     }
 
-    else   if (this.samenotePitch(7)) { //SOL
+    else if (this.samenotePitch(7)) { //SOL
       if ((t.issharp() && t.getAlterationsNumber() >=3) || (t.isflat() && t.getAlterationsNumber() >=5))
         alt = "n"; else alt = "";
       noteY = (67-this.pitch)*35/12 + 23 + keyoffset;

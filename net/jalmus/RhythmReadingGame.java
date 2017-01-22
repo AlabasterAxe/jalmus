@@ -9,7 +9,7 @@ public abstract class RhythmReadingGame implements Game {
   boolean sameRhythms = false;
   RhythmLevel rhythmLevel = new RhythmLevel();
   protected ArrayList<Rhythm> rhythms = new ArrayList<Rhythm>(); 
-  int rhythmIndex;
+  int rhythmIndex = -1;
   protected ArrayList<RhythmAnswer> answers = new ArrayList<RhythmAnswer>();
   protected int precision = 10; //precision on control between note and answer
   boolean cursorstart = false;

@@ -374,7 +374,6 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
     gameTypeComboBox.removeAllItems();
     //  rhythmGameTypeComboBox.addItem(bundle.getString("_learninggame"));
     gameTypeComboBox.addItem(bundle.getString("_normalgame"));
-
   }
 
   @Override
@@ -394,6 +393,7 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
     }
 
     ui.jalmus.gameStarted = true; // start game
+    gameStarted = true; // start game
     ui.startButton.setText(ui.bundle.getString("_stop"));
     rhythmCursorXpos = ui.firstNoteXPos - (ui.noteDistance * tmpdiv);
 
@@ -685,12 +685,12 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
       " pitch: " + rhythms.get(rhythmIndex).getPitch() +
       " index: " + rhythmIndex);
 
-    if (rhythms.get(rhythmIndex).getDuration() != 0) {
+    //if (rhythms.get(rhythmIndex).getDuration() != 0) {
       if (rhythmIndex < rhythms.size()-1) {
         rhythmIndex++;
         ui.repaint();
       }
-    }
+    //}
   }
 
   private void createMetronome() {
@@ -1096,12 +1096,12 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
     for (int i = 0; i < rhythms.size(); i++) {
       // System.out.println(i);
       if (rhythms.get(i).getDuration() != 0) {
-        if ((i != rhythmIndex) || (ui.muteRhythms)) { //only paint note in learning mode
-          rhythms.get(i).paint(g, ui.jalmus.selectedGame, f, null, 9, ui.rowsDistance,
-            false, ui.scoreYpos, ui);
-        } else {
+        if ((i == rhythmIndex) && !ui.muteRhythms && gameStarted) { //only paint note in learning mode
           rhythms.get(i).paint(g, ui.jalmus.selectedGame, f, null, 9, ui.rowsDistance,
             true, ui.scoreYpos, ui);
+        } else {
+          rhythms.get(i).paint(g, ui.jalmus.selectedGame, f, null, 9, ui.rowsDistance,
+            false, ui.scoreYpos, ui);
         }
       }
     }
