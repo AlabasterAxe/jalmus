@@ -1,11 +1,6 @@
 package net.jalmus;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -76,7 +71,7 @@ public class SwingScoreReadingGame extends ScoreReadingGame implements SwingGame
 
   public void setUi(final SwingJalmus ui) {
     this.ui = ui;
-    
+
     startButton = new JButton();
     startButton.setFocusable(false);
     ui.localizables.add(new Localizable.Button(startButton, "_start"));
@@ -120,7 +115,22 @@ public class SwingScoreReadingGame extends ScoreReadingGame implements SwingGame
 
     rhythmCursorXpos = ui.firstNoteXPos - ui.noteDistance;
     rhythmCursorXStartPos = ui.firstNoteXPos - ui.noteDistance;
-    }
+
+    gameButtonPanel.setLayout(new FlowLayout());
+    gameButtonPanel.add(startButton);
+    gameButtonPanel.add(newButton);
+    gameButtonPanel.add(listenButton);
+    gameButtonPanel.add(preferencesButton);
+    gameButtonPanel.setBackground(Color.white);
+
+    principal.setLayout(new BorderLayout());
+    animationPanel = new Anim(ui);
+    animationPanel.setBackground(Color.white);
+    animationPanel.setVisible(true);
+    principal.add(gameButtonPanel, BorderLayout.NORTH);
+    principal.add(animationPanel, BorderLayout.CENTER);
+    principal.setVisible(true);
+  }
 
   @Override
   public JPanel getPreferencesPanel() {
@@ -242,7 +252,7 @@ public class SwingScoreReadingGame extends ScoreReadingGame implements SwingGame
           scoreLevel.setRandomTonality(false);
           int index = alterationsComboBox.getSelectedIndex();
           
-          String modifier = "#";
+          String modifier = "";
           if (index > 7) {
             index -= 7;
             modifier = "b";
@@ -431,6 +441,10 @@ public class SwingScoreReadingGame extends ScoreReadingGame implements SwingGame
     return panel;
   }
 
+  JPanel getGamePanel() {
+    return principal;
+  }
+
   @Override
   public String getPreferencesIconResource() {
     return "/images/score.png";
@@ -491,11 +505,12 @@ public class SwingScoreReadingGame extends ScoreReadingGame implements SwingGame
 
   @Override
   public void changeScreen() {
-    ui.gameButtonPanel.setVisible(true);
-    ui.noteGame.noteButtonPanel.setVisible(false);
-    ui.newButton.setVisible(true);
-    ui.listenButton.setVisible(true);
-    ui.principal.setVisible(true);
+    gameButtonPanel.setVisible(true);
+    newButton.setVisible(true);
+    listenButton.setVisible(true);
+    principal.setVisible(true);
+    principal.repaint();
+    principal.revalidate();
   }
   
   @Override
@@ -681,9 +696,9 @@ public class SwingScoreReadingGame extends ScoreReadingGame implements SwingGame
     int nbrhythms = 0;
 
     for (int i = 0; i < answers.size(); i++) {
-      if (answers.get(i).allgood() && !answers.get(i).isnull()) nbgood = nbgood +1;
-      if (!answers.get(i).isnull() && answers.get(i).badnote()) nbnotefalse = nbnotefalse +1;
-      if (!answers.get(i).isnull() && answers.get(i).badrhythm() ) nbrhythmfalse = nbrhythmfalse +1;
+      if (answers.get(i).allGood() && !answers.get(i).isnull()) nbgood = nbgood +1;
+      if (!answers.get(i).isnull() && answers.get(i).badNote()) nbnotefalse = nbnotefalse +1;
+      if (!answers.get(i).isnull() && answers.get(i).badRhythm() ) nbrhythmfalse = nbrhythmfalse +1;
     }
 
     //Nb rhythms
@@ -970,7 +985,7 @@ public class SwingScoreReadingGame extends ScoreReadingGame implements SwingGame
       @Override
       public void actionPerformed(ActionEvent e) {
         //Execute when button is pressed
-        if (! chooseNotePanel.atLeast3Pitches()) {
+        if (!chooseNotePanel.atLeast3Pitches()) {
           JOptionPane.showMessageDialog(null, "Choose at least three notes", "Warning",
               JOptionPane.ERROR_MESSAGE); 
         } else {

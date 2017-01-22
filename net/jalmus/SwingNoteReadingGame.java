@@ -49,7 +49,6 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
       }
       ui.repaint();
     }
-    
   };
 
   String DO;

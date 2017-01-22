@@ -11,7 +11,7 @@ public abstract class ScoreReadingGame implements Game {
   boolean cursorstart = false;
   protected int precision = 10; //precision on control between note and answer
   protected ArrayList<RhythmAnswer> answers = new ArrayList<RhythmAnswer>();
-  protected ArrayList<Rhythm> rhythms = new ArrayList<Rhythm>(); 
+  protected ArrayList<Rhythm> rhythms = new ArrayList<Rhythm>();
 
   @Override
   public void initGame() {
@@ -28,12 +28,12 @@ public abstract class ScoreReadingGame implements Game {
     // TODO Auto-generated method stub
   }
 
-@Override
-public void startLevel() {
-	// TODO Auto-generated method stub
-}
+  @Override
+  public void startLevel() {
+    // TODO Auto-generated method stub
+  }
 
-void updateTonality() {
+  void updateTonality() {
     String stmp;
 
     // to change tonality when randomly
@@ -51,12 +51,12 @@ void updateTonality() {
       scoreLevel.getCurrentTonality().init(i, stmp);
     }
 
-}
+  }
 
   void setTripletValue(int val) {
     rhythms.get(rhythms.size() - 1).setTripletValue(val);
   }
-  
+
   boolean isBeginMeasure(int i) {
     double d = 0;
     int id = 0;
@@ -80,6 +80,6 @@ void updateTonality() {
   @Override
   public void nextGame() {
     // TODO Auto-generated method stub
-    
+
   }
 }

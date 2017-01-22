@@ -1531,7 +1531,6 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
         }
         repaint();
         gameButtonPanel.setVisible(true);
-
         menuPrefs.setEnabled(false);
       }
     }
@@ -1543,7 +1542,7 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
       this.getContentPane().add(rhythmGame.getGamePanel());
       rhythmGame.changeScreen();
     } else if (selectedGame == Jalmus.SCOREREADING) {
-      this.getContentPane().add(principal);
+      this.getContentPane().add(scoreGame.getGamePanel());
       scoreGame.changeScreen();
     }
   }
@@ -1712,6 +1711,7 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
     case Jalmus.RHYTHMREADING:
       return rhythmGame.animationPanel;
     case Jalmus.SCOREREADING:
+      return scoreGame.animationPanel;
     default:
       return animationPanel;
     }

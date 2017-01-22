@@ -556,13 +556,13 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
     int nbrhythms = 0;
 
     for (int i = 0; i < answers.size(); i++) {
-      if (answers.get(i).allgood() && !answers.get(i).isnull()) {
+      if (answers.get(i).allGood() && !answers.get(i).isnull()) {
         nbgood = nbgood +1;
       }
-      if (!answers.get(i).isnull() && answers.get(i).badnote()) {
+      if (!answers.get(i).isnull() && answers.get(i).badNote()) {
         nbnotefalse = nbnotefalse +1;
       }
-      if (!answers.get(i).isnull() && answers.get(i).badrhythm()) {
+      if (!answers.get(i).isnull() && answers.get(i).badRhythm()) {
         nbrhythmfalse = nbrhythmfalse +1;
       }
     }

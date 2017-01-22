@@ -519,23 +519,43 @@ public class Rhythm {
 
     // DRAW LINE UNDER STAFF
     if (!this.silence && levelType == SCOREREADING) {
-      int legerLineHeight = -1;
-      if (noteY < -22) {
-        legerLineHeight = scoreYpos + this.rowNumber * rowsDistance - 20;
-      } else if (noteY < -12) {
-        legerLineHeight = scoreYpos + this.rowNumber * rowsDistance - 10;
-      } else if (noteY > 38) {
-        legerLineHeight = scoreYpos + this.rowNumber * rowsDistance + 50;
-      } else if (noteY > 48) {
-        legerLineHeight = scoreYpos + this.rowNumber * rowsDistance + 60;
-      }
+      // Even though we want the note to be red, the line it's on should still be black.
+      g.setColor(Color.BLACK);
 
-      if (legerLineHeight != 1) {
+      // NOTE: these if statements purposefully support the case where multiple of them will be true.
+      // the reason being that if a note is two ledger lines above the staff you'll need the ledger line below
+      // it too.
+      if (noteY < -22) {
+        int ledgerLineHeight = scoreYpos + this.rowNumber * rowsDistance - 20;
         g.drawLine(
           this.position - 5,
-          scoreYpos + this.rowNumber * rowsDistance - 20,
+          ledgerLineHeight,
           this.position + 15,
-          scoreYpos + this.rowNumber * rowsDistance - 20);
+          ledgerLineHeight);
+      }
+      if (noteY < -12) {
+        int ledgerLineHeight = scoreYpos + this.rowNumber * rowsDistance - 10;
+        g.drawLine(
+          this.position - 5,
+          ledgerLineHeight,
+          this.position + 15,
+          ledgerLineHeight);
+      }
+      if (noteY > 38) {
+        int ledgerLineHeight = scoreYpos + this.rowNumber * rowsDistance + 50;
+        g.drawLine(
+          this.position - 5,
+          ledgerLineHeight,
+          this.position + 15,
+          ledgerLineHeight);
+      }
+      if (noteY > 48) {
+        int ledgerLineHeight = scoreYpos + this.rowNumber * rowsDistance + 60;
+        g.drawLine(
+          this.position - 5,
+          ledgerLineHeight,
+          this.position + 15,
+          ledgerLineHeight);
       }
     }
     g.setColor(Color.black);
