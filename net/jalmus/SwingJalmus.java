@@ -1423,7 +1423,7 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
         }
         if (midiHelper.inputDevice.isOpen()) {
           System.out.println(
-              "Midi Device open : play a key, if this key don't change his " +
+            "Midi Device open : play a key, if this key don't change his " +
               "color at screen, verify the MIDI port name");
         }
         midiHelper.open = true;
@@ -1449,18 +1449,18 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
         }
       }
 
-      } else if (evt.getItemSelectable() == this.instrumentsComboBox) {
-        if (!midiHelper.midierror && midiHelper.instruments != null) {
-          midiHelper.currentChannel.getChannel().programChange(this.instrumentsComboBox.getSelectedIndex());
-        }
-      } else if (evt.getItemSelectable() == this.keyboardLengthComboBox) {
-        if (this.keyboardLengthComboBox.getSelectedIndex() == 0) {
-          jalmus.piano = new Piano(73, 40);
-        } else if (this.keyboardLengthComboBox.getSelectedIndex() == 1) {
-          jalmus.piano = new Piano(61, 90);
-        }
+    } else if (evt.getItemSelectable() == this.instrumentsComboBox) {
+      if (!midiHelper.midierror && midiHelper.instruments != null) {
+        midiHelper.currentChannel.getChannel().programChange(this.instrumentsComboBox.getSelectedIndex());
+      }
+    } else if (evt.getItemSelectable() == this.keyboardLengthComboBox) {
+      if (this.keyboardLengthComboBox.getSelectedIndex() == 0) {
+        jalmus.piano = new Piano(73, 40);
+      } else if (this.keyboardLengthComboBox.getSelectedIndex() == 1) {
+        jalmus.piano = new Piano(61, 90);
       }
     }
+  }
 
   @Override
   public void keyPressed(KeyEvent evt) {
@@ -1654,15 +1654,11 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
   void handleScoreReadingMenuItem() {
     jalmus.stopGames();
 
-    gameButtonPanel.add(newButton);
-    gameButtonPanel.add(listenButton);
-    gameButtonPanel.add(startButton);
-    gameButtonPanel.add(preferencesButton);
     scoreYpos = 110;
     repaint();
 
     jalmus.selectedGame = Jalmus.SCOREREADING;
-    newButton.doClick();
+    scoreGame.newButton.doClick();
     if (jalmus.isLessonMode) {
       noteGame.noteLevel.init();
     }
