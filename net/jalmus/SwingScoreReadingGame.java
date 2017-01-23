@@ -526,10 +526,31 @@ public class SwingScoreReadingGame extends ScoreReadingGame implements SwingGame
 
     ui.jalmus.gameStarted = true; // start game
     gameStarted = true; // start game
-    ui.startButton.setText(ui.bundle.getString("_stop"));
+    startButton.setText(ui.bundle.getString("_stop"));
     rhythmCursorXpos = ui.firstNoteXPos - (ui.noteDistance * tmpdiv);
 
     cursorstart = false;
+  }
+
+  @Override
+  public void stopGame() {
+    super.stopGame();
+    int tmpdiv = scoreLevel.getTimeDivision();
+
+    startButton.setText(ui.bundle.getString("_start"));
+
+    ui.scoreYpos = 110;
+    rhythmCursorXpos = ui.firstNoteXPos - (ui.noteDistance * tmpdiv);
+    rhythmCursorXStartPos = ui.firstNoteXPos - (ui.noteDistance * tmpdiv);
+    rhythmAnswerScoreYpos = 100;
+    cursorstart = false;
+    ui.jalmus.metronomeCount = 0;
+    ui.metronomeYPos = 100;
+
+    if (ui.midiHelper.smSequencer != null) {
+      ui.midiHelper.smSequencer.close();
+    }
+    //repaint();
   }
   
   @Override

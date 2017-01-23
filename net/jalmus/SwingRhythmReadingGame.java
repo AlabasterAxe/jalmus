@@ -394,7 +394,7 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
 
     ui.jalmus.gameStarted = true; // start game
     gameStarted = true; // start game
-    ui.startButton.setText(ui.bundle.getString("_stop"));
+    startButton.setText(ui.bundle.getString("_stop"));
     rhythmCursorXpos = ui.firstNoteXPos - (ui.noteDistance * tmpdiv);
 
     cursorstart = false;
@@ -405,7 +405,7 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
     super.stopGame();
     int tmpdiv = rhythmLevel.getTimeDivision();
 
-    ui.startButton.setText(ui.bundle.getString("_start"));
+    startButton.setText(ui.bundle.getString("_start"));
 
     ui.scoreYpos = 110;
     rhythmCursorXpos = ui.firstNoteXPos - (ui.noteDistance * tmpdiv);
