@@ -412,6 +412,7 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
     rhythmCursorXStartPos = ui.firstNoteXPos - (ui.noteDistance * tmpdiv);
     rhythmAnswerScoreYpos = 100;
     cursorstart = false;
+    rhythmIndex = -1;
     ui.jalmus.metronomeCount = 0;
     ui.metronomeYPos = 100;
 
@@ -689,6 +690,8 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
       if (rhythmIndex < rhythms.size()-1) {
         rhythmIndex++;
         ui.repaint();
+      } else {
+        stopGame();
       }
     //}
   }
