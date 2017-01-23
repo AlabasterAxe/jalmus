@@ -896,9 +896,7 @@ public class SwingScoreReadingGame extends ScoreReadingGame implements SwingGame
 	      System.exit(1);
 	    }
 
-	    for(int i = 0; i < 1000; i++) {
-        updateTonality(); //when selected random tonality
-      }
+      updateTonality(); //when selected random tonality
 
 	    if (!scoreLevel.isCustomNotes()) {
 	      scoreLevel.initPitcheslist( scoreLevel.getNbnotes());
