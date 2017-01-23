@@ -38,7 +38,7 @@ public abstract class ScoreReadingGame implements Game {
 
     // to change tonality when randomly
     if (scoreLevel.getRandomTonality()) {
-      int i = (int) Math.round((Math.random()*7));
+      int i = (int) Math.ceil((Math.random()*7));
       double tmp = Math.random();
       if (tmp < 0.1) {
         stmp = "";
