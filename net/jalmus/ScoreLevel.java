@@ -35,9 +35,13 @@ public class ScoreLevel implements Level {
   //int[] pitchtab = new int [8];
   ArrayList<Integer> pitcheslist = new ArrayList<Integer>();
 
-  /*                          C3  D3  E3  F3  G3  A3  B3  */
-  /*                         ---------------------------- */
-  char[][] sharpsMatrix = { { 60, 62, 64, 65, 67, 69, 71 },
+
+  /*                        C3  D3  E3  F3  G3  A3  B3  */
+  /*                       ---------------------------- */
+  char[] defaultPitches = { 60, 62, 64, 65, 67, 69, 71 };
+
+  char[][] sharpsMatrix = {
+    {  0,  0,  0,  0,  0,  0,  0 }, // unmodified
     {  0,  0,  0,  1,  0,  0,  0 }, // 1 alteration
     {  1,  0,  0,  1,  0,  0,  0 }, // 2 alterations
     {  1,  0,  0,  1,  1,  0,  0 }, // 3 alterations
@@ -48,7 +52,8 @@ public class ScoreLevel implements Level {
   };
   /*                         C3  D3  E3  F3  G3  A3  B3  */
   /*                        ---------------------------- */
-  char[][] flatsMatrix = { { 60, 62, 64, 65, 67, 69, 71 },
+  char[][] flatsMatrix = {
+    {  0,  0,  0,  0,  0,  0,  0 }, // unmodified
     {  0,  0,  0,  0,  0,  0,  1 }, // 1 alteration
     {  0,  0,  1,  0,  0,  0,  1 }, // 2 alterations
     {  0,  0,  1,  0,  0,  1,  1 }, // 3 alterations
@@ -237,7 +242,7 @@ public class ScoreLevel implements Level {
         alteration =  0 - flatsMatrix[altIndex][noteIdx];
       }
 
-      pitcheslist.add(sharpsMatrix[0][noteIdx] + (octaveOffset * 12) + alteration);
+      pitcheslist.add(defaultPitches[noteIdx] + (octaveOffset * 12) + alteration);
 
       if (noteIdx == 6) {
         octaveOffset++;
