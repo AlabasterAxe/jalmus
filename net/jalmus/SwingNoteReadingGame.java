@@ -80,7 +80,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
 
   private JComboBox<String> keyComboBox;
   private JComboBox<String> keySignatureCheckBox;
-  private JPanel KeyPanel;
+  private JPanel keyPanel;
   private JComboBox<String> noteGroupComboBox;
   private JComboBox<String> noteCountComboBox;
   private JComboBox<String> intervalComboBox;
@@ -343,10 +343,10 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
           
         }}});
 
-    KeyPanel = new JPanel(); // panel pour la Key du premier jeu
-    KeyPanel.add(keyComboBox);
-    KeyPanel.add(keySignatureCheckBox);
-    ui.localizables.add(new Localizable.NamedGroup(KeyPanel, "_menuClef"));
+    keyPanel = new JPanel(); // panel pour la Key du premier jeu
+    keyPanel.add(keyComboBox);
+    keyPanel.add(keySignatureCheckBox);
+    ui.localizables.add(new Localizable.NamedGroup(keyPanel, "_menuClef"));
 
     /* 3rd panel - Notes */
 
@@ -483,16 +483,16 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
       }
     });
 
-    ui.noteReadingNotesPanel.add(noteGroupComboBox);
-    ui.noteReadingNotesPanel.add(noteCountComboBox);
+    noteReadingNotesPanel.add(noteGroupComboBox);
+    noteReadingNotesPanel.add(noteCountComboBox);
 
-    ui.localizables.add(new Localizable.NamedGroup(ui.noteReadingNotesPanel, "_menuNotes"));
+    ui.localizables.add(new Localizable.NamedGroup(noteReadingNotesPanel, "_menuNotes"));
 
     JPanel panel = new JPanel();
     panel.setLayout(new GridLayout(3, 1));
     panel.add(gamePanel);
-    panel.add(KeyPanel);
-    panel.add(ui.noteReadingNotesPanel);
+    panel.add(keyPanel);
+    panel.add(noteReadingNotesPanel);
 
     return panel;
   }
