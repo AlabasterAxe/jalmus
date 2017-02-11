@@ -5,7 +5,7 @@ class RenderingThread extends Thread {
   private final SwingJalmus ui;
 
   /**
-   * @param jalmus
+   * @param ui
    */
   RenderingThread(SwingJalmus ui) {
     this.ui = ui;
@@ -82,7 +82,7 @@ class RenderingThread extends Thread {
 
         ui.activePanel().repaint();
 
-        int tmpdiv = 1; 
+        int tmpdiv;
         //thread for rhythm game move the rhythm cursor according to tempo
         if (ui.jalmus.selectedGame == Jalmus.RHYTHMREADING ||
             ui.jalmus.selectedGame == Jalmus.SCOREREADING) {
@@ -92,51 +92,56 @@ class RenderingThread extends Thread {
             tmpdiv = ui.rhythmGame.rhythmLevel.getTimeDivision();
             
             if (ui.rhythmGame.rhythmCursorXpos >= ui.rhythmGame.rhythmCursorXlimit - ui.notesShift) {
-              if (ui.rhythmGame.rhythmAnswerScoreYpos < ui.scoreYpos + (ui.rowsDistance *
-                    (ui.numberOfRows - 2))) {
+              if (ui.rhythmGame.rhythmAnswerScoreYpos <
+                  ui.scoreYpos + (ui.rowsDistance * (ui.numberOfRows - 2))) {
                 ui.rhythmGame.rhythmAnswerScoreYpos += ui.rowsDistance;
                 ui.rhythmGame.rhythmCursorXStartPos = ui.firstNoteXPos - ui.notesShift;
                 ui.rhythmGame.rhythmCursorXpos = ui.rhythmGame.rhythmCursorXStartPos;
                 ui.jalmus.timestart = System.currentTimeMillis();
               } else { //end of game
-                ui.showResult();
-                ui.jalmus.stopRhythmGame();
-                ui.jalmus.gameStarted = false;
+                System.out.println("It's over!!1");
+                ui.rhythmGame.showResult();
+
+                // Maybe stopGame should call init game?
+                ui.rhythmGame.sameRhythms = true;
+                ui.rhythmGame.stopGame();
+                ui.rhythmGame.initGame();
                 ui.repaint();
               }
             }         
             if (ui.jalmus.timestart != 0) {
               ui.rhythmGame.rhythmCursorXpos = ui.rhythmGame.rhythmCursorXStartPos +
-                ((System.currentTimeMillis()-ui.jalmus.timestart)*
-                 (ui.noteDistance*tmpdiv))/(60000/ui.jalmus.tempo);
+                ((System.currentTimeMillis() - ui.jalmus.timestart) *
+                 (ui.noteDistance * tmpdiv)) / (60000 / ui.jalmus.tempo);
             }
           } else if (ui.scoreGame.cursorstart && ui.muteRhythms) {
             ui.jalmus.tempo = ui.jalmus.scoreGame.scoreLevel.getspeed();
             tmpdiv = ui.jalmus.scoreGame.scoreLevel.getTimeDivision();
             
             if (ui.scoreGame.rhythmCursorXpos >= ui.scoreGame.rhythmCursorXlimit - ui.notesShift) {
-              if (ui.scoreGame.rhythmAnswerScoreYpos < ui.scoreYpos + (ui.rowsDistance *
-                    (ui.numberOfRows - 2))) {
+              if (ui.scoreGame.rhythmAnswerScoreYpos <
+                  ui.scoreYpos + (ui.rowsDistance * (ui.numberOfRows - 2))) {
                 ui.scoreGame.rhythmAnswerScoreYpos += ui.rowsDistance;
                 ui.scoreGame.rhythmCursorXStartPos = ui.firstNoteXPos - ui.notesShift;
                 ui.scoreGame.rhythmCursorXpos = ui.scoreGame.rhythmCursorXStartPos;
                 ui.jalmus.timestart = System.currentTimeMillis();
               } else { //end of game
-                ui.showResult();
-                ui.jalmus.stopRhythmGame();
-                ui.jalmus.gameStarted = false;
+                ui.scoreGame.showResult();
+                ui.scoreGame.sameRhythms = true;
+                ui.scoreGame.stopGame();
+                ui.scoreGame.initGame();
                 ui.repaint();
               }
             }
             if (ui.jalmus.timestart != 0) {
               ui.scoreGame.rhythmCursorXpos = ui.scoreGame.rhythmCursorXStartPos +
-                ((System.currentTimeMillis()-ui.jalmus.timestart)*
-                 (ui.noteDistance*tmpdiv))/(60000/ui.jalmus.tempo);
+                ((System.currentTimeMillis() - ui.jalmus.timestart) *
+                 (ui.noteDistance * tmpdiv)) / (60000 / ui.jalmus.tempo);
             }
           }
           sleep(10); // cursor moves every 10 milliseconds
         }
-      } catch (Exception e) {
+      } catch (InterruptedException e) {
         // What exceptions are these? should we care?
       }
     }

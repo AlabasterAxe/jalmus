@@ -1141,7 +1141,7 @@ public class SwingScoreReadingGame extends ScoreReadingGame implements SwingGame
         rhythmIndex++;
         ui.repaint();
       } else {
-        stopGame();
+        //stopGame();
       }
     //}
   }

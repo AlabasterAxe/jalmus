@@ -24,12 +24,14 @@ public abstract class RhythmReadingGame implements Game {
   @Override
   public void startGame() {
     // TODO Auto-generated method stub
+    gameStarted = true;
     
   }
 
   @Override
   public void stopGame() {
     // TODO Auto-generated method stub
+    gameStarted = false;
     
   }
 

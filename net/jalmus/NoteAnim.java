@@ -98,5 +98,4 @@ public class NoteAnim extends Anim {
           ui.noteGame.noteLevel.isCustomNotesgame(), ui.noteGame.noteLevel.getPitcheslist());
     }
   }
-
 }

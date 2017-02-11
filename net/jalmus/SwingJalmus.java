@@ -1769,14 +1769,4 @@ public class SwingJalmus extends JFrame implements ActionListener, ItemListener,
     }
     midiOutComboBox.setSelectedIndex(sauvmidi[5]);
   }
-
-  void showResult() {
-    if (jalmus.selectedGame == Jalmus.NOTEREADING) {
-      noteGame.showResult();
-    } else if (jalmus.selectedGame == Jalmus.RHYTHMREADING) {
-      rhythmGame.showResult();
-    } else if (jalmus.selectedGame == Jalmus.SCOREREADING) {
-      scoreGame.showResult();
-    }
-  }
 }

@@ -380,9 +380,7 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
   public void startGame() {
     super.startGame();
     ui.midiHelper.smSequencer.start();
-    int tmpdiv = 1;
-
-    tmpdiv = rhythmLevel.getTimeDivision();
+    int tmpdiv = rhythmLevel.getTimeDivision();
 
     if (ui.muteRhythms) {
       ui.midiHelper.smSequencer.setTrackMute(1, true);
@@ -392,8 +390,6 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
       ui.midiHelper.smSequencer.setTrackMute(0, true);
     }
 
-    ui.jalmus.gameStarted = true; // start game
-    gameStarted = true; // start game
     startButton.setText(ui.bundle.getString("_stop"));
     rhythmCursorXpos = ui.firstNoteXPos - (ui.noteDistance * tmpdiv);
 
@@ -690,8 +686,6 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
       if (rhythmIndex < rhythms.size()-1) {
         rhythmIndex++;
         ui.repaint();
-      } else {
-        stopGame();
       }
     //}
   }
@@ -1062,6 +1056,7 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
 
   void handleStartButtonClicked() {
     if (gameStarted) {
+      sameRhythms = true;
       stopGame();
       initGame(); //stop the game before restart
     } else {
