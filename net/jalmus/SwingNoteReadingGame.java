@@ -73,7 +73,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
   final JButton sharpButton2 = new JButton();
   JPanel noteButtonPanel = new JPanel();
 
-  JPanel noteReadingNotesPanel = new JPanel(); // panel for choose type on fonts on first exercise
+  JPanel notesPanel = new JPanel(); // panel for choose type on fonts on first exercise
   private JComboBox<String> noteGameTypeComboBox;
   private JComboBox<String> noteGameSpeedComboBox;
   private JPanel gamePanel;
@@ -359,22 +359,22 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
       public void itemStateChanged(ItemEvent e) {
         if (noteGroupComboBox.getSelectedIndex() == 0) {
           noteLevel.setNotetype("notes");
-          noteReadingNotesPanel.removeAll();
-          noteReadingNotesPanel.add(noteGroupComboBox);
-          noteReadingNotesPanel.add(noteCountComboBox);
-          noteReadingNotesPanel.repaint();
+          notesPanel.removeAll();
+          notesPanel.add(noteGroupComboBox);
+          notesPanel.add(noteCountComboBox);
+          notesPanel.repaint();
           ui.preferencesDialog.repaint();
         } else if (noteGroupComboBox.getSelectedIndex() == 1) {
           noteLevel.setNotetype("accidentals");
-          noteReadingNotesPanel.removeAll();
-          noteReadingNotesPanel.add(noteGroupComboBox);
-          noteReadingNotesPanel.add(noteCountComboBox);
-          noteReadingNotesPanel.repaint();
+          notesPanel.removeAll();
+          notesPanel.add(noteGroupComboBox);
+          notesPanel.add(noteCountComboBox);
+          notesPanel.repaint();
           ui.preferencesDialog.repaint();
         } else if (noteGroupComboBox.getSelectedIndex() == 2) {
           noteLevel.setNotetype("custom");
-          noteReadingNotesPanel.removeAll();
-          noteReadingNotesPanel.add(noteGroupComboBox);
+          notesPanel.removeAll();
+          notesPanel.add(noteGroupComboBox);
           ui.preferencesDialog.repaint();
           chooseNoteP = new ChooseNotePanel(noteLevel.getKey(), Jalmus.NOTEREADING, ui.bundle);
           chooseNoteP.updateTable(noteLevel.getPitcheslist());
@@ -405,19 +405,19 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
         } else if (noteGroupComboBox.getSelectedIndex() == 3) {
           noteLevel.setNotetype("intervals");
 
-          noteReadingNotesPanel.removeAll();
-          noteReadingNotesPanel.add(noteGroupComboBox);
-          noteReadingNotesPanel.add(intervalComboBox);
-          noteReadingNotesPanel.repaint();
+          notesPanel.removeAll();
+          notesPanel.add(noteGroupComboBox);
+          notesPanel.add(intervalComboBox);
+          notesPanel.repaint();
           ui.preferencesDialog.repaint();
 
         } else if (noteGroupComboBox.getSelectedIndex() == 4) {
           noteLevel.setNotetype("chords");
 
-          noteReadingNotesPanel.removeAll();
-          noteReadingNotesPanel.add(noteGroupComboBox);
-          noteReadingNotesPanel.add(chordTypeComboBox);
-          noteReadingNotesPanel.repaint();
+          notesPanel.removeAll();
+          notesPanel.add(noteGroupComboBox);
+          notesPanel.add(chordTypeComboBox);
+          notesPanel.repaint();
           ui.preferencesDialog.repaint();
         }
       }
@@ -483,16 +483,16 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
       }
     });
 
-    noteReadingNotesPanel.add(noteGroupComboBox);
-    noteReadingNotesPanel.add(noteCountComboBox);
+    notesPanel.add(noteGroupComboBox);
+    notesPanel.add(noteCountComboBox);
 
-    ui.localizables.add(new Localizable.NamedGroup(noteReadingNotesPanel, "_menuNotes"));
+    ui.localizables.add(new Localizable.NamedGroup(notesPanel, "_menuNotes"));
 
     JPanel panel = new JPanel();
     panel.setLayout(new GridLayout(3, 1));
     panel.add(gamePanel);
     panel.add(keyPanel);
-    panel.add(noteReadingNotesPanel);
+    panel.add(notesPanel);
 
     return panel;
   }

@@ -54,11 +54,9 @@ class Anim extends JPanel {
       } else if (this.ui.jalmus.selectedGame == Jalmus.RHYTHMREADING) {
         g.setColor(Color.white);
         g.fillRect(0, 0, d.width, d.height);
-        this.ui.gameButtonPanel.setBackground(Color.white);
 
-        this.ui.drawScore(g);
-        this.ui.drawKeys(g);
-        this.ui.drawTimeSignature(g);
+        this.ui.rhythmGame.drawScore(g);
+        this.ui.rhythmGame.drawTimeSignature(g);
 
         /* Show cursor if enabled */
         if (this.ui.jalmus.rhythmGame.rhythmLevel.getMetronomeBeats()) {
@@ -73,11 +71,10 @@ class Anim extends JPanel {
       } else if (this.ui.jalmus.selectedGame == Jalmus.SCOREREADING) {
         g.setColor(Color.white);
         g.fillRect(0, 0, d.width, d.height);
-        this.ui.gameButtonPanel.setBackground(Color.white);
 
-        this.ui.drawScore(g);
-        this.ui.drawKeys(g);
-        this.ui.drawTimeSignature(g);
+        this.ui.scoreGame.drawScore(g);
+        this.ui.scoreGame.drawKeys(g);
+        this.ui.scoreGame.drawTimeSignature(g);
 
         ui.numberOfRows = ((getSize().height - ui.scoreYpos - 50) / ui.rowsDistance)+1;
         ui.jalmus.scoreGame.scoreLevel.getCurrentTonality().paint(3,

@@ -564,7 +564,7 @@ public class SwingScoreReadingGame extends ScoreReadingGame implements SwingGame
       ui.levelMessage.setLocationRelativeTo(ui);
       ui.levelMessage.setVisible(true);
     } else {
-      ui.startButton.doClick();
+      startButton.doClick();
     }
   }
 
@@ -1165,7 +1165,7 @@ public class SwingScoreReadingGame extends ScoreReadingGame implements SwingGame
     startGame();
   }
 
-  private void handleNewButtonClicked() {
+  void handleNewButtonClicked() {
     sameRhythms = false;
     ui.muteRhythms = false;
     initGame();

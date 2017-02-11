@@ -533,7 +533,7 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
       ui.levelMessage.setLocationRelativeTo(ui);
       ui.levelMessage.setVisible(true);
     } else {
-      ui.startButton.doClick();
+      startButton.doClick();
     }
   }
 
@@ -1004,7 +1004,7 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
 
     ui.changeScreen(ui.jalmus.isLessonMode, ui.jalmus.currentLesson, ui.jalmus.selectedGame);
     rhythmLevel.printtest();
-    ui.newButton.doClick();
+    newButton.doClick();
     startLevel();
   }
 
@@ -1065,6 +1065,7 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
       stopGame();
       initGame(); //stop the game before restart
     } else {
+      ui.muteRhythms = true;
       ui.requestFocus();
       startGame();
       if (!ui.renderingThread.isAlive()) {
