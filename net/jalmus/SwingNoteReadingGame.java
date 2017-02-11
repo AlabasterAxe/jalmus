@@ -681,7 +681,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
       } else if (noteLevel.isChordsgame()) {
         newChord();
       } else if (noteLevel.isIntervalsgame()) {
-        newinterval();
+        newInterval();
       }
     } else if (noteLevel.isInlinegame()) {
       createLine();
@@ -721,7 +721,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
     System.out.println("nailed it");
     if (noteLevel.isLearningGame()) {
       if (noteLevel.isChordsgame() || noteLevel.isIntervalsgame()) {
-        nextnote();
+        nextNote();
       } else if (ui.jalmus.isLessonMode && notecounter == noteLevel.getLearningduration()) {
         gameStarted = false;
         startButton.setText(ui.bundle.getString("_start"));
@@ -754,7 +754,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
       }
 
       if (noteLevel.isChordsgame() || noteLevel.isIntervalsgame()) {
-        nextnote();
+        nextNote();
       } else {
         newNote();
       }
@@ -842,7 +842,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
     return h;
   }
   
-  void newinterval() {
+  void newInterval() {
 	    ui.midiHelper.stopSound();
 	    currentInterval.copy(intervalChoice());
 	    if (noteLevel.isNormalgame() || noteLevel.isLearningGame()) {
@@ -921,8 +921,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
 	    }
 	  }
 
-    void nextnote() {
-
+    void nextNote() {
 	    if (noteLevel.isChordsgame()) {
 	      if (posnote < 2) {
 	        posnote += 1;
@@ -956,7 +955,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
 	          startButton.setText(ui.bundle.getString("_start"));
 	          ui.jalmus.nextLevel();
 	        } else {
-	          newinterval();
+	          newInterval();
 	          notecounter++;
 	        }
 	      }
@@ -967,7 +966,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
 
 	    if (noteLevel.isNormalgame() || noteLevel.isLearningGame()) {
 	      posnote = 0;
-	      currentChord.copy(chordchoice());
+	      currentChord.copy(chordChoice());
 	      currentChord.convert(noteLevel);
 	      currentNote = currentChord.getNote(currentChord.realPosition(posnote));
 	      if (ui.soundOnCheckBox.isSelected()) {
@@ -1088,7 +1087,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
     return inter;
   }
   
-  private Chord chordchoice() {
+  private Chord chordChoice() {
     int h;
     Note n1 = new Note(0, 0, 0);
     Note n2 = new Note(0, 0, 0);
@@ -1190,6 +1189,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
         line[i].updateNote(noteLevel, ui.scoreYpos, ui.bundle);
         line[i].updateAccidental(noteLevel, ui.bundle);
       }
+      currentNote = line[position];
     } else if (noteLevel.isCustomNotesgame()) {
 
       line[0] = new Note(0, size.width-ui.noteMargin, noteLevel.getRandomPitch() );
@@ -1214,7 +1214,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
     } else if (noteLevel.isChordsgame()) {
       // voir pour precedant
       for (int i = 0; i < line.length; i++) {
-        a.copy(chordchoice());
+        a.copy(chordChoice());
         a.updateX(size.width-ui.noteMargin+i*50);
         lineacc[i] = new Chord(a.getNote(0), a.getNote(1), a.getNote(2), a.getName(),
             a.getInversion());
@@ -1380,10 +1380,10 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
         }
 
         if (gameStarted) {
-          newinterval();
+          newInterval();
         }
       } else if (noteLevel.isLearningGame()) {
-        newinterval();
+        newInterval();
         resetButtonColor();
       } else if (noteLevel.isInlinegame() 
              && gameStarted 

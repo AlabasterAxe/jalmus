@@ -33,6 +33,10 @@ public class Piano {
   int marge = 43;
   int length = 73;
 
+  // TODO(mattkeller): do this less hackily
+  private static final int KEY_TARGET_OFFSET_X = -8;
+  private static final int KEY_TARGET_OFFSET_Y = -116;
+
   public Piano(int length, int m) {
 
     int octavanumber;
@@ -104,11 +108,7 @@ public class Piano {
   public Key getKey(Point point) {
     Point p = new Point();
 
-    System.out.print("X: ");
-    System.out.print(p.getX());
-    System.out.print(" Y: ");
-    System.out.println(p.getY());
-    p.setLocation(point.getX() - 8, point.getY() - 115);
+    p.setLocation(point.getX() + KEY_TARGET_OFFSET_X, point.getY() + KEY_TARGET_OFFSET_Y);
 
     for (int i = 0; i < keys.size(); i++) {
       if (keys.get(i).contains(p)) {
