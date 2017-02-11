@@ -20,9 +20,9 @@ import java.awt.Polygon;
 
 public class Piano {
 
-  Vector<Key> blackKeys = new Vector<Key>();
-  Vector<Key> keys = new Vector<Key>();
-  Vector<Key> whiteKeys = new Vector<Key>();
+  Vector<Key> blackKeys = new Vector<>();
+  Vector<Key> keys = new Vector<>();
+  Vector<Key> whiteKeys = new Vector<>();
   private static final Color JFC_BLUE = new Color(204, 204, 255);
   private static final Color RED = new Color(242, 179, 112);
 
@@ -104,11 +104,15 @@ public class Piano {
   public Key getKey(Point point) {
     Point p = new Point();
 
-    p.setLocation(point.getX() - 4, point.getY() - 100);
+    System.out.print("X: ");
+    System.out.print(p.getX());
+    System.out.print(" Y: ");
+    System.out.println(p.getY());
+    p.setLocation(point.getX() - 8, point.getY() - 115);
 
     for (int i = 0; i < keys.size(); i++) {
-      if ( ( (Key) keys.get(i)).contains(p)) {
-        return (Key) keys.get(i);
+      if (keys.get(i).contains(p)) {
+        return keys.get(i);
       }
     }
     return null;
@@ -141,7 +145,7 @@ public class Piano {
     // System.out.println("note jouee");
 
     for (int i = 0; i < whiteKeys.size(); i++) {
-      Key key = (Key) whiteKeys.get(i);
+      Key key = whiteKeys.get(i);
       if (onoff == 1 & key.kNum == pitch) {
         key.turnOn(cc, midiok);
       } else if (onoff == 0 & key.kNum == pitch) {
@@ -149,7 +153,7 @@ public class Piano {
       }
     }
     for (int i = 0; i < blackKeys.size(); i++) {
-      Key key = (Key) blackKeys.get(i);
+      Key key = blackKeys.get(i);
       if (onoff == 1 & key.kNum == pitch) {
         key.turnOn(cc, midiok);
       } else if (onoff == 0 & key.kNum == pitch) {

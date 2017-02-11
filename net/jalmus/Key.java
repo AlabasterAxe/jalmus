@@ -15,7 +15,7 @@ public class Key extends Rectangle {
 
   private static final long serialVersionUID = 1L;
 
-  private static enum State { ON, OFF };
+  private enum State { ON, OFF }
   private State noteState = State.OFF;
   int kNum;
   int offx; // just for black keys since they have an irregular pattern
