@@ -11,15 +11,15 @@ public class Instrument {
     this.measures = measures;
     this.clef = clef;
   }
-  
+
   public Instrument getInstrument(List<Measure> measures, Clef clef) {
     return new Instrument(measures, clef);
   }
-  
+
   public Iterable<Measure> getMeasures() {
     return measures;
   }
-  
+
   public Clef getClef() {
     return clef;
   }

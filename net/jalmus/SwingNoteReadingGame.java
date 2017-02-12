@@ -1,63 +1,12 @@
 package net.jalmus;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.KeyEvent;
+import javax.swing.*;
+import javax.swing.plaf.ColorUIResource;
+import java.awt.*;
+import java.awt.event.*;
 import java.util.ResourceBundle;
 
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.plaf.ColorUIResource;
-
 public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
-
-  private SwingJalmus ui;
-
-  private final ActionListener noteButtonActionListener = new ActionListener() {
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-      if ((gameStarted && ui.jalmus.selectedGame == Jalmus.NOTEREADING && !ui.jalmus.paused)) {
-        if (!currentNote.getAlteration().equals("")) {  // NOTES AVEC ALTERATION
-          if (((JButton)e.getSource()).getText().equals(currentNote.getAlteration())) {
-            alterationOk = true;
-          } else if (alterationOk &&
-              ((JButton)e.getSource()).getText().equals(currentNote.getName())) {
-            rightAnswer();
-          } else {
-            wrongAnswer();
-          }
-        } else if (currentNote.getAlteration().equals("")) { // NOTE SANS ALTERATION
-          if (((JButton)e.getSource()).getText().equals(currentNote.getName())) {
-            rightAnswer();
-          } else {
-            wrongAnswer();
-          }
-        }
-      }
-      ui.repaint();
-    }
-  };
-
-  String DO;
-  String RE;
-  String MI;
-  String FA;
-  String SOL;
-  String LA;
-  String SI;
 
   final JButton doButton1 = new JButton();
   final JButton reButton = new JButton();
@@ -71,13 +20,54 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
   final JButton sharpButton1 = new JButton();
   final JButton flatButton2 = new JButton();
   final JButton sharpButton2 = new JButton();
+  String DO;
+  String RE;
+  String MI;
+  String FA;
+  String SOL;
+  String LA;
+  String SI;
   JPanel noteButtonPanel = new JPanel();
-
   JPanel notesPanel = new JPanel(); // panel for choose type on fonts on first exercise
+  ChooseNotePanel chooseNoteP;
+  JDialog notesDialog;
+  JButton startButton = new JButton();    // button to start or stop game
+  JButton preferencesButton = new JButton();  // button to access game preferences
+  JPanel principal = new JPanel(); // panel principal
+  NoteAnim animationPanel;
+  JPanel gameButtonPanel = new JPanel();
+  int notecounter = 1;
+  int scoreYpos = 110;
+  int noteMargin;
+  private SwingJalmus ui;
+  private final ActionListener noteButtonActionListener = new ActionListener() {
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+      if ((gameStarted && ui.jalmus.selectedGame == Jalmus.NOTEREADING && !ui.jalmus.paused)) {
+        if (!currentNote.getAlteration().equals("")) {  // NOTES AVEC ALTERATION
+          if (((JButton) e.getSource()).getText().equals(currentNote.getAlteration())) {
+            alterationOk = true;
+          } else if (alterationOk &&
+              ((JButton) e.getSource()).getText().equals(currentNote.getName())) {
+            rightAnswer();
+          } else {
+            wrongAnswer();
+          }
+        } else if (currentNote.getAlteration().equals("")) { // NOTE SANS ALTERATION
+          if (((JButton) e.getSource()).getText().equals(currentNote.getName())) {
+            rightAnswer();
+          } else {
+            wrongAnswer();
+          }
+        }
+      }
+      ui.repaint();
+    }
+  };
   private JComboBox<String> noteGameTypeComboBox;
   private JComboBox<String> noteGameSpeedComboBox;
   private JPanel gamePanel;
-
   private JComboBox<String> keyComboBox;
   private JComboBox<String> keySignatureCheckBox;
   private JPanel keyPanel;
@@ -86,25 +76,11 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
   private JComboBox<String> intervalComboBox;
   private JComboBox<String> chordTypeComboBox;
 
-  ChooseNotePanel chooseNoteP;
-  JDialog notesDialog;
-  JButton startButton = new JButton();    // button to start or stop game
-  JButton preferencesButton = new JButton();  // button to access game preferences
-  JPanel principal = new JPanel(); // panel principal
-  NoteAnim animationPanel;
-  JPanel gameButtonPanel = new JPanel();
-
-  int notecounter = 1;
-
-  int scoreYpos = 110;
-  
-  int noteMargin;
-  
   public void setUi(final SwingJalmus ui) {
     this.ui = ui;
 
     notesDialog = new JDialog(ui, true);
-    notesDialog.setResizable(false);   
+    notesDialog.setResizable(false);
 
     doButton1.addActionListener(noteButtonActionListener);
     noteButtonPanel.add(doButton1);
@@ -152,7 +128,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
         handleStartButtonClicked();
       }
     });
-    
+
     preferencesButton.setFocusable(false);
     ui.localizables.add(new Localizable.Button(preferencesButton, "_menuPreferences"));
     preferencesButton.setPreferredSize(new Dimension(150, 20));
@@ -161,19 +137,19 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
         ui.handlePreferencesClicked();
       }
     });
-    
+
     noteButtonPanel.add(sharpButton1, 0);
     noteButtonPanel.add(flatButton1, 5);
     noteButtonPanel.add(flatButton2, 6);
     noteButtonPanel.add(sharpButton2, 11);
     noteButtonPanel.setLayout(new GridLayout(2, 4));
-    
+
     gameButtonPanel.setLayout(new FlowLayout());
     gameButtonPanel.add(startButton);
     gameButtonPanel.add(noteButtonPanel);
     gameButtonPanel.add(preferencesButton);
     gameButtonPanel.setBackground(Color.white);
-    
+
     principal.setLayout(new BorderLayout());
 
     animationPanel = new NoteAnim(ui);
@@ -185,7 +161,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
   @Override
   public void initGame() {
     super.initGame();
-    
+
     noteButtonPanel.setPreferredSize(new Dimension(450, 40));
     noteButtonPanel.setBackground(Color.white);
 
@@ -194,9 +170,9 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
     sharpButton2.setVisible(false);
     flatButton1.setVisible(false);
     flatButton2.setVisible(false);
-    
+
     scoreYpos = 110;
-    
+
     ColorUIResource def = new ColorUIResource(238, 238, 238);
     doButton1.setBackground(def);
     reButton.setBackground(def);
@@ -204,8 +180,8 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
     faButton.setBackground(def);
     solButton.setBackground(def);
     laButton.setBackground(def);
-    siButton.setBackground(def); 
-    
+    siButton.setBackground(def);
+
     if (noteLevel.isNormalgame() || noteLevel.isLearningGame()) {
       noteMargin = 220;
     } else if (noteLevel.isInlinegame()) {
@@ -220,14 +196,14 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
       @Override
       public void actionPerformed(ActionEvent e) {
         //Execute when button is pressed
-        if (! chooseNoteP.atLeast3Pitches()) {
-          JOptionPane.showMessageDialog(null, "Choose at least three notes", "Warning", JOptionPane.ERROR_MESSAGE); 
+        if (!chooseNoteP.atLeast3Pitches()) {
+          JOptionPane.showMessageDialog(null, "Choose at least three notes", "Warning", JOptionPane.ERROR_MESSAGE);
         } else {
           notesDialog.setVisible(false);
           noteLevel.setPitcheslist(chooseNoteP.getPitches());
         }
       }
-    }); 
+    });
   }
 
   public JPanel getPreferencesPanel() {
@@ -332,7 +308,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
         } else {
           noteLevel.setRandomtonality(false);
           int index = keySignatureCheckBox.getSelectedIndex();
-          
+
           String tonalityString = "#";
           if (index > 7) {
             index -= 7;
@@ -340,8 +316,10 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
           }
 
           noteLevel.getCurrentTonality().init(index, tonalityString);
-          
-        }}});
+
+        }
+      }
+    });
 
     keyPanel = new JPanel(); // panel pour la Key du premier jeu
     keyPanel.add(keyComboBox);
@@ -350,8 +328,8 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
 
     /* 3rd panel - Notes */
 
- // Game type choice
-    
+    // Game type choice
+
     noteGroupComboBox = new JComboBox<>();
     noteGroupComboBox.addItemListener(new ItemListener() {
 
@@ -385,13 +363,13 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
             public void actionPerformed(ActionEvent e) {
               //Execute when button is pressed
               if (!chooseNoteP.atLeast3Pitches()) {
-                JOptionPane.showMessageDialog(null, "Choose at least three notes", "Warning", JOptionPane.ERROR_MESSAGE); 
+                JOptionPane.showMessageDialog(null, "Choose at least three notes", "Warning", JOptionPane.ERROR_MESSAGE);
               } else {
                 notesDialog.setVisible(false);
                 noteLevel.setPitcheslist(chooseNoteP.getPitches());
               }
             }
-          });   
+          });
 
           notesDialog.setContentPane(chooseNoteP);
           notesDialog.setSize(650, 220);
@@ -428,7 +406,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
 
       @Override
       public void itemStateChanged(ItemEvent e) {
-        
+
         if (noteCountComboBox.getSelectedIndex() == 0) {
           noteLevel.setNbnotes(3);
         } else if (noteCountComboBox.getSelectedIndex() == 1) {
@@ -513,7 +491,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
     keyComboBox.addItem(bundle.getString("_trebleclef"));
     keyComboBox.addItem(bundle.getString("_bassclef"));
     keyComboBox.addItem(bundle.getString("_bothclefs"));
-    
+
     noteGroupComboBox.removeAllItems();
     noteGroupComboBox.addItem(bundle.getString("_notes"));
     noteGroupComboBox.addItem(bundle.getString("_alterednotes"));
@@ -550,7 +528,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
     keySignatureCheckBox.addItem("6 " + bundle.getString("_flat"));
     keySignatureCheckBox.addItem("7 " + bundle.getString("_flat"));
     keySignatureCheckBox.addItem(bundle.getString("_random"));
-    
+
     intervalComboBox.removeAllItems();
     intervalComboBox.addItem(bundle.getString("_second"));
     intervalComboBox.addItem(bundle.getString("_third"));
@@ -606,7 +584,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
       noteButtonPanel.validate();
     }
   }
-  
+
   public int[] serializePrefs() {
     int[] prefs = new int[8];
     prefs[0] = noteGameTypeComboBox.getSelectedIndex();
@@ -615,8 +593,8 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
     prefs[4] = keySignatureCheckBox.getSelectedIndex();
     prefs[5] = noteGameSpeedComboBox.getSelectedIndex();
     prefs[6] = noteGroupComboBox.getSelectedIndex();
-    if (noteGroupComboBox.getSelectedIndex() == 0 
-      || noteGroupComboBox.getSelectedIndex() == 1) {
+    if (noteGroupComboBox.getSelectedIndex() == 0
+        || noteGroupComboBox.getSelectedIndex() == 1) {
       prefs[7] = noteCountComboBox.getSelectedIndex();
     } else if (noteGroupComboBox.getSelectedIndex() == 2) {
       prefs[7] = intervalComboBox.getSelectedIndex();
@@ -625,7 +603,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
     }
     return prefs;
   }
-  
+
   public void deserializePrefs(int[] prefs) {
     noteGameTypeComboBox.setSelectedIndex(prefs[0]);
     noteGameSpeedComboBox.setSelectedIndex(prefs[1]);
@@ -633,7 +611,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
     keySignatureCheckBox.setSelectedIndex(prefs[4]);
     noteGameSpeedComboBox.setSelectedIndex(prefs[5]);
     noteGroupComboBox.setSelectedIndex(prefs[6]);
-    if (noteGroupComboBox.getSelectedIndex() == 0 || noteGroupComboBox.getSelectedIndex()==1) {
+    if (noteGroupComboBox.getSelectedIndex() == 0 || noteGroupComboBox.getSelectedIndex() == 1) {
       noteCountComboBox.setSelectedIndex(prefs[7]);
     } else if (noteGroupComboBox.getSelectedIndex() == 2) {
       intervalComboBox.setSelectedIndex(prefs[7]);
@@ -641,14 +619,14 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
       chordTypeComboBox.setSelectedIndex(prefs[7]);
     }
   }
-  
+
   @Override
   public void showResult() {
     if (currentScore.isWin()) {
       ui.scoreMessage.setTitle(ui.bundle.getString("_congratulations"));
 
       ui.textscoreMessage.setText("  " + currentScore.getNbtrue() + " " + ui.bundle.getString("_correct") +
-          " / " + currentScore.getNbfalse() + " " + ui.bundle.getString("_wrong")+"  ");
+          " / " + currentScore.getNbfalse() + " " + ui.bundle.getString("_wrong") + "  ");
       ui.scoreMessage.pack();
       ui.scoreMessage.setLocationRelativeTo(ui);
 
@@ -660,7 +638,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
 
       ui.textscoreMessage.setText("  " + currentScore.getNbtrue() + " " + ui.bundle.getString("_correct") +
           " / " + currentScore.getNbfalse() + " " +
-          ui.bundle.getString("_wrong")+"  ");
+          ui.bundle.getString("_wrong") + "  ");
       ui.scoreMessage.pack();
       ui.scoreMessage.setLocationRelativeTo(ui);
       ui.scoreMessage.setVisible(true);
@@ -668,7 +646,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
       stopGame();
     }
   }
-  
+
   @Override
   public void startGame() {
     super.startGame();
@@ -691,7 +669,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
     ui.jalmus.gameStarted = true;
     startButton.setText(ui.bundle.getString("_stop"));
   }
-  
+
   @Override
   public void startLevel() {
     if (!noteLevel.isMessageEmpty()) {
@@ -702,9 +680,9 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
       ui.levelMessage.setVisible(true);
     } else {
       startButton.doClick();
-    }        
+    }
   }
-  
+
   @Override
   public void stopGame() {
     super.stopGame();
@@ -716,7 +694,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
 
     ui.midiHelper.stopSound();
   }
-  
+
   void rightAnswer() {
     System.out.println("nailed it");
     if (noteLevel.isLearningGame()) {
@@ -746,7 +724,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
         showResult();
       }
 
-      if (noteLevel.isInlinegame() && position == line.length-1) {
+      if (noteLevel.isInlinegame() && position == line.length - 1) {
         currentScore.setWin();
         gameStarted = false;
         startButton.setText(ui.bundle.getString("_start"));
@@ -760,7 +738,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
       }
     }
   }
-  
+
   void wrongAnswer() {
     alterationOk = false;
 
@@ -782,7 +760,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
       }
     }
   }
-  
+
   /**
    * To choose a random height for a note according to base note
    *
@@ -799,18 +777,18 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
     if (noteLevel.isCurrentKeyTreble() || noteLevel.isCurrentKeyBass()) {
       tmp = Math.random();
       if (tmp < 0.5) {
-        i = (int) Math.round((Math.random()*nbupper1));
+        i = (int) Math.round((Math.random() * nbupper1));
       } else {
-        i = -(int) Math.round((Math.random()*nbunder1));
+        i = -(int) Math.round((Math.random() * nbunder1));
       }
       // negative number between under note and 0 
       if (noteLevel.isCurrentKeyTreble()) {
-        h = (ui.scoreYpos+noteLevel.getBasetreble()) - (i*5); // 20 for trebble key
+        h = (ui.scoreYpos + noteLevel.getBasetreble()) - (i * 5); // 20 for trebble key
       } else {
-        h = (ui.scoreYpos+noteLevel.getBasebass()) - (i*5); // 4 far bass key
+        h = (ui.scoreYpos + noteLevel.getBasebass()) - (i * 5); // 4 far bass key
       }
     } else if (noteLevel.isCurrentKeyBoth()) {
-    // SECOND CASE double Key
+      // SECOND CASE double Key
       int belowBase;
       if (nbupper2 < 0) {
         belowBase = nbupper2;
@@ -822,170 +800,170 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
       if (tmpcle < 0.5) { // treble key
         tmp = Math.random();
         if (tmp < 0.5) {
-          i = (int) Math.round((Math.random()*nbupper1));
+          i = (int) Math.round((Math.random() * nbupper1));
         } else {
-        // between 0 and upper note 
-          i = -(int) Math.round((Math.random()*nbunder1));
+          // between 0 and upper note
+          i = -(int) Math.round((Math.random() * nbunder1));
         }
         // negative number between under note and 0 
-        h = ui.scoreYpos + noteLevel.getBasetreble()-(i*5);
+        h = ui.scoreYpos + noteLevel.getBasetreble() - (i * 5);
       } else {
         tmp = Math.random();
         if (tmp < 0.5) {
-          i = (int) Math.round((Math.random()*nbupper2) + belowBase);
+          i = (int) Math.round((Math.random() * nbupper2) + belowBase);
         } else {
-          i = -(int) Math.round((Math.random()*nbunder2)) + belowBase;
+          i = -(int) Math.round((Math.random() * nbunder2)) + belowBase;
         }
-        h = ui.scoreYpos + noteLevel.getBasebass()+90-(i*5);
+        h = ui.scoreYpos + noteLevel.getBasebass() + 90 - (i * 5);
       }
     }
     return h;
   }
-  
-  void newInterval() {
-	    ui.midiHelper.stopSound();
-	    currentInterval.copy(intervalChoice());
-	    if (noteLevel.isNormalgame() || noteLevel.isLearningGame()) {
-	      posnote = 0;
-	      currentNote = currentInterval.getNote(posnote);
-	      if (ui.soundOnCheckBox.isSelected()) {
-	        ui.midiHelper.synthNote(currentNote.getPitch(), 80, ui.midiHelper.noteDuration);
-	      }
-	    } else if (noteLevel.isInlinegame()) {
-	      if (position < line.length-1) {
-	        position += 1;
-	        currentInterval.copy(lineint[position]);
 
-	        posnote = 0;
-	        //acourant.convertir(clecourante, typeaccord);
-	        currentNote = currentInterval.getNote(posnote);
-	        if (ui.soundOnCheckBox.isSelected()) {
-	          ui.midiHelper.synthNote(currentNote.getPitch(), 80, ui.midiHelper.noteDuration);
-	        }
-	      }
-	    }
-	  }
+  void newInterval() {
+    ui.midiHelper.stopSound();
+    currentInterval.copy(intervalChoice());
+    if (noteLevel.isNormalgame() || noteLevel.isLearningGame()) {
+      posnote = 0;
+      currentNote = currentInterval.getNote(posnote);
+      if (ui.soundOnCheckBox.isSelected()) {
+        ui.midiHelper.synthNote(currentNote.getPitch(), 80, ui.midiHelper.noteDuration);
+      }
+    } else if (noteLevel.isInlinegame()) {
+      if (position < line.length - 1) {
+        position += 1;
+        currentInterval.copy(lineint[position]);
+
+        posnote = 0;
+        //acourant.convertir(clecourante, typeaccord);
+        currentNote = currentInterval.getNote(posnote);
+        if (ui.soundOnCheckBox.isSelected()) {
+          ui.midiHelper.synthNote(currentNote.getPitch(), 80, ui.midiHelper.noteDuration);
+        }
+      }
+    }
+  }
 
   void newNote() {
-	    if ((noteLevel.isNormalgame() || noteLevel.isLearningGame()) & gameStarted) {
-	      notecounter++;
-	      if (prevNote != 0 & ui.soundOnCheckBox.isSelected()) {
-	        ui.midiHelper.stopSound();
-	      }
-	      currentNote.init();
+    if ((noteLevel.isNormalgame() || noteLevel.isLearningGame()) & gameStarted) {
+      notecounter++;
+      if (prevNote != 0 & ui.soundOnCheckBox.isSelected()) {
+        ui.midiHelper.stopSound();
+      }
+      currentNote.init();
 
-	      if (noteLevel.isNotesgame() || noteLevel.isAccidentalsgame()) {
-	        //choosing note with height to do change to choose note with pitch
-	        currentNote.setHeight(setNoteHeight(noteLevel.getNbnotesupper(),
-	                                  noteLevel.getNbnotesunder(),
-	                                  noteLevel.getNbnotesupper(),
-	                                  noteLevel.getNbnotesunder()));
-	        while (currentNote.getHeight() == prevNote) {
-	          currentNote.setHeight(setNoteHeight(noteLevel.getNbnotesupper(),
-	              noteLevel.getNbnotesunder(), noteLevel.getNbnotesupper(),
-	              noteLevel.getNbnotesunder()));
-	        }
-	        currentNote.updateNote(noteLevel, ui.scoreYpos, ui.bundle);
-	        currentNote.updateAccidental(noteLevel, ui.bundle);
-	        prevNote = currentNote.getHeight();
-	      } else if (noteLevel.isCustomNotesgame()) {
-	        // choosing note with pitch
+      if (noteLevel.isNotesgame() || noteLevel.isAccidentalsgame()) {
+        //choosing note with height to do change to choose note with pitch
+        currentNote.setHeight(setNoteHeight(noteLevel.getNbnotesupper(),
+            noteLevel.getNbnotesunder(),
+            noteLevel.getNbnotesupper(),
+            noteLevel.getNbnotesunder()));
+        while (currentNote.getHeight() == prevNote) {
+          currentNote.setHeight(setNoteHeight(noteLevel.getNbnotesupper(),
+              noteLevel.getNbnotesunder(), noteLevel.getNbnotesupper(),
+              noteLevel.getNbnotesunder()));
+        }
+        currentNote.updateNote(noteLevel, ui.scoreYpos, ui.bundle);
+        currentNote.updateAccidental(noteLevel, ui.bundle);
+        prevNote = currentNote.getHeight();
+      } else if (noteLevel.isCustomNotesgame()) {
+        // choosing note with pitch
 
-	        currentNote.setPitch(noteLevel.getRandomPitch());
-	        currentNote.updateNotePitch(noteLevel, ui.scoreYpos, ui.bundle);
-	        prevNote = currentNote.getHeight();
-	      }
+        currentNote.setPitch(noteLevel.getRandomPitch());
+        currentNote.updateNotePitch(noteLevel, ui.scoreYpos, ui.bundle);
+        prevNote = currentNote.getHeight();
+      }
 
-	      currentNote.setX(ui.noteMargin+98);
-	      System.out.println(currentNote.getName());
-	      System.out.println(currentNote.getHeight());
-	      System.out.println(currentNote.getPitch());
-	      //if (soundOnCheckBox.isSelected()) sons[indiceson(ncourante.getHeight())].play();
+      currentNote.setX(ui.noteMargin + 98);
+      System.out.println(currentNote.getName());
+      System.out.println(currentNote.getHeight());
+      System.out.println(currentNote.getPitch());
+      //if (soundOnCheckBox.isSelected()) sons[indiceson(ncourante.getHeight())].play();
 
-	      if (ui.soundOnCheckBox.isSelected()) {
-	        ui.midiHelper.synthNote(currentNote.getPitch(), 80, ui.midiHelper.noteDuration);
-	      }
-	    } else if (noteLevel.isInlinegame()) {
-	      //sons[indiceson(ncourante.getHeight())].stop();
-	      if (prevNote != 0 & ui.soundOnCheckBox.isSelected()) {
-	        ui.midiHelper.stopSound();
-	      }
-	      if (position < line.length-1) {
-	        position += 1;
-	        currentNote.copy(line[position]);
-	      }
-	      //if (soundOnCheckBox.isSelected()) sons[indiceson(ncourante.getHeight())].play();
-	      if (ui.soundOnCheckBox.isSelected()) {
-	        ui.midiHelper.synthNote(currentNote.getPitch(), 80, ui.midiHelper.noteDuration);
-	      }
-	    }
-	  }
+      if (ui.soundOnCheckBox.isSelected()) {
+        ui.midiHelper.synthNote(currentNote.getPitch(), 80, ui.midiHelper.noteDuration);
+      }
+    } else if (noteLevel.isInlinegame()) {
+      //sons[indiceson(ncourante.getHeight())].stop();
+      if (prevNote != 0 & ui.soundOnCheckBox.isSelected()) {
+        ui.midiHelper.stopSound();
+      }
+      if (position < line.length - 1) {
+        position += 1;
+        currentNote.copy(line[position]);
+      }
+      //if (soundOnCheckBox.isSelected()) sons[indiceson(ncourante.getHeight())].play();
+      if (ui.soundOnCheckBox.isSelected()) {
+        ui.midiHelper.synthNote(currentNote.getPitch(), 80, ui.midiHelper.noteDuration);
+      }
+    }
+  }
 
-    void nextNote() {
-	    if (noteLevel.isChordsgame()) {
-	      if (posnote < 2) {
-	        posnote += 1;
+  void nextNote() {
+    if (noteLevel.isChordsgame()) {
+      if (posnote < 2) {
+        posnote += 1;
 
-	        currentNote = currentChord.getNote(currentChord.realPosition(posnote));
-	        alterationOk = false;
-	        if (ui.soundOnCheckBox.isSelected()) {
-	          ui.midiHelper.synthNote(currentNote.getPitch(), 80, ui.midiHelper.noteDuration);
-	        }
-	      } else {
-	        if (isLessonMode && notecounter == noteLevel.getLearningduration()) {
-	          gameStarted = false;
-	          startButton.setText(ui.bundle.getString("_start"));
-	          ui.jalmus.nextLevel();
-	        } else {
-	          newChord();
-	          notecounter++;
-	        }
-	      }
-	    } else if (noteLevel.isIntervalsgame()) {
-	      if (posnote == 0) {
-	        posnote += 1;
-	        currentNote = currentInterval.getNote(posnote);
-	        alterationOk = false;
-	        if (ui.soundOnCheckBox.isSelected()) {
-	          ui.midiHelper.synthNote(currentNote.getPitch(), 80, ui.midiHelper.noteDuration);
-	        }
-	      } else {
-	        if (isLessonMode && notecounter == noteLevel.getLearningduration()) {
-	          gameStarted = false;
-	          startButton.setText(ui.bundle.getString("_start"));
-	          ui.jalmus.nextLevel();
-	        } else {
-	          newInterval();
-	          notecounter++;
-	        }
-	      }
-	    }
-	  }
-  
+        currentNote = currentChord.getNote(currentChord.realPosition(posnote));
+        alterationOk = false;
+        if (ui.soundOnCheckBox.isSelected()) {
+          ui.midiHelper.synthNote(currentNote.getPitch(), 80, ui.midiHelper.noteDuration);
+        }
+      } else {
+        if (isLessonMode && notecounter == noteLevel.getLearningduration()) {
+          gameStarted = false;
+          startButton.setText(ui.bundle.getString("_start"));
+          ui.jalmus.nextLevel();
+        } else {
+          newChord();
+          notecounter++;
+        }
+      }
+    } else if (noteLevel.isIntervalsgame()) {
+      if (posnote == 0) {
+        posnote += 1;
+        currentNote = currentInterval.getNote(posnote);
+        alterationOk = false;
+        if (ui.soundOnCheckBox.isSelected()) {
+          ui.midiHelper.synthNote(currentNote.getPitch(), 80, ui.midiHelper.noteDuration);
+        }
+      } else {
+        if (isLessonMode && notecounter == noteLevel.getLearningduration()) {
+          gameStarted = false;
+          startButton.setText(ui.bundle.getString("_start"));
+          ui.jalmus.nextLevel();
+        } else {
+          newInterval();
+          notecounter++;
+        }
+      }
+    }
+  }
+
   void newChord() {
 
-	    if (noteLevel.isNormalgame() || noteLevel.isLearningGame()) {
-	      posnote = 0;
-	      currentChord.copy(chordChoice());
-	      currentChord.convert(noteLevel);
-	      currentNote = currentChord.getNote(currentChord.realPosition(posnote));
-	      if (ui.soundOnCheckBox.isSelected()) {
-	        ui.midiHelper.synthNote(currentNote.getPitch(), 80, ui.midiHelper.noteDuration);
-	      }
-	    } else if (noteLevel.isInlinegame()) {
-	      if (position < line.length-1) {
-	        position += 1;
-	        currentChord.copy(lineacc[position]);
+    if (noteLevel.isNormalgame() || noteLevel.isLearningGame()) {
+      posnote = 0;
+      currentChord.copy(chordChoice());
+      currentChord.convert(noteLevel);
+      currentNote = currentChord.getNote(currentChord.realPosition(posnote));
+      if (ui.soundOnCheckBox.isSelected()) {
+        ui.midiHelper.synthNote(currentNote.getPitch(), 80, ui.midiHelper.noteDuration);
+      }
+    } else if (noteLevel.isInlinegame()) {
+      if (position < line.length - 1) {
+        position += 1;
+        currentChord.copy(lineacc[position]);
 
-	        posnote = 0;
-	        //acourant.convertir(clecourante,typeaccord);
-	        currentNote = currentChord.getNote(currentChord.realPosition(posnote));
-	        if (ui.soundOnCheckBox.isSelected()) {
-	          ui.midiHelper.synthNote(currentNote.getPitch(), 80, ui.midiHelper.noteDuration);
-	        }
-	      }
-	    }
-	  }
+        posnote = 0;
+        //acourant.convertir(clecourante,typeaccord);
+        currentNote = currentChord.getNote(currentChord.realPosition(posnote));
+        if (ui.soundOnCheckBox.isSelected()) {
+          ui.midiHelper.synthNote(currentNote.getPitch(), 80, ui.midiHelper.noteDuration);
+        }
+      }
+    }
+  }
 
   private Interval intervalChoice() {
     int i = 1;
@@ -1004,19 +982,19 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
     } else if (noteLevel.isOctaveInterval()) {
       i = 7;
     } else if (noteLevel.isRandomInterval()) {
-      i = (int)Math.round((Math.random()*6))+1;
+      i = (int) Math.round((Math.random() * 6)) + 1;
     }
 
     int h;
     if (noteLevel.isCurrentKeyBoth()) {
-      h = setNoteHeight(13-i, 5, 6-i, 10);
+      h = setNoteHeight(13 - i, 5, 6 - i, 10);
       while (h == prevNote) {
-        h = setNoteHeight(13-i, 5, 6-i, 10);
+        h = setNoteHeight(13 - i, 5, 6 - i, 10);
       }
     } else {
-      h = setNoteHeight(13-i, 8, 13-i, 8);
+      h = setNoteHeight(13 - i, 8, 13 - i, 8);
       while (h == prevNote) {
-        h = setNoteHeight(13-i, 8, 13-i, 8);
+        h = setNoteHeight(13 - i, 8, 13 - i, 8);
       }
     }
 
@@ -1024,61 +1002,61 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
     n1.updateNote(noteLevel, ui.scoreYpos, ui.bundle);
     n1.updateAccidental(noteLevel, ui.bundle);
 
-    Note n2 = new Note(h-i*5, ui.noteMargin + 98, 0);
+    Note n2 = new Note(h - i * 5, ui.noteMargin + 98, 0);
     n2.updateNote(noteLevel, ui.scoreYpos, ui.bundle);
     n2.updateAccidental(noteLevel, ui.bundle);
 
     String chordtype = "";
     int pitchDifference = n2.getPitch() - n1.getPitch();
-    if (pitchDifference == 0 && i==1) {
+    if (pitchDifference == 0 && i == 1) {
       chordtype = "_seconddim";
-    } else if (pitchDifference == 1 && i==1) {
+    } else if (pitchDifference == 1 && i == 1) {
       chordtype = "_secondmin";
-    } else if (pitchDifference == 2 && i==1) {
+    } else if (pitchDifference == 2 && i == 1) {
       chordtype = "_secondmaj";
-    } else if (pitchDifference == 3 && i==1) {
+    } else if (pitchDifference == 3 && i == 1) {
       chordtype = "_secondaug";
-    } else if (pitchDifference == 2 && i==2) {
+    } else if (pitchDifference == 2 && i == 2) {
       chordtype = "_thirddim";
-    } else if (pitchDifference == 3 && i==2) {
+    } else if (pitchDifference == 3 && i == 2) {
       chordtype = "_thirdmin";
-    } else if (pitchDifference == 4 && i==2) {
+    } else if (pitchDifference == 4 && i == 2) {
       chordtype = "_thirdmaj";
-    } else if (pitchDifference == 5 && i==2) {
+    } else if (pitchDifference == 5 && i == 2) {
       chordtype = "_thirdaug";
-    } else if (pitchDifference == 4 && i==3) {
+    } else if (pitchDifference == 4 && i == 3) {
       chordtype = "_fourthdim";
-    } else if (pitchDifference == 5 && i==3) {
+    } else if (pitchDifference == 5 && i == 3) {
       chordtype = "_fourthper";
-    } else if (pitchDifference == 6 && i==3) {
+    } else if (pitchDifference == 6 && i == 3) {
       chordtype = "_fourthaug";
-    } else if (pitchDifference == 6 && i==4) {
+    } else if (pitchDifference == 6 && i == 4) {
       chordtype = "_fifthdim";
-    } else if (pitchDifference == 7 && i==4) {
+    } else if (pitchDifference == 7 && i == 4) {
       chordtype = "_fifthper";
-    } else if (pitchDifference == 8 && i==4) {
+    } else if (pitchDifference == 8 && i == 4) {
       chordtype = "_fifthaug";
-    } else if (pitchDifference == 7 && i==5) {
+    } else if (pitchDifference == 7 && i == 5) {
       chordtype = "_sixthdim";
-    } else if (pitchDifference == 8 && i==5) {
+    } else if (pitchDifference == 8 && i == 5) {
       chordtype = "_sixthmin";
-    } else if (pitchDifference == 9 && i==5) {
+    } else if (pitchDifference == 9 && i == 5) {
       chordtype = "_sixthmaj";
-    } else if (pitchDifference == 10 && i==5) {
+    } else if (pitchDifference == 10 && i == 5) {
       chordtype = "_sixthaug";
-    } else if (pitchDifference == 9 && i==6) {
+    } else if (pitchDifference == 9 && i == 6) {
       chordtype = "_seventhdim";
-    } else if (pitchDifference == 10 && i==6) {
+    } else if (pitchDifference == 10 && i == 6) {
       chordtype = "_seventhmin";
-    } else if (pitchDifference == 11 && i==6) {
+    } else if (pitchDifference == 11 && i == 6) {
       chordtype = "_seventhmaj";
-    } else if (pitchDifference == 12 && i==6) {
+    } else if (pitchDifference == 12 && i == 6) {
       chordtype = "_seventhaug";//inusitï¿½e
-    } else if (pitchDifference == 11 && i==7) {
+    } else if (pitchDifference == 11 && i == 7) {
       chordtype = "_octavedim";
-    } else if (pitchDifference == 12 && i==7) {
+    } else if (pitchDifference == 12 && i == 7) {
       chordtype = "_octaveper";
-    } else if (pitchDifference == 13 && i==7) {
+    } else if (pitchDifference == 13 && i == 7) {
       chordtype = "_octaveaug";
     }
     Interval inter = new Interval(n1, n2, ui.bundle.getString(chordtype));
@@ -1086,7 +1064,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
 
     return inter;
   }
-  
+
   private Chord chordChoice() {
     int h;
     Note n1 = new Note(0, 0, 0);
@@ -1114,24 +1092,24 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
       n1.updateNote(noteLevel, ui.scoreYpos, ui.bundle);
       n1.updateAccidental(noteLevel, ui.bundle);
 
-      n2 = new Note(h-2*5, ui.noteMargin + 98, 0);
+      n2 = new Note(h - 2 * 5, ui.noteMargin + 98, 0);
       n2.updateNote(noteLevel, ui.scoreYpos, ui.bundle);
       n2.updateAccidentalInChord(noteLevel.getCurrentTonality(), n1.getPitch(), 2, ui.bundle); //deuxieme note
 
-      n3 = new Note(h-4*5, ui.noteMargin+98, 0);
+      n3 = new Note(h - 4 * 5, ui.noteMargin + 98, 0);
       n3.updateNote(noteLevel, ui.scoreYpos, ui.bundle);
       n3.updateAccidentalInChord(noteLevel.getCurrentTonality(), n1.getPitch(), 3, ui.bundle); //troisieme note
 
-      if (n2.getPitch()-n1.getPitch() == 3 && n3.getPitch()-n1.getPitch()==7) {
+      if (n2.getPitch() - n1.getPitch() == 3 && n3.getPitch() - n1.getPitch() == 7) {
         minmaj = ui.minor;
         ok = true;
-      } else if (n2.getPitch()-n1.getPitch() == 3 && n3.getPitch()-n1.getPitch()==6) {
+      } else if (n2.getPitch() - n1.getPitch() == 3 && n3.getPitch() - n1.getPitch() == 6) {
         minmaj = "dim";
         ok = true;
-      } else if (n2.getPitch()-n1.getPitch() == 4 && n3.getPitch()-n1.getPitch()==7) {
+      } else if (n2.getPitch() - n1.getPitch() == 4 && n3.getPitch() - n1.getPitch() == 7) {
         minmaj = ui.major;
         ok = true;
-      } else if (n2.getPitch()-n1.getPitch() == 4 && n3.getPitch()-n1.getPitch()==8) {
+      } else if (n2.getPitch() - n1.getPitch() == 4 && n3.getPitch() - n1.getPitch() == 8) {
         minmaj = "aug";
         ok = true;
       } else {
@@ -1144,18 +1122,18 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
         salt = n1.getAlteration();
       }
     }
-    Chord a = new Chord(n1, n2, n3, n1.getName()+salt+" "+minmaj, 0);
+    Chord a = new Chord(n1, n2, n3, n1.getName() + salt + " " + minmaj, 0);
     prevNote = n1.getHeight();
     return a;
   }
-  
+
   @Override
   public void nextGame() {
     super.nextGame();
     noteLevel.copy((NoteLevel) ui.jalmus.currentLesson.getLevel());
     noteLevel.updatenbnotes(ui.jalmus.piano);
 
-    ui.jalmus.selectedGame = Jalmus.NOTEREADING ;
+    ui.jalmus.selectedGame = Jalmus.NOTEREADING;
     initGame();
     ui.changeScreen(isLessonMode, ui.jalmus.currentLesson, ui.jalmus.selectedGame);
     noteLevel.printtest();
@@ -1171,7 +1149,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
     if (noteLevel.isNotesgame() || noteLevel.isAccidentalsgame()) {
       line[0] = new Note(setNoteHeight(noteLevel.getNbnotesupper(),
           noteLevel.getNbnotesunder(), noteLevel.getNbnotesupper(),
-          noteLevel.getNbnotesunder()), size.width-ui.noteMargin, 0);
+          noteLevel.getNbnotesunder()), size.width - ui.noteMargin, 0);
       line[0].updateNote(noteLevel, ui.scoreYpos, ui.bundle);
       line[0].updateAccidental(noteLevel, ui.bundle);
 
@@ -1179,29 +1157,29 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
         int tmph = setNoteHeight(noteLevel.getNbnotesupper(),
             noteLevel.getNbnotesunder(), noteLevel.getNbnotesupper(),
             noteLevel.getNbnotesunder());
-        while (tmph == line[i-1].getHeight()) {
+        while (tmph == line[i - 1].getHeight()) {
           tmph = setNoteHeight(noteLevel.getNbnotesupper(),
               noteLevel.getNbnotesunder(), noteLevel.getNbnotesupper(),
               noteLevel.getNbnotesunder()); // pour �viter les r�p�titions
         }
 
-        line[i] = new Note(tmph, size.width-ui.noteMargin+i*35, 0);
+        line[i] = new Note(tmph, size.width - ui.noteMargin + i * 35, 0);
         line[i].updateNote(noteLevel, ui.scoreYpos, ui.bundle);
         line[i].updateAccidental(noteLevel, ui.bundle);
       }
       currentNote = line[position];
     } else if (noteLevel.isCustomNotesgame()) {
 
-      line[0] = new Note(0, size.width-ui.noteMargin, noteLevel.getRandomPitch() );
+      line[0] = new Note(0, size.width - ui.noteMargin, noteLevel.getRandomPitch());
       line[0].updateNotePitch(noteLevel, ui.scoreYpos, ui.bundle);
 
       for (int i = 1; i < line.length; i++) {
         int tmpp = noteLevel.getRandomPitch();
-        while (tmpp == line[i-1].getPitch()) {
+        while (tmpp == line[i - 1].getPitch()) {
           tmpp = noteLevel.getRandomPitch(); // to avoid same pitch
         }
 
-        line[i] = new Note(0, size.width-ui.noteMargin+i*35, tmpp);
+        line[i] = new Note(0, size.width - ui.noteMargin + i * 35, tmpp);
         line[i].updateNotePitch(noteLevel, ui.scoreYpos, ui.bundle);
       }
 
@@ -1215,7 +1193,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
       // voir pour precedant
       for (int i = 0; i < line.length; i++) {
         a.copy(chordChoice());
-        a.updateX(size.width-ui.noteMargin+i*50);
+        a.updateX(size.width - ui.noteMargin + i * 50);
         lineacc[i] = new Chord(a.getNote(0), a.getNote(1), a.getNote(2), a.getName(),
             a.getInversion());
         lineacc[i].convert(noteLevel);
@@ -1233,7 +1211,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
       for (int i = 0; i < line.length; i++) {
         inter.copy(intervalChoice());
         //i = nouvelintervalle();
-        inter.updatex(size.width - ui.noteMargin + i*65);
+        inter.updateX(size.width - ui.noteMargin + i * 65);
         lineint[i] = new Interval(inter.getNote(0), inter.getNote(1), inter.getName());
       }
       position = 0;
@@ -1246,7 +1224,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
       }
     }
   }
-  
+
   void resetButtonColor() {
     ColorUIResource def = new ColorUIResource(238, 238, 238);
     doButton1.setBackground(def);
@@ -1259,7 +1237,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
     sharpButton1.setBackground(def);
     flatButton2.setBackground(def);
   }
-  
+
   void applyButtonColor() {
     resetButtonColor();
 
@@ -1290,8 +1268,8 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
   void drawChord(Chord a, Graphics g, boolean accordcourant) {
     Dimension d = ui.getSize();
 
-    if (a.getNote(posnote).getX() < d.width-noteMargin &&
-        a.getNote(posnote).getX() >= noteMargin+98 && gameStarted) {
+    if (a.getNote(posnote).getX() < d.width - noteMargin &&
+        a.getNote(posnote).getX() >= noteMargin + 98 && gameStarted) {
       // NOTE DANS LIMITES
       a.paint(posnote, noteLevel, g, ui.musiSync, accordcourant, ui,
           scoreYpos, ui.bundle);
@@ -1313,8 +1291,8 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
       } else if (noteLevel.isLearningGame()) {
         newChord();
         resetButtonColor();
-      } else if (noteLevel.isInlinegame() && gameStarted && noteLevel.isChordsgame() && 
-          lineacc[position].getNote(0).getX() < noteMargin+98) {
+      } else if (noteLevel.isInlinegame() && gameStarted && noteLevel.isChordsgame() &&
+          lineacc[position].getNote(0).getX() < noteMargin + 98) {
         // If the current note (except the last) touch the limit
         currentScore.setPoints(0);
         currentScore.setLost();
@@ -1325,16 +1303,16 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
       }
     }
   }
-  
+
   void drawNote(Note note, Graphics g, Font f, Color couleur) {
     Dimension size = ui.getSize();
 
     g.setColor(couleur);
     if (note.getX() < size.width - noteMargin && note.getX() >= noteMargin + 98 && gameStarted) { // NOTE DANS LIMITES
       if (noteLevel.isAccidentalsgame() || noteLevel.isCustomNotesgame()) {
-        note.paint(noteLevel, g, f, 9, 0, scoreYpos, ui, couleur, ui.bundle);
+        note.paint(noteLevel, g, f, 9, 0, scoreYpos, couleur, ui.bundle);
       } else {
-        note.paint(noteLevel, g, f, 0, 0, scoreYpos, ui, couleur, ui.bundle);
+        note.paint(noteLevel, g, f, 0, 0, scoreYpos, couleur, ui.bundle);
       }
     } else {
       if (noteLevel.isNormalgame()) {
@@ -1349,7 +1327,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
         newNote();
         resetButtonColor();
       } else if (noteLevel.isInlinegame() && gameStarted) {
-        if (line[position].getX() < noteMargin+98) { // Si la note courant (sauf la derniï¿½re)dï¿½passe la limite ici marge +25
+        if (line[position].getX() < noteMargin + 98) { // Si la note courant (sauf la derniï¿½re)dï¿½passe la limite ici marge +25
           currentScore.setPoints(0);
           currentScore.setLost();
           gameStarted = false;
@@ -1385,9 +1363,9 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
       } else if (noteLevel.isLearningGame()) {
         newInterval();
         resetButtonColor();
-      } else if (noteLevel.isInlinegame() 
-             && gameStarted 
-             && lineint[position].getNote(0).getX() < noteMargin+98) {
+      } else if (noteLevel.isInlinegame()
+          && gameStarted
+          && lineint[position].getNote(0).getX() < noteMargin + 98) {
         // Si la note courant dï¿½passe la limite ici marge +25
         currentScore.setPoints(0);
         currentScore.setLost();
@@ -1422,36 +1400,36 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
       g.drawString("?", noteMargin, scoreYpos + 40);
     } else if (noteLevel.isCurrentKeyBoth()) {
       g.setFont(ui.musiSync.deriveFont(70f));
-      g.drawString("G", noteMargin, scoreYpos+42);
+      g.drawString("G", noteMargin, scoreYpos + 42);
       g.setFont(ui.musiSync.deriveFont(60f));
-      g.drawString("?", noteMargin, scoreYpos+130);
+      g.drawString("?", noteMargin, scoreYpos + 130);
     }
   }
-  
+
   void drawInlineGame(Graphics g) {
     Dimension size = ui.getSize();
     g.setColor(Color.black);
     int yd;
 
-    for (yd = scoreYpos; yd<=scoreYpos+40; yd+=10) { //  1ere ligne ï¿½ 144;   derniï¿½re ï¿½ 176
-      g.drawLine(noteMargin, yd, size.width-noteMargin, yd);
+    for (yd = scoreYpos; yd <= scoreYpos + 40; yd += 10) { //  1ere ligne ï¿½ 144;   derniï¿½re ï¿½ 176
+      g.drawLine(noteMargin, yd, size.width - noteMargin, yd);
     }
 
     if (noteLevel.isCurrentKeyBoth()) {  // dessine la deuxiï¿½me portï¿½e 72 points en dessous
-      for (yd = scoreYpos+90; yd<=scoreYpos+130; yd+=10) {  //  1ere ligne ï¿½ 196;   derniï¿½re ï¿½ 228
-        g.drawLine(noteMargin, yd, size.width-noteMargin, yd);
+      for (yd = scoreYpos + 90; yd <= scoreYpos + 130; yd += 10) {  //  1ere ligne ï¿½ 196;   derniï¿½re ï¿½ 228
+        g.drawLine(noteMargin, yd, size.width - noteMargin, yd);
       }
     }
     if (noteLevel.isInlinegame()) {
       g.setColor(Color.red);
-      g.drawLine(noteMargin+98, scoreYpos-30, noteMargin+98, scoreYpos+70);
+      g.drawLine(noteMargin + 98, scoreYpos - 30, noteMargin + 98, scoreYpos + 70);
       if (noteLevel.isCurrentKeyBoth()) {
-        g.drawLine(noteMargin+98, scoreYpos+20, noteMargin+98, scoreYpos+160);
+        g.drawLine(noteMargin + 98, scoreYpos + 20, noteMargin + 98, scoreYpos + 160);
       }
       g.setColor(Color.black);
     }
   }
-  
+
   void handleStartButtonClicked() {
     if (gameStarted) {
       stopGame();
@@ -1464,14 +1442,14 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
       }
     }
   }
-  
+
   public JPanel getGamePanel() {
     return principal;
   }
-  
+
   public void handleKeyTyped(KeyEvent evt) {
     char ch = evt.getKeyChar();  // The character typed.
-    
+
     if (gameStarted) {
       if (ch == 'P' || ch == 'p') {
         paused = true;
@@ -1485,28 +1463,27 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
       }
 
       if (!paused && noteLevel.isNotesgame()) {
-        if (ch == 'Q' || ch=='q' || ch=='A' || ch=='a' || ch=='S' || ch=='s' || ch == 'D' ||
-            ch=='d' || ch=='F' || ch=='f' || ch=='G' || ch=='g' || ch == 'H' || ch=='h' || ch=='J' ||
-            ch=='j' || ch=='K' || ch=='k') {
+        if (ch == 'Q' || ch == 'q' || ch == 'A' || ch == 'a' || ch == 'S' || ch == 's' || ch == 'D' ||
+            ch == 'd' || ch == 'F' || ch == 'f' || ch == 'G' || ch == 'g' || ch == 'H' || ch == 'h' || ch == 'J' ||
+            ch == 'j' || ch == 'K' || ch == 'k') {
 
-          if (((ui.language == "fr" && (ch=='Q' || ch=='q'))
-                || ((ui.language == "en" || ui.language =="es" || ui.language =="de") && (ch=='A' || ch=='a')))
-              && currentNote.getName() == DO)
-          {
+          if (((ui.language == "fr" && (ch == 'Q' || ch == 'q'))
+              || ((ui.language == "en" || ui.language == "es" || ui.language == "de") && (ch == 'A' || ch == 'a')))
+              && currentNote.getName() == DO) {
             rightAnswer();
-          } else if ((ch == 'S' || ch=='s') && currentNote.getName().equals(RE)) {
+          } else if ((ch == 'S' || ch == 's') && currentNote.getName().equals(RE)) {
             rightAnswer();
-          } else if ((ch == 'D' || ch=='d') && currentNote.getName().equals(MI)) {
+          } else if ((ch == 'D' || ch == 'd') && currentNote.getName().equals(MI)) {
             rightAnswer();
-          } else if ((ch == 'F' || ch=='f') && currentNote.getName().equals(FA)) {
+          } else if ((ch == 'F' || ch == 'f') && currentNote.getName().equals(FA)) {
             rightAnswer();
-          } else if ((ch == 'G' || ch=='g') && currentNote.getName().equals(SOL)) {
+          } else if ((ch == 'G' || ch == 'g') && currentNote.getName().equals(SOL)) {
             rightAnswer();
-          } else if ((ch == 'H' || ch=='h') && currentNote.getName().equals(LA)) {
+          } else if ((ch == 'H' || ch == 'h') && currentNote.getName().equals(LA)) {
             rightAnswer();
-          } else if ((ch == 'J' || ch=='j') && currentNote.getName().equals(SI)) {
+          } else if ((ch == 'J' || ch == 'j') && currentNote.getName().equals(SI)) {
             rightAnswer();
-          } else if ((ch == 'K' || ch=='k') && currentNote.getName().equals(DO)) {
+          } else if ((ch == 'K' || ch == 'k') && currentNote.getName().equals(DO)) {
             rightAnswer();
           } else {
             wrongAnswer();

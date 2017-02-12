@@ -1,7 +1,7 @@
 package net.jalmus.domain;
 
 /**
- * Enum to represent time signature of a piece of 
+ * Enum to represent time signature of a piece of
  * music.
  */
 public enum TimeSignature {
@@ -14,12 +14,12 @@ public enum TimeSignature {
 
   private final int numerator;
   private final int denominator;
-  
+
   private TimeSignature(int numerator, int denominator) {
     this.numerator = numerator;
     this.denominator = denominator;
   }
-  
+
   /**
    * @return the numerator of the time signature.
    */

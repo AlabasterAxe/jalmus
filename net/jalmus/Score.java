@@ -1,16 +1,15 @@
 package net.jalmus;
 
-import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.*;
 
 
 /**
  * <p>Title: Jalmus</p>
- *
+ * <p>
  * <p>Description: Free software for sight reading</p>
- *
+ * <p>
  * <p>Copyright: Copyright (c) 2006</p>
- *
+ * <p>
  * <p>Company: </p>
  *
  * @author RICHARD Christophe
@@ -18,21 +17,19 @@ import java.awt.Graphics;
  */
 public class Score {
 
-  private enum Status {NO_RESULT, WON, LOST}
+  static int maxpoints = 500;
   int nbtrue;
   int nbfalse;
   int points;
   Status status;
-  static int maxpoints = 500;
-
   public Score() {
     this.nbtrue = 0;
-    this.nbfalse  = 0;
+    this.nbfalse = 0;
     this.points = 100;
     status = Status.NO_RESULT;
   }
 
-  public int getNbtrue(){
+  public int getNbtrue() {
     return this.nbtrue;
   }
 
@@ -44,7 +41,7 @@ public class Score {
     this.nbtrue = this.nbtrue + i;
   }
 
-  public int getNbfalse(){
+  public int getNbfalse() {
     return this.nbfalse;
   }
 
@@ -60,21 +57,22 @@ public class Score {
     this.points = i;
   }
 
-  public void setWin(){
+  public void setWin() {
     this.status = Status.WON;
   }
 
-  public void setLost(){
+  public void setLost() {
     this.status = Status.LOST;
 
   }
+
   public boolean isWin() {
     return this.status == Status.WON;
   }
 
   public boolean isLost() {
-  return this.status == Status.LOST;
-}
+    return this.status == Status.LOST;
+  }
 
   public boolean isUnknown() {
     return this.status == Status.NO_RESULT;
@@ -88,11 +86,11 @@ public class Score {
   }
 
   /**
-     * To add or substract points
-     *
-     * @param i for the number of points to add (if i>0) or substract (if i<0)
-     *
-     * If new number of points reach the max points or 0 update the status parameter
+   * To add or substract points
+   *
+   * @param i for the number of points to add (if i>0) or substract (if i<0)
+   *          <p>
+   *          If new number of points reach the max points or 0 update the status parameter
    */
 
   public void addPoints(int i) {
@@ -105,16 +103,16 @@ public class Score {
       }
     } else { // i < 0 substract points
       if (this.points + i > 0) {
-         this.points = this.points + i;
+        this.points = this.points + i;
       } else {
-         this.points = 0;
-         this.setLost();
+        this.points = 0;
+        this.setLost();
       }
     }
   }
 
   public void paint(Graphics g, int width) {
-	int xPos = (width - 251) / 2;
+    int xPos = (width - 251) / 2;
     g.setColor(Color.black);
     g.draw3DRect(xPos, 420, 251, 20, true);
     for (int tmp = 0; tmp < this.points; tmp = tmp + 10) {
@@ -126,4 +124,6 @@ public class Score {
       g.fillRect(xPos + 1 + tmp / 2, 421, 5, 19);
     }
   }
+
+  private enum Status {NO_RESULT, WON, LOST}
 }

@@ -5,6 +5,7 @@ package net.jalmus;
  * <p>Description: </p>
  * <p>Copyright: Copyright (c) 2006</p>
  * <p>Company: </p>
+ *
  * @author RICHARD Christophe
  * @version 1.0
  */
@@ -15,9 +16,9 @@ import javax.sound.midi.MidiUnavailableException;
 
 public class MidiCommon {
 
-  /**	TODO:
-  todo: flag long
-  */
+  /**  TODO:
+   todo: flag long
+   */
   public static void listDevicesAndExit(boolean bForInput, boolean bForOutput) {
     listDevicesAndExit(bForInput, bForOutput, false);
   }
@@ -27,7 +28,7 @@ public class MidiCommon {
   }
 
   public static void listDevicesAndExit(boolean bForInput,
-      boolean bForOutput, boolean bVerbose) {
+                                        boolean bForOutput, boolean bVerbose) {
     if (bForInput && !bForOutput) {
       out("Available MIDI IN Devices:");
     } else if (!bForInput && bForOutput) {
@@ -36,19 +37,18 @@ public class MidiCommon {
       out("Available MIDI Devices:");
     }
 
-    MidiDevice.Info[]	aInfos = MidiSystem.getMidiDeviceInfo();
+    MidiDevice.Info[] aInfos = MidiSystem.getMidiDeviceInfo();
     for (int i = 0; i < aInfos.length; i++) {
       try {
-        MidiDevice	device = MidiSystem.getMidiDevice(aInfos[i]);
-        boolean		bAllowsInput = (device.getMaxTransmitters() != 0);
-        boolean		bAllowsOutput = (device.getMaxReceivers() != 0);
+        MidiDevice device = MidiSystem.getMidiDevice(aInfos[i]);
+        boolean bAllowsInput = (device.getMaxTransmitters() != 0);
+        boolean bAllowsOutput = (device.getMaxReceivers() != 0);
         if ((bAllowsInput && bForInput) ||
-            (bAllowsOutput && bForOutput))
-        {
+            (bAllowsOutput && bForOutput)) {
           if (bVerbose) {
             out("" + i + "  "
-                + (bAllowsInput?"IN ":"   ")
-                + (bAllowsOutput?"OUT ":"    ")
+                + (bAllowsInput ? "IN " : "   ")
+                + (bAllowsOutput ? "OUT " : "    ")
                 + aInfos[i].getName() + ", "
                 + aInfos[i].getVendor() + ", "
                 + aInfos[i].getVersion() + ", "
@@ -70,30 +70,29 @@ public class MidiCommon {
 
   /** Retrieve a MidiDevice.Info for a given name.
 
-    This method tries to return a MidiDevice.Info whose name
-    matches the passed name. If no matching MidiDevice.Info is
-    found, null is returned.  If bForOutput is true, then only
-    output devices are searched, otherwise only input devices.
+   This method tries to return a MidiDevice.Info whose name
+   matches the passed name. If no matching MidiDevice.Info is
+   found, null is returned.  If bForOutput is true, then only
+   output devices are searched, otherwise only input devices.
 
-    @param strDeviceName the name of the device for which an info
-    object should be retrieved.
+   @param strDeviceName the name of the device for which an info
+   object should be retrieved.
 
-    @param bForOutput If true, only output devices are
-    considered. If false, only input devices are considered.
+   @param bForOutput If true, only output devices are
+   considered. If false, only input devices are considered.
 
-    @return A MidiDevice.Info object matching the passed device
-    name or null if none could be found.
+   @return A MidiDevice.Info object matching the passed device
+   name or null if none could be found.
 
-*/
-  public static MidiDevice.Info getMidiDeviceInfo(String strDeviceName, boolean bForOutput)
-  {
-    MidiDevice.Info[]	aInfos = MidiSystem.getMidiDeviceInfo();
+   */
+  public static MidiDevice.Info getMidiDeviceInfo(String strDeviceName, boolean bForOutput) {
+    MidiDevice.Info[] aInfos = MidiSystem.getMidiDeviceInfo();
     for (int i = 0; i < aInfos.length; i++) {
       if (aInfos[i].getName().equals(strDeviceName)) {
         try {
           MidiDevice device = MidiSystem.getMidiDevice(aInfos[i]);
-          boolean	bAllowsInput = (device.getMaxTransmitters() != 0);
-          boolean	bAllowsOutput = (device.getMaxReceivers() != 0);
+          boolean bAllowsInput = (device.getMaxTransmitters() != 0);
+          boolean bAllowsOutput = (device.getMaxReceivers() != 0);
           if ((bAllowsOutput && bForOutput) || (bAllowsInput && !bForOutput)) {
             return aInfos[i];
           }
@@ -117,7 +116,7 @@ public class MidiCommon {
    *         or null if none could be found.
    */
   public static MidiDevice.Info getMidiDeviceInfo(int index) {
-    MidiDevice.Info[]	aInfos = MidiSystem.getMidiDeviceInfo();
+    MidiDevice.Info[] aInfos = MidiSystem.getMidiDeviceInfo();
     if ((index < 0) || (index >= aInfos.length)) {
       return null;
     }

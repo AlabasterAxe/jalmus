@@ -1,11 +1,9 @@
 package net.jalmus;
 
-import java.awt.Dimension;
-
 public abstract class NoteReadingGame implements Game {
 
   NoteLevel noteLevel = new NoteLevel();
-  
+
   boolean gameStarted;
   boolean isLessonMode;
   boolean paused;
@@ -16,7 +14,7 @@ public abstract class NoteReadingGame implements Game {
 
   int position; // position of the current note in the list
   int posnote = 1; // current position of the note within a chor or an interval
-  
+
   Note[] line = new Note[40]; // array of notes
   Chord[] lineacc = new Chord[40]; // array of chords
   Interval[] lineint = new Interval[40];
@@ -40,12 +38,12 @@ public abstract class NoteReadingGame implements Game {
   @Override
   public void startGame() {
     // TODO Auto-generated method stub
-    
+
   }
-  
+
   @Override
   public void startLevel() {
-	// nothing
+    // nothing
   }
 
   @Override
@@ -54,13 +52,13 @@ public abstract class NoteReadingGame implements Game {
     currentChord = new Chord(currentNote, currentNote, currentNote, "", 0);
     currentInterval = new Interval(currentNote, currentNote, "");
   }
-  
+
   void updateTonality() {
     String stmp;
 
     // to change tonality when randomly
     if ((noteLevel.getRandomTonality())) {
-      int i = (int) Math.round((Math.random()*7));
+      int i = (int) Math.round((Math.random() * 7));
       double tmp = Math.random();
       if (tmp < 0.1) {
         stmp = "";
@@ -86,8 +84,8 @@ public abstract class NoteReadingGame implements Game {
   @Override
   public void nextGame() {
     // TODO Auto-generated method stub
-    
+
   }
-  
+
 
 }

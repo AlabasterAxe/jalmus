@@ -1,5 +1,7 @@
 package net.jalmus;
 
+import javax.sound.midi.*;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,31 +9,10 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ResourceBundle;
 
-import javax.sound.midi.InvalidMidiDataException;
-import javax.sound.midi.MetaEventListener;
-import javax.sound.midi.MetaMessage;
-import javax.sound.midi.MidiEvent;
-import javax.sound.midi.MidiSystem;
-import javax.sound.midi.MidiUnavailableException;
-import javax.sound.midi.Receiver;
-import javax.sound.midi.Sequence;
-import javax.sound.midi.ShortMessage;
-import javax.sound.midi.Synthesizer;
-import javax.sound.midi.Track;
-import javax.sound.midi.Transmitter;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
 public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGame {
-
-  private SwingJalmus ui;
 
   JComboBox<String> gameTypeComboBox;
   JComboBox<String> speedComboBox;
-
   JCheckBox wholeCheckBox;
   JCheckBox halfCheckBox;
   JCheckBox dottedhalfCheckBox;
@@ -39,30 +20,25 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
   JCheckBox eighthCheckBox;
   JCheckBox restCheckBox;
   JCheckBox tripletCheckBox;
-
-  private JLabel timeSignLabel;
-  private JComboBox<String> timeSignComboBox;
-
   JCheckBox metronomeCheckBox;
   JCheckBox metronomeShowCheckBox;
-
-  private Track track;
-  private Track mutetrack;
   Track metronome;
-
   int rhythmAnswerScoreYpos = 100; //distance to paint answer
   float rhythmCursorXpos;
   int rhythmCursorXStartPos;
   int rhythmCursorXlimit;
-
   JPanel principal = new JPanel();
   Anim animationPanel;
   JPanel gameButtonPanel = new JPanel();
-
   JButton startButton = new JButton();    // button to start or stop game
   JButton listenButton = new JButton();    // button for listen exercise in rhythm game
   JButton newButton = new JButton();    // button for new exercise in rhythm game
   JButton preferencesButton = new JButton();  // button to access game preferences
+  private SwingJalmus ui;
+  private JLabel timeSignLabel;
+  private JComboBox<String> timeSignComboBox;
+  private Track track;
+  private Track mutetrack;
 
   void setUi(final SwingJalmus ui) {
     this.ui = ui;
@@ -129,7 +105,7 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
 
   @Override
   public JPanel getPreferencesPanel() {
-	    /* 1st panel - type of game */
+      /* 1st panel - type of game */
 
     gameTypeComboBox = new JComboBox<String>();
     gameTypeComboBox.addItemListener(new ItemListener() {
@@ -242,9 +218,9 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
 
         // TODO: try to test equality with timeSignComboBox
         if (e.getSource() instanceof JComboBox<?>) {
-          JComboBox<?> cb = (JComboBox<?>)e.getSource();
+          JComboBox<?> cb = (JComboBox<?>) e.getSource();
           int sel = cb.getSelectedIndex();
-          System.out.println("Rhythm time signature changed. Selected: "+ sel);
+          System.out.println("Rhythm time signature changed. Selected: " + sel);
           switch (sel) {
             case 0:
               wholeCheckBox.setEnabled(true);
@@ -484,7 +460,7 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
         if ("departthread".equals(strText)) {
           System.out.println("Cursor started");
           rhythmCursorXlimit = ui.firstNoteXPos +
-            (tmpnum * ui.numberOfMeasures * ui.noteDistance);
+              (tmpnum * ui.numberOfMeasures * ui.noteDistance);
           cursorstart = true;
           ui.jalmus.timestart = System.currentTimeMillis();
         }
@@ -496,11 +472,11 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
         } else if ("beat".equals(strText)) {
           // show metronome beats
           answers.add(new RhythmAnswer(ui.firstNoteXPos +
-            (ui.jalmus.metronomeCount%((tmpnum/tmpdiv) * ui.numberOfMeasures)) *
-              (ui.noteDistance * tmpdiv), ui.metronomeYPos - 30, true, 3));
+              (ui.jalmus.metronomeCount % ((tmpnum / tmpdiv) * ui.numberOfMeasures)) *
+                  (ui.noteDistance * tmpdiv), ui.metronomeYPos - 30, true, 3));
           ui.jalmus.metronomeCount++;
-          if (ui.jalmus.metronomeCount == ((tmpnum/tmpdiv) * ui.numberOfMeasures) &&
-            ui.metronomeYPos < ui.scoreYpos + (ui.numberOfRows * ui.rowsDistance)) {
+          if (ui.jalmus.metronomeCount == ((tmpnum / tmpdiv) * ui.numberOfMeasures) &&
+              ui.metronomeYPos < ui.scoreYpos + (ui.numberOfRows * ui.rowsDistance)) {
             ui.metronomeYPos += ui.rowsDistance;
             ui.jalmus.metronomeCount = 0;
           }
@@ -554,20 +530,20 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
 
     for (int i = 0; i < answers.size(); i++) {
       if (answers.get(i).allGood() && !answers.get(i).isnull()) {
-        nbgood = nbgood +1;
+        nbgood = nbgood + 1;
       }
       if (!answers.get(i).isnull() && answers.get(i).badNote()) {
-        nbnotefalse = nbnotefalse +1;
+        nbnotefalse = nbnotefalse + 1;
       }
       if (!answers.get(i).isnull() && answers.get(i).badRhythm()) {
-        nbrhythmfalse = nbrhythmfalse +1;
+        nbrhythmfalse = nbrhythmfalse + 1;
       }
     }
 
     //Nb rhythms
     for (int i = 0; i < rhythms.size(); i++) {
       if (!rhythms.get(i).isSilence() && !rhythms.get(i).isNull()) {
-        nbrhythms =  nbrhythms +1;
+        nbrhythms = nbrhythms + 1;
       }
     }
 
@@ -578,9 +554,9 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
     }
 
     ui.textscoreMessage.setText("  " + nbrhythms + " " + ui.bundle.getString("_menuRythms") +
-      " : " + nbgood + " " + ui.bundle.getString("_correct") +
-      " / " + nbnotefalse + " " + ui.bundle.getString("_wrong") +
-      "  " + nbrhythmfalse + " " + ui.bundle.getString("_wrongrhythm") + "  ");
+        " : " + nbgood + " " + ui.bundle.getString("_correct") +
+        " / " + nbnotefalse + " " + ui.bundle.getString("_wrong") +
+        "  " + nbrhythmfalse + " " + ui.bundle.getString("_wrongrhythm") + "  ");
     ui.scoreMessage.pack();
     ui.scoreMessage.setLocationRelativeTo(ui);
     ui.scoreMessage.setVisible(true);
@@ -678,15 +654,15 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
   }
 
   private void nextRhythm() {
-    System.out.println ("rhytm xpos: " + rhythms.get(rhythmIndex).getPosition() +
-      " pitch: " + rhythms.get(rhythmIndex).getPitch() +
-      " index: " + rhythmIndex);
+    System.out.println("rhytm xpos: " + rhythms.get(rhythmIndex).getPosition() +
+        " pitch: " + rhythms.get(rhythmIndex).getPitch() +
+        " index: " + rhythmIndex);
 
     //if (rhythms.get(rhythmIndex).getDuration() != 0) {
-      if (rhythmIndex < rhythms.size()-1) {
-        rhythmIndex++;
-        ui.repaint();
-      }
+    if (rhythmIndex < rhythms.size() - 1) {
+      rhythmIndex++;
+      ui.repaint();
+    }
     //}
   }
 
@@ -702,10 +678,10 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
       System.out.println("[createMetronome] timeSignNumerator =  " + tmpnum + ", timeSignDenominator = " + tmpden);
 
       String textd = "depart";
-      ui.midiHelper.addEvent(metronome, TEXT, textd.getBytes(), (int)(tmpnum/tmpdiv)*MidiHelper.PULSES_PER_QUARTER_NOTE);
+      ui.midiHelper.addEvent(metronome, TEXT, textd.getBytes(), (int) (tmpnum / tmpdiv) * MidiHelper.PULSES_PER_QUARTER_NOTE);
 
       String textdt = "departthread"; //one beat before rhythms
-      ui.midiHelper.addEvent(metronome, TEXT, textdt.getBytes(), (int)((tmpnum/tmpdiv)-1)*MidiHelper.PULSES_PER_QUARTER_NOTE);
+      ui.midiHelper.addEvent(metronome, TEXT, textdt.getBytes(), (int) ((tmpnum / tmpdiv) - 1) * MidiHelper.PULSES_PER_QUARTER_NOTE);
 
       if (rhythmLevel.getMetronome()) {
         nbpulse = (tmpnum * ui.numberOfMeasures * ui.numberOfRows) + tmpnum;
@@ -722,7 +698,7 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
 
         metronome.add(new MidiEvent(mess, i * MidiHelper.PULSES_PER_QUARTER_NOTE));
         mess2.setMessage(ShortMessage.NOTE_OFF, 9, 77, 0);
-        metronome.add(new MidiEvent(mess2, (i * MidiHelper.PULSES_PER_QUARTER_NOTE)+1));
+        metronome.add(new MidiEvent(mess2, (i * MidiHelper.PULSES_PER_QUARTER_NOTE) + 1));
 
         if (rhythmLevel.getMetronomeBeats() && i > ((tmpnum / tmpdiv) - 1)) {
           //System.out.println("adding metronome beat : "+i + "tmpnum : " + tmpnum + "tmpdiv : "+tmpdiv);
@@ -738,33 +714,33 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
 
   void rhythmKeyReleased(int pitch) {
     if (ui.keyboardsoundCheckBox.isSelected()) {
-      ui.midiHelper.currentChannel.stopNote(true,pitch);
+      ui.midiHelper.currentChannel.stopNote(true, pitch);
     }
 
     float rhythmCursorXposcorrected;
     if (cursorstart) {
       rhythmCursorXposcorrected = rhythmCursorXStartPos +
-        ((System.currentTimeMillis()-ui.jalmus.timestart - ui.midiHelper.latency)*
-          ui.noteDistance)/(60000/ui.jalmus.tempo);
+          ((System.currentTimeMillis() - ui.jalmus.timestart - ui.midiHelper.latency) *
+              ui.noteDistance) / (60000 / ui.jalmus.tempo);
     } else {
       rhythmCursorXposcorrected = rhythmCursorXpos;
     }
 
-    System.out.println ("rhythmCursorXpos" + rhythmCursorXposcorrected);
+    System.out.println("rhythmCursorXpos" + rhythmCursorXposcorrected);
     if (cursorstart) {
       // key should be released at the end of the rhythm
       if ((rhythmIndex >= 0) && (rhythmIndex < rhythms.size())
-        && (!rhythms.get(rhythmIndex).isSilence()) && (rhythms.get(rhythmIndex).duration != 0)
-        && ((int)rhythmCursorXposcorrected < rhythms.get(rhythmIndex).getPosition() + 8/rhythms.get(rhythmIndex).duration * 27 - precision)
-        && ((int)rhythmCursorXposcorrected > rhythms.get(rhythmIndex).getPosition() + precision)) {
-        answers.add(new RhythmAnswer((int)rhythmCursorXposcorrected, rhythmAnswerScoreYpos - 15 , true, 2 ));
+          && (!rhythms.get(rhythmIndex).isSilence()) && (rhythms.get(rhythmIndex).duration != 0)
+          && ((int) rhythmCursorXposcorrected < rhythms.get(rhythmIndex).getPosition() + 8 / rhythms.get(rhythmIndex).duration * 27 - precision)
+          && ((int) rhythmCursorXposcorrected > rhythms.get(rhythmIndex).getPosition() + precision)) {
+        answers.add(new RhythmAnswer((int) rhythmCursorXposcorrected, rhythmAnswerScoreYpos - 15, true, 2));
       }
       //key should be released just before a silent
-      if ((rhythmIndex >= 0) && (rhythms.get(rhythmIndex).isSilence()) && (rhythmIndex-1 >= 0)
-        && (!rhythms.get(rhythmIndex-1).isSilence())
-        && ((int)rhythmCursorXposcorrected > rhythms.get(rhythmIndex).getPosition() + precision)
-        && ((int)rhythmCursorXposcorrected < rhythms.get(rhythmIndex).getPosition() + 8/rhythms.get(rhythmIndex).duration * 27 - precision)) {
-        answers.add(new RhythmAnswer((int)rhythmCursorXposcorrected, rhythmAnswerScoreYpos - 15 , true, 2 ));
+      if ((rhythmIndex >= 0) && (rhythms.get(rhythmIndex).isSilence()) && (rhythmIndex - 1 >= 0)
+          && (!rhythms.get(rhythmIndex - 1).isSilence())
+          && ((int) rhythmCursorXposcorrected > rhythms.get(rhythmIndex).getPosition() + precision)
+          && ((int) rhythmCursorXposcorrected < rhythms.get(rhythmIndex).getPosition() + 8 / rhythms.get(rhythmIndex).duration * 27 - precision)) {
+        answers.add(new RhythmAnswer((int) rhythmCursorXposcorrected, rhythmAnswerScoreYpos - 15, true, 2));
       }
     }
   }
@@ -782,18 +758,18 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
 
     if (cursorstart) {
       rhythmCursorXposcorrected = rhythmCursorXStartPos +
-        ((System.currentTimeMillis() - ui.jalmus.timestart - ui.midiHelper.latency)*ui.noteDistance)/
-          (60000/ui.jalmus.tempo);
+          ((System.currentTimeMillis() - ui.jalmus.timestart - ui.midiHelper.latency) * ui.noteDistance) /
+              (60000 / ui.jalmus.tempo);
     } else {
       rhythmCursorXposcorrected = rhythmCursorXpos;
     }
 
-    System.out.println ("rhythmCursorXpos" + rhythmCursorXposcorrected);
+    System.out.println("rhythmCursorXpos" + rhythmCursorXposcorrected);
 
     if (((rhythmIndex >= 0)
-      && ((int) rhythmCursorXposcorrected < rhythms.get(rhythmIndex).getPosition() + precision)
-      && ((int) rhythmCursorXposcorrected > rhythms.get(rhythmIndex).getPosition() - precision)
-      && !rhythms.get(rhythmIndex).isSilence())) {
+        && ((int) rhythmCursorXposcorrected < rhythms.get(rhythmIndex).getPosition() + precision)
+        && ((int) rhythmCursorXposcorrected > rhythms.get(rhythmIndex).getPosition() - precision)
+        && !rhythms.get(rhythmIndex).isSilence())) {
       if (pitch == rhythms.get(rhythmIndex).getPitch()) {
         result = 0;
         goodnote = true;
@@ -803,9 +779,9 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
       }
       //to resolve problem with eight on fast tempo
     } else if (((rhythmIndex - 1 >= 0)
-      && ((int) rhythmCursorXposcorrected < rhythms.get(rhythmIndex-1).getPosition() + precision)
-      && ((int) rhythmCursorXposcorrected > rhythms.get(rhythmIndex-1).getPosition() - precision)
-      && !rhythms.get(rhythmIndex-1).isSilence())) {
+        && ((int) rhythmCursorXposcorrected < rhythms.get(rhythmIndex - 1).getPosition() + precision)
+        && ((int) rhythmCursorXposcorrected > rhythms.get(rhythmIndex - 1).getPosition() - precision)
+        && !rhythms.get(rhythmIndex - 1).isSilence())) {
       if (pitch == rhythms.get(rhythmIndex).getPitch()) {
         result = 0;
         goodnote = true;
@@ -815,7 +791,7 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
       }
     } else {
       if (rhythmIndex >= 0
-        && pitch== rhythms.get(rhythmIndex).getPitch()) {
+          && pitch == rhythms.get(rhythmIndex).getPitch()) {
         result = 1;
         goodnote = true;
       } else {
@@ -824,16 +800,16 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
       }
     }
     answers.add(
-      new RhythmAnswer((int)rhythmCursorXposcorrected, rhythmAnswerScoreYpos - 15, goodnote, result));
+        new RhythmAnswer((int) rhythmCursorXposcorrected, rhythmAnswerScoreYpos - 15, goodnote, result));
   }
 
   private void regroupNotes() {
-    for (int i = 0; i < rhythms.size()-1; i++) {
-      if (rhythms.get(i).getDuration() == 0.5 && rhythms.get(i+1).getDuration()==0.5 &&  //TO BE FIX  FOR 8
-        !rhythms.get(i+1).isSilence() && !rhythms.get(i).isSilence() &&
-        !isBeginMeasure(i+1)  && !rhythms.get(i).isGroupee()) {
+    for (int i = 0; i < rhythms.size() - 1; i++) {
+      if (rhythms.get(i).getDuration() == 0.5 && rhythms.get(i + 1).getDuration() == 0.5 &&  //TO BE FIX  FOR 8
+          !rhythms.get(i + 1).isSilence() && !rhythms.get(i).isSilence() &&
+          !isBeginMeasure(i + 1) && !rhythms.get(i).isGroupee()) {
         rhythms.get(i).setGroupee(1);
-        rhythms.get(i+1).setGroupee(2);
+        rhythms.get(i + 1).setGroupee(2);
       }
     }
   }
@@ -859,7 +835,7 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
 
     int tmpnum = rhythmLevel.getTimeSignNumerator();
     int tmpdiv = rhythmLevel.getTimeDivision();
-    int currentTick = (int)((tmpnum/tmpdiv) * ui.midiHelper.PULSES_PER_QUARTER_NOTE);
+    int currentTick = (int) ((tmpnum / tmpdiv) * ui.midiHelper.PULSES_PER_QUARTER_NOTE);
 
     // INITIALIZE Sequence and tracks
     try {
@@ -894,18 +870,18 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
         pitch = 71;
         stemup = true;
 
-        if (wholeNote && filledBeats+4 <= tmpnum && tmp<0.2) { // ronde, whole
+        if (wholeNote && filledBeats + 4 <= tmpnum && tmp < 0.2) { // ronde, whole
           filledBeats += 4;
           currentTick = addRhythm(4, pitch, stemup, currentTick, rowCount, currentXPos);
-          currentXPos += (ui.noteDistance*4);
+          currentXPos += (ui.noteDistance * 4);
         } else if (dottedhalfNote && filledBeats + 3 <= tmpnum && tmp < 0.4) { // blanche pointee, dotted half
           filledBeats += 3;
           currentTick = addRhythm(3, pitch, stemup, currentTick, rowCount, currentXPos);
-          currentXPos += (ui.noteDistance*3);
+          currentXPos += (ui.noteDistance * 3);
         } else if (halfNote && filledBeats + 2 <= tmpnum && tmp < 0.4) { // blanche, half
           filledBeats += 2;
           currentTick = addRhythm(2, pitch, stemup, currentTick, rowCount, currentXPos);
-          currentXPos += (ui.noteDistance*2);
+          currentXPos += (ui.noteDistance * 2);
         } else if (quarterNote && filledBeats + 1 <= tmpnum && tmp < 0.6) { // noire, quarter
           filledBeats += 1;
           currentTick = addRhythm(1, pitch, stemup, currentTick, rowCount, currentXPos);
@@ -913,9 +889,9 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
         } else if (eighthNote && filledBeats + 0.5 <= tmpnum && tmp < 0.8) { // croche, eighth
           filledBeats += 0.5;
           currentTick = addRhythm(0.5, pitch, stemup, currentTick, rowCount, currentXPos);
-          currentXPos += (ui.noteDistance/2);
-        } else if (triplet && filledBeats+1 <= tmpnum && tmp<0.9) { // triplet
-          int[] tripletPitches = { pitch, 71, 71 };
+          currentXPos += (ui.noteDistance / 2);
+        } else if (triplet && filledBeats + 1 <= tmpnum && tmp < 0.9) { // triplet
+          int[] tripletPitches = {pitch, 71, 71};
           int lowestPitch = tripletPitches[0];
           for (int i = 1; i < 3; i++) {
             if (tripletPitches[i] < lowestPitch && !stemup)
@@ -929,14 +905,14 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
 
           currentTick = addRhythm(0.333, pitch, stemup, currentTick, rowCount, currentXPos);
           setTripletValue(lowestPitch);
-          currentXPos += (ui.noteDistance/3);
+          currentXPos += (ui.noteDistance / 3);
           currentTick = addRhythm(0.333, tripletPitches[1], stemup, currentTick, rowCount, currentXPos);
           setTripletValue(100 + lowestPitch);
-          currentXPos += (ui.noteDistance/3);
+          currentXPos += (ui.noteDistance / 3);
           currentTick = addRhythm(0.333, tripletPitches[2], stemup, currentTick, rowCount, currentXPos);
           setTripletValue(100 + lowestPitch);
           filledBeats += 1;
-          currentXPos += (ui.noteDistance/3);
+          currentXPos += (ui.noteDistance / 3);
         }
       }
 
@@ -957,8 +933,8 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
     String text = "off";
 
     boolean silence = rhythmLevel.getSilence();
-    int tmpdiv =  rhythmLevel.getTimeDivision();
-    int tmpnum =  rhythmLevel.getTimeSignNumerator();
+    int tmpdiv = rhythmLevel.getTimeDivision();
+    int tmpnum = rhythmLevel.getTimeSignNumerator();
 
     if (duration == 0.333) { // do not handle pauses into triplets for now
       silence = false;
@@ -968,12 +944,12 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
 
     double tmpsilence = Math.random();
     if (!silence
-      || (silence && tmpsilence < 0.85)
-      || (duration == 3 && tmpnum != 3)) {
-      rhythms.add(new Rhythm(duration, newXPos, pitch,  row, stemup, false, false, 0));
+        || (silence && tmpsilence < 0.85)
+        || (duration == 3 && tmpnum != 3)) {
+      rhythms.add(new Rhythm(duration, newXPos, pitch, row, stemup, false, false, 0));
       track.add(MidiHelper.createNoteOnEvent(pitch, velocity, tick));
       mutetrack.add(MidiHelper.createNoteOnEvent(pitch, 0, tick));
-      tick += (int)((duration*tmpdiv) * MidiHelper.PULSES_PER_QUARTER_NOTE);
+      tick += (int) ((duration * tmpdiv) * MidiHelper.PULSES_PER_QUARTER_NOTE);
       ui.midiHelper.addEvent(track, TEXT, text.getBytes(), tick);
       ui.midiHelper.addEvent(mutetrack, TEXT, text.getBytes(), tick);
       track.add(MidiHelper.createNoteOffEvent(pitch, tick));
@@ -982,7 +958,7 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
       rhythms.add(new Rhythm(duration, newXPos, pitch, row, false, false, true, 0));
       track.add(MidiHelper.createNoteOffEvent(pitch, tick));
       mutetrack.add(MidiHelper.createNoteOffEvent(pitch, tick));
-      tick += (int)((duration*tmpdiv) * MidiHelper.PULSES_PER_QUARTER_NOTE);
+      tick += (int) ((duration * tmpdiv) * MidiHelper.PULSES_PER_QUARTER_NOTE);
       ui.midiHelper.addEvent(track, TEXT, text.getBytes(), tick);
       ui.midiHelper.addEvent(mutetrack, TEXT, text.getBytes(), tick);
     }
@@ -1019,7 +995,7 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
     for (int r = 0; r < ui.numberOfRows; r++) {
       // draw vertical separators first
       for (int v = 0; v < ui.numberOfMeasures; v++) {
-        g.drawLine(vXPos + v * (tmpnum * ui.noteDistance), yPos, vXPos + v * (tmpnum * ui.noteDistance), yPos+40);
+        g.drawLine(vXPos + v * (tmpnum * ui.noteDistance), yPos, vXPos + v * (tmpnum * ui.noteDistance), yPos + 40);
       }
 
       // draw the single line for the rhythm game.
@@ -1046,7 +1022,7 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
         t = "P";
       }
       g.drawString(t, ui.windowMargin + ui.keyWidth,
-        ui.scoreYpos+41 + rowNum * ui.rowsDistance);
+          ui.scoreYpos + 41 + rowNum * ui.rowsDistance);
     }
   }
 
@@ -1097,10 +1073,10 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
       if (rhythms.get(i).getDuration() != 0) {
         if ((i == rhythmIndex) && !ui.muteRhythms && gameStarted) { //only paint note in learning mode
           rhythms.get(i).paint(g, ui.jalmus.selectedGame, f, null, 9, ui.rowsDistance,
-            true, ui.scoreYpos, ui);
+              true, ui.scoreYpos, ui);
         } else {
           rhythms.get(i).paint(g, ui.jalmus.selectedGame, f, null, 9, ui.rowsDistance,
-            false, ui.scoreYpos, ui);
+              false, ui.scoreYpos, ui);
         }
       }
     }

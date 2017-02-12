@@ -16,31 +16,31 @@ import java.util.List;
  * assuming that the pitches have durations.
  */
 public class Chord implements Schedulable {
-   
+
+  private final List<Note> notes;
+
+  private Chord(List<Note> notes) {
+    this.notes = notes;
+  }
+
+  public Iterable<Note> getNotes() {
+    return notes;
+  }
+
   public class Builder {
     private final List<Note> notes;
-      
+
     public Builder() {
       this.notes = new ArrayList<>();
     }
-      
+
     public Builder addNote(Note note) {
       notes.add(note);
       return this;
     }
-      
+
     public Chord build() {
       return new Chord(this.notes);
     }
-  }
-    
-  private Chord(List<Note> notes) {
-    this.notes = notes;
-  }
-  
-  private final List<Note> notes;
-  
-  public Iterable<Note> getNotes() {
-    return notes;
   }
 }

@@ -4,41 +4,41 @@ import java.util.ArrayList;
 
 public abstract class RhythmReadingGame implements Game {
 
+  protected ArrayList<Rhythm> rhythms = new ArrayList<Rhythm>();
+  protected ArrayList<RhythmAnswer> answers = new ArrayList<RhythmAnswer>();
+  protected int precision = 10; //precision on control between note and answer
   boolean gameStarted;
   boolean paused;
   boolean sameRhythms = false;
   RhythmLevel rhythmLevel = new RhythmLevel();
-  protected ArrayList<Rhythm> rhythms = new ArrayList<Rhythm>(); 
   int rhythmIndex = -1;
-  protected ArrayList<RhythmAnswer> answers = new ArrayList<RhythmAnswer>();
-  protected int precision = 10; //precision on control between note and answer
   boolean cursorstart = false;
 
 
   @Override
   public void initGame() {
     // TODO Auto-generated method stub
-    
+
   }
 
   @Override
   public void startGame() {
     // TODO Auto-generated method stub
     gameStarted = true;
-    
+
   }
 
   @Override
   public void stopGame() {
     // TODO Auto-generated method stub
     gameStarted = false;
-    
+
   }
 
   @Override
   public void startLevel() {
     // TODO Auto-generated method stub
-    
+
   }
 
   void setTripletValue(int val) {
@@ -57,8 +57,8 @@ public abstract class RhythmReadingGame implements Game {
     int tmpnum = rhythmLevel.getTimeSignNumerator();
 
     boolean reponse = false;
-    for (int k = 1; k<tmpnum * 2; k++) {
-      if (id == tmpnum*k) {
+    for (int k = 1; k < tmpnum * 2; k++) {
+      if (id == tmpnum * k) {
         reponse = true;
       }
     }
@@ -68,6 +68,6 @@ public abstract class RhythmReadingGame implements Game {
   @Override
   public void nextGame() {
     // TODO Auto-generated method stub
-    
+
   }
 }

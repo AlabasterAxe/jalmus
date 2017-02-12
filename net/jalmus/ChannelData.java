@@ -5,6 +5,7 @@ package net.jalmus;
  * <p>Description: </p>
  * <p>Copyright: Copyright (c) 2006</p>
  * <p>Company: </p>
+ *
  * @author RICHARD Christophe
  * @version 1.0
  */
@@ -19,7 +20,7 @@ public class ChannelData {
   boolean mute;
   boolean sustain;
   int velocity;
-  int pressure; 
+  int pressure;
   int bend;
   int reverb;
   int row;
@@ -39,7 +40,7 @@ public class ChannelData {
   public void playNote(boolean midiok, int kNum) {
     playNote(midiok, kNum, 25);
   }
-        
+
   public void playNote(boolean midiok, int kNum, int i) {
     if (midiok) {
       this.channel.noteOn(kNum, i);
@@ -52,7 +53,7 @@ public class ChannelData {
     }
   }
 
-  public void stopnotes(){
+  public void stopnotes() {
     this.channel.allNotesOff();
   }
 }

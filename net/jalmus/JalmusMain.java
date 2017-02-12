@@ -1,8 +1,7 @@
 package net.jalmus;
 
-import java.awt.Dimension;
-
-import javax.swing.JFrame;
+import javax.swing.*;
+import java.awt.*;
 
 public final class JalmusMain {
 

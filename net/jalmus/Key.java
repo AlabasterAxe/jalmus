@@ -5,21 +5,19 @@ package net.jalmus;
  * <p>Description: </p>
  * <p>Copyright: Copyright (c) 2006</p>
  * <p>Company: </p>
+ *
  * @author RICHARD Christophe
  * @version 1.0
  */
 
-import java.awt.Rectangle;
+import java.awt.*;
 
 public class Key extends Rectangle {
 
   private static final long serialVersionUID = 1L;
-
-  private enum State { ON, OFF }
-  private State noteState = State.OFF;
   int kNum;
   int offx; // just for black keys since they have an irregular pattern
-
+  private State noteState = State.OFF;
   public Key(int x, int y, int width, int height, int num, int offset) {
     super(x, y, width, height);
     kNum = num;
@@ -29,7 +27,7 @@ public class Key extends Rectangle {
   public int getKNum() {
     return this.kNum;
   }
-    
+
   public int getXoffset() {
     return this.offx;
   }
@@ -51,4 +49,6 @@ public class Key extends Rectangle {
   public void setNoteState(State state) {
     noteState = state;
   }
+
+  private enum State {ON, OFF}
 } // End class Key

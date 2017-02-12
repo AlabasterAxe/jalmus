@@ -103,7 +103,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 */
 
 
-
 /********************/
 
 /*FRENCH TRANSLATION*/
@@ -161,12 +160,11 @@ public class Jalmus {
   //----------------------------------------------------------------
   // Main variables
 
-  int selectedGame = FIRSTSCREEN; // FIRSTSCREEN, NOTEREADING, RHYTHMREADING, SCOREREADING
   static final int FIRSTSCREEN = 0;
   static final int NOTEREADING = 1;
   static final int RHYTHMREADING = 2;
   static final int SCOREREADING = 3;
-
+  int selectedGame = FIRSTSCREEN; // FIRSTSCREEN, NOTEREADING, RHYTHMREADING, SCOREREADING
   //----------------------------------------------------------------
   // Lesson variables
   Lessons currentLesson = new Lessons();
@@ -214,7 +212,7 @@ public class Jalmus {
   NoteReadingGame noteGame;
   RhythmReadingGame rhythmGame;
   ScoreReadingGame scoreGame;
-  
+
   public Jalmus(NoteReadingGame noteGame, RhythmReadingGame rhythmGame, ScoreReadingGame scoreGame) {
     this.noteGame = noteGame;
     this.rhythmGame = rhythmGame;
@@ -229,17 +227,19 @@ public class Jalmus {
   }
 
   //----------------------------------------------------------------
-  
+
   //################################################################
   // METHODES D'ACTION DES BOUTONS ET CHOICES
 
   /** Initialize note reading game if there is modification in
    * parameters and game restart. */
-  
+
   /** Initialize rhythm reading game if there is modification in
    * parameters and game restart. */
 
-  /** Stops all games. */
+  /**
+   * Stops all games.
+   */
 
   void stopGames() {
     if (selectedGame == NOTEREADING) {
@@ -297,40 +297,39 @@ public class Jalmus {
   /**
    * Open uri with default browser
    *
-   * @param  uristring uri to open
-   * @return      void
-   *
+   * @param uristring uri to open
+   * @return void
    */
   public void OpenURI(String uristring) {
-    if(!java.awt.Desktop.isDesktopSupported()) {
-      System.err.println( "Desktop is not supported (fatal)" );
-      System.exit(1);
-    }
-
-    java.awt.Desktop desktop = java.awt.Desktop.getDesktop();
-
-    if(!desktop.isSupported(java.awt.Desktop.Action.BROWSE)) {
-      System.err.println("Desktop doesn't support the browse action (fatal)");
-      System.exit(1);
-    }
-
-    try {
-      java.net.URI uri = new java.net.URI( uristring );
-      desktop.browse( uri );
-    } catch (Exception e) {
-      System.err.println( e.getMessage() );
-    }
-  }
-
-  public void OpenDirectory(File dir) {
-    if(!java.awt.Desktop.isDesktopSupported()) {
+    if (!java.awt.Desktop.isDesktopSupported()) {
       System.err.println("Desktop is not supported (fatal)");
       System.exit(1);
     }
 
     java.awt.Desktop desktop = java.awt.Desktop.getDesktop();
 
-    if(!desktop.isSupported(java.awt.Desktop.Action.OPEN)) {
+    if (!desktop.isSupported(java.awt.Desktop.Action.BROWSE)) {
+      System.err.println("Desktop doesn't support the browse action (fatal)");
+      System.exit(1);
+    }
+
+    try {
+      java.net.URI uri = new java.net.URI(uristring);
+      desktop.browse(uri);
+    } catch (Exception e) {
+      System.err.println(e.getMessage());
+    }
+  }
+
+  public void OpenDirectory(File dir) {
+    if (!java.awt.Desktop.isDesktopSupported()) {
+      System.err.println("Desktop is not supported (fatal)");
+      System.exit(1);
+    }
+
+    java.awt.Desktop desktop = java.awt.Desktop.getDesktop();
+
+    if (!desktop.isSupported(java.awt.Desktop.Action.OPEN)) {
       System.err.println("Desktop doesn't support the open action (fatal)");
       System.exit(1);
     }

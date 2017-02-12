@@ -1,10 +1,10 @@
 package net.jalmus.domain;
 
+import net.jalmus.util.CycleArrayList;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import net.jalmus.util.CycleArrayList;
 
 public class KeySignature {
 
@@ -28,12 +28,12 @@ public class KeySignature {
 
   private final List<Pitch.Name> modifications;
   private final Pitch.Modifier direction;
-  
+
   private KeySignature(List<Pitch.Name> modifications, Pitch.Modifier direction) {
     this.modifications = modifications;
     this.direction = direction;
   }
-  
+
   public static KeySignature getKeySignature(int magnitude, Pitch.Modifier direction) {
     List<Pitch.Name> modifications = new ArrayList<>();
 
@@ -49,24 +49,24 @@ public class KeySignature {
         throw new AssertionError();
     }
 
-    while(magnitude > 0) {
+    while (magnitude > 0) {
       modifications.add(iter.next());
       magnitude--;
     }
 
     return new KeySignature(modifications, direction);
   }
-  
+
   public Scale getScale(int octave, Scale.Mode mode) {
     Pitch.Name pitchName = modificationOrder.get(modifications.size());
-    
+
     Pitch.Modifier baseModifier;
-    if(modifications.indexOf(pitchName) < 0) {
+    if (modifications.indexOf(pitchName) < 0) {
       baseModifier = direction;
     } else {
       baseModifier = Pitch.Modifier.NONE;
     }
-    
+
     Pitch pitch = Pitch.getPitch(pitchName, octave, baseModifier);
 
     return Scale.getScale(pitch, mode);

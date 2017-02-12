@@ -4,14 +4,14 @@ import java.util.ArrayList;
 
 public abstract class ScoreReadingGame implements Game {
 
+  protected int precision = 10; //precision on control between note and answer
+  protected ArrayList<RhythmAnswer> answers = new ArrayList<RhythmAnswer>();
+  protected ArrayList<Rhythm> rhythms = new ArrayList<Rhythm>();
   ScoreLevel scoreLevel = new ScoreLevel();
   boolean gameStarted = false;
   boolean sameRhythms = true;
   int rhythmIndex = -1;
   boolean cursorstart = false;
-  protected int precision = 10; //precision on control between note and answer
-  protected ArrayList<RhythmAnswer> answers = new ArrayList<RhythmAnswer>();
-  protected ArrayList<Rhythm> rhythms = new ArrayList<Rhythm>();
 
   @Override
   public void initGame() {
@@ -38,7 +38,7 @@ public abstract class ScoreReadingGame implements Game {
 
     // to change tonality when randomly
     if (scoreLevel.getRandomTonality()) {
-      int i = (int) Math.ceil((Math.random()*7));
+      int i = (int) Math.ceil((Math.random() * 7));
       double tmp = Math.random();
       if (tmp < 0.1) {
         stmp = "";
@@ -69,8 +69,8 @@ public abstract class ScoreReadingGame implements Game {
     int tmpnum = scoreLevel.getTimeSignNumerator();
 
     boolean reponse = false;
-    for (int k = 1; k<tmpnum * 2; k++) {
-      if (id == tmpnum*k) {
+    for (int k = 1; k < tmpnum * 2; k++) {
+      if (id == tmpnum * k) {
         reponse = true;
       }
     }
