@@ -22,6 +22,7 @@ public class Score {
   int nbfalse;
   int points;
   Status status;
+
   public Score() {
     this.nbtrue = 0;
     this.nbfalse = 0;

@@ -18,6 +18,7 @@ public class Key extends Rectangle {
   int kNum;
   int offx; // just for black keys since they have an irregular pattern
   private State noteState = State.OFF;
+
   public Key(int x, int y, int width, int height, int num, int offset) {
     super(x, y, width, height);
     kNum = num;

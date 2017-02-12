@@ -88,17 +88,17 @@ class DumpReceiver implements Receiver {
             }
 
             if (ui.jalmus.selectedGame == Jalmus.RHYTHMREADING && ui.jalmus.gameStarted) {
-              if (((ShortMessage) event).getData2() != 0)
+              if (((ShortMessage) event).getData2() != 0) {
                 ui.rhythmGame.rhythmKeyPressed(71);
-              else {
+              } else {
                 ui.rhythmGame.rhythmKeyReleased(71);
               }
             }
 
             if (ui.jalmus.selectedGame == Jalmus.SCOREREADING && ui.jalmus.gameStarted) {
-              if (((ShortMessage) event).getData2() != 0)
+              if (((ShortMessage) event).getData2() != 0) {
                 ui.rhythmGame.rhythmKeyPressed(((ShortMessage) event).getData1());
-              else {
+              } else {
                 ui.rhythmGame.rhythmKeyReleased(((ShortMessage) event).getData1());
               }
             }

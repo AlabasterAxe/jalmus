@@ -96,8 +96,9 @@ public class Piano {
 
   /**
    * To return Key of the Piano where the mouse aim
-   * @return Key of the piano where the mouse aim
+   *
    * @param Point of the mouse pointer
+   * @return Key of the piano where the mouse aim
    */
   public Key getKey(Point point) {
     Point p = new Point();
@@ -159,11 +160,11 @@ public class Piano {
   /**
    * Paint keyboard on screen with  keys in blue when played, in green for notes to train
    *
-   * @param  g Graphics to paint 
-   * @param  basenotepitch1 pitch of the first note to train
-   * @param  basenotepitch2 pitch of the last note to train
+   * @param g              Graphics to paint
+   * @param basenotepitch1 pitch of the first note to train
+   * @param basenotepitch2 pitch of the last note to train
    * @return void
-   * @see         Image
+   * @see Image
    */
 
   public void paint(Graphics g, int width, boolean paintbutton, int basenotepitch1, int basenotepitch2,
@@ -219,16 +220,14 @@ public class Piano {
           (key.kNum <= basenotepitchb1 & key.kNum >= basenotepitchb2))) {
         g2.setColor(cg);
         g2.fill(key);
-      } else if (iscustom && paintbutton)
+      } else if (iscustom && paintbutton) {
         for (Integer pitch : pitchesl) {
           if (key.kNum == pitch) {
             g2.setColor(cg);
             g2.fill(key);
           }
         }
-
-
-      else if (key.kNum == pitchcourant0 | key.kNum == pitchcourant1 |
+      } else if (key.kNum == pitchcourant0 | key.kNum == pitchcourant1 |
           key.kNum == pitchcourant2) {
         g2.setColor(RED);
         g2.fill(key);

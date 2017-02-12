@@ -412,12 +412,15 @@ public class NoteLevel implements Level {
       fileContent.append("<levels>" + newline + "<notereading id = '0'>" + newline);
       fileContent.append("<message>" + message + "</message>" + newline);
       fileContent.append("<game>" + this.gametype + "</game>" + newline);
-      if (this.isLearningGame())
+      if (this.isLearningGame()) {
         fileContent.append("<learningduration>30<learningduration>" + newline);
+      }
       fileContent.append("<clef>" + this.currentKey + "</clef>" + newline);
-      if (this.randomtonality) fileContent.append("<tonality>random</tonality>" + newline);
-      else if (this.currenttonality.getAlterationsNumber() != 0)
+      if (this.randomtonality) {
+        fileContent.append("<tonality>random</tonality>" + newline);
+      } else if (this.currenttonality.getAlterationsNumber() != 0) {
         fileContent.append("<tonality>" + this.currenttonality.getAlterationsNumber() + this.currenttonality.getAlteration() + "</tonality>" + newline);
+      }
       fileContent.append("<notes>" + this.notetype + "</notes>" + newline);
       if (this.isNotesgame() || this.isAccidentalsgame()) {
         fileContent.append("<nbnotes>" + this.nbnotes + "</nbnotes>" + newline);

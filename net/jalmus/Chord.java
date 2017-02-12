@@ -20,6 +20,7 @@ public class Chord {
   Note tabNotes[] = new Note[3];
   String name;
   InversionType inversion;
+
   public Chord(Note note1, Note note2, Note note3, String name, int inversion) {
     this.tabNotes[0] = note1;
     this.tabNotes[1] = note2;
@@ -56,51 +57,81 @@ public class Chord {
 
 
     //pr = this.posreelle(pos);
-    if (this.tabNotes[pos].getAlteration() == "") resultat = 0;
-    else {
+    if (this.tabNotes[pos].getAlteration() == "") {
+      resultat = 0;
+    } else {
       for (int i = 0; i < 3; i = i + 1) {
         if (((this.tabNotes[i].getAlteration() == "#" | this.tabNotes[i].getAlteration() == "b") & !this.tabNotes[i].accidentalInTonality(tcourante, bundle))
-            | this.tabNotes[i].getAlteration() == "n")
+            | this.tabNotes[i].getAlteration() == "n") {
           nbalt++;
+        }
       }
 
-      if (nbalt == 0) resultat = 0;
-      else if (nbalt == 1) resultat = 10;
-      else if (nbalt == 2) {
+      if (nbalt == 0) {
+        resultat = 0;
+      } else if (nbalt == 1) {
+        resultat = 10;
+      } else if (nbalt == 2) {
         switch (this.inversion) {
           case UNINVERTED:
-            if (pos == 0) resultat = 10;
-            else if (pos == 1 & this.tabNotes[0].getAlteration() != "") resultat = 20;
-            else if (pos == 1 & this.tabNotes[2].getAlteration() != "") resultat = 10;
+            if (pos == 0) {
+              resultat = 10;
+            } else if (pos == 1 & this.tabNotes[0].getAlteration() != "") {
+              resultat = 20;
+            } else if (pos == 1 & this.tabNotes[2].getAlteration() != "") {
+              resultat = 10;
+            }
                         /*else if (pos == 2 & this.acc[0].getAlteration() != "") resultat = 8;*/
-            else resultat = 20;
+            else {
+              resultat = 20;
+            }
             break;
           case FIRST_INVERSION:
-            if (pos == 0 & this.tabNotes[2].getAlteration() != "") resultat = 20;
-            else if (pos == 2 & this.tabNotes[1].getAlteration() != "") resultat = 20;
-            else resultat = 10;
+            if (pos == 0 & this.tabNotes[2].getAlteration() != "") {
+              resultat = 20;
+            } else if (pos == 2 & this.tabNotes[1].getAlteration() != "") {
+              resultat = 20;
+            } else {
+              resultat = 10;
+            }
             break;
           case SECOND_INVERSION:
-            if (pos == 1 & this.tabNotes[0].getAlteration() != "") resultat = 20;
-            else if (pos == 0 & this.tabNotes[2].getAlteration() != "") resultat = 20;
-            else resultat = 10;
+            if (pos == 1 & this.tabNotes[0].getAlteration() != "") {
+              resultat = 20;
+            } else if (pos == 0 & this.tabNotes[2].getAlteration() != "") {
+              resultat = 20;
+            } else {
+              resultat = 10;
+            }
             break;
           default:
             throw new AssertionError("I want to punch a baby.");
         }
       } else if (nbalt == 3) {
         if (this.inversion.toInt() == 0) {
-          if (pos == 0) resultat = 14;
-          else if (pos == 1) resultat = 24;
-          else if (pos == 2) resultat = 8;
+          if (pos == 0) {
+            resultat = 14;
+          } else if (pos == 1) {
+            resultat = 24;
+          } else if (pos == 2) {
+            resultat = 8;
+          }
         } else if (this.inversion.toInt() == 1) {
-          if (pos == 2) resultat = 24;
-          else if (pos == 0) resultat = 8;
-          else resultat = 14;
+          if (pos == 2) {
+            resultat = 24;
+          } else if (pos == 0) {
+            resultat = 8;
+          } else {
+            resultat = 14;
+          }
         } else if (this.inversion.toInt() == 2) {
-          if (pos == 0) resultat = 24;
-          else if (pos == 1) resultat = 8;
-          else resultat = 14;
+          if (pos == 0) {
+            resultat = 24;
+          } else if (pos == 1) {
+            resultat = 8;
+          } else {
+            resultat = 14;
+          }
         }
       }
     }
@@ -119,8 +150,9 @@ public class Chord {
     Color c = new Color(147, 22, 22);
 
     for (int i = 0; i < 3; i = i + 1) {
-      if (!(i == this.realPosition(position) & accordcourant))
+      if (!(i == this.realPosition(position) & accordcourant)) {
         tabNotes[i].paint(nrlevel, g, f, this.getNotePosition(i, nrlevel.getCurrentTonality(), bundle), 0, dportee, Color.black, bundle);
+      }
     }
     if (accordcourant) {
       tabNotes[this.realPosition(position)].paint(nrlevel, g, f, this.getNotePosition(this.realPosition(position), nrlevel.getCurrentTonality(), bundle), 0, dportee, c, bundle);

@@ -7,6 +7,7 @@ public class Voice {
 
   ;
   private final Clef clef;
+
   public Voice(List<Measure> measures, Clef clef) {
     this.measures = measures;
     this.clef = clef;

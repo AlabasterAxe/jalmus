@@ -49,8 +49,9 @@ public class Lessons extends DefaultHandler {
   }
 
   public void nextLevel() {
-    if (this.currentlevel + 1 < this.levelslist.size())
+    if (this.currentlevel + 1 < this.levelslist.size()) {
       this.currentlevel++;
+    }
   }
 
   public String getLessonPath(String language) {
@@ -100,34 +101,39 @@ public class Lessons extends DefaultHandler {
   }
 
   public Level getLevel() {
-    if (this.levelslist.get(this.currentlevel).getClass().getSimpleName().equals("NoteLevel"))
+    if (this.levelslist.get(this.currentlevel).getClass().getSimpleName().equals("NoteLevel")) {
       return (NoteLevel) this.levelslist.get(this.currentlevel);
-    else if (this.levelslist.get(this.currentlevel).getClass().getSimpleName().equals("RhythmLevel"))
+    } else if (this.levelslist.get(this.currentlevel).getClass().getSimpleName().equals("RhythmLevel")) {
       return (RhythmLevel) this.levelslist.get(this.currentlevel);
-    else //Scorelevel
+    } else //Scorelevel
+    {
       return (ScoreLevel) this.levelslist.get(this.currentlevel);
+    }
   }
 
   public boolean isNoteLevel() {
-    if (this.levelslist.get(this.currentlevel).getClass().getSimpleName().equals("NoteLevel"))
+    if (this.levelslist.get(this.currentlevel).getClass().getSimpleName().equals("NoteLevel")) {
       return true;
-    else
+    } else {
       return false;
+    }
   }
 
   public boolean isRhythmLevel() {
-    if (this.levelslist.get(this.currentlevel).getClass().getSimpleName().equals("RhythmLevel"))
+    if (this.levelslist.get(this.currentlevel).getClass().getSimpleName().equals("RhythmLevel")) {
       return true;
-    else
+    } else {
       return false;
+    }
   }
 
   public boolean isScoreLevel() {
     if (this.levelslist.get(this.currentlevel).getClass().getSimpleName().equals("ScoreLevel")) {
       System.out.println("Score level");
       return true;
-    } else
+    } else {
       return false;
+    }
   }
 
   //détection d'ouverture de balise
@@ -382,9 +388,9 @@ public class Lessons extends DefaultHandler {
           StringTokenizer st = new StringTokenizer(tmprhythms, "/");
           Integer p;
           //System.out.println("Tokens"+st.countTokens());
-          if (st.countTokens() != 2)
+          if (st.countTokens() != 2) {
             throw new SAXException("In level " + rlevel.getId() + " time should be like n/m");
-          else {
+          } else {
             p = Integer.parseInt(st.nextToken());
             if (p == 2) {
               rlevel.setTimeSignNumerator(2);
@@ -406,8 +412,9 @@ public class Lessons extends DefaultHandler {
             } else if (p == 8 & (rlevel.getTimeSignNumerator() == 6)) {
               rlevel.setTimeSignDenominator(8);
               rlevel.setTimeDivision(2);
-            } else
+            } else {
               throw new SAXException("In level " + rlevel.getId() + " denominator should be  4,8  ");
+            }
           }
           break;
 
@@ -415,9 +422,9 @@ public class Lessons extends DefaultHandler {
           StringTokenizer sts = new StringTokenizer(tmprhythms, "/");
           Integer ps;
           //System.out.println("Tokens"+st.countTokens());
-          if (sts.countTokens() != 2)
+          if (sts.countTokens() != 2) {
             throw new SAXException("In level " + slevel.getId() + " time should be like n/m");
-          else {
+          } else {
             ps = Integer.parseInt(sts.nextToken());
             if (ps == 2) {
               slevel.setTimeSignNumerator(2);
@@ -465,14 +472,17 @@ public class Lessons extends DefaultHandler {
           rlevel.adjustLevel(false, false, false, false, false, false, false);
           while (st.hasMoreTokens()) {
             p = Integer.parseInt(st.nextToken());
-            if (p == 1 && rlevel.getTimeSignNumerator() == 4 && rlevel.getTimeSignDenominator() == 4)
+            if (p == 1 && rlevel.getTimeSignNumerator() == 4 && rlevel.getTimeSignDenominator() == 4) {
               rlevel.setWholeNote(true);
-            else if (p == 2) rlevel.setHalfNote(true);
-            else if (p == 3 && rlevel.getTimeSignNumerator() >= 3 && rlevel.getTimeSignDenominator() == 4)
+            } else if (p == 2) {
+              rlevel.setHalfNote(true);
+            } else if (p == 3 && rlevel.getTimeSignNumerator() >= 3 && rlevel.getTimeSignDenominator() == 4) {
               rlevel.setDottedHalfNote(true);
-            else if (p == 4) rlevel.setQuarterNote(true);
-            else if (p == 8) rlevel.setEighthNote(true);
-            else {
+            } else if (p == 4) {
+              rlevel.setQuarterNote(true);
+            } else if (p == 8) {
+              rlevel.setEighthNote(true);
+            } else {
               throw new SAXException("In level " + rlevel.getId() + " rhythms should be 1, 2, 3, 4, 8  ");
             }
           }
@@ -720,13 +730,19 @@ public class Lessons extends DefaultHandler {
             p = Integer.parseInt(st.nextToken());
             System.out.println(p);
             if (nlevel.isCurrentKeyTreble()) {
-              if (p >= 47 & p <= 96) pitcheslist.add(p);
-              else throw new SAXException("In level " + nlevel.getId() +
-                  " pitches should be list pitch 47 to 96");
+              if (p >= 47 & p <= 96) {
+                pitcheslist.add(p);
+              } else {
+                throw new SAXException("In level " + nlevel.getId() +
+                    " pitches should be list pitch 47 to 96");
+              }
             } else if (nlevel.isCurrentKeyBass()) {
-              if (p >= 26 & p <= 74) pitcheslist.add(p);
-              else throw new SAXException("In level " + nlevel.getId() +
-                  " pitches should be list pitch 26 to 74");
+              if (p >= 26 & p <= 74) {
+                pitcheslist.add(p);
+              } else {
+                throw new SAXException("In level " + nlevel.getId() +
+                    " pitches should be list pitch 26 to 74");
+              }
             } else if (nlevel.isCurrentKeyBoth()) {
               if (p >= 26 & p <= 96) {
                 pitcheslist.add(p);
@@ -754,9 +770,11 @@ public class Lessons extends DefaultHandler {
                 throw new SAXException("In level " + slevel.getId() + " pitches should be list pitch 55 to 84");
               }
             } else if (slevel.isCurrentKeyBass()) {
-              if (p >= 35 & p <= 64) pitcheslist.add(p); //E-2 E0
-              else
+              if (p >= 35 & p <= 64) {
+                pitcheslist.add(p); //E-2 E0
+              } else {
                 throw new SAXException("In level " + slevel.getId() + " pitches should be list pitch 35 to 64");
+              }
             }
           }
           slevel.setPitcheslist(pitcheslist);

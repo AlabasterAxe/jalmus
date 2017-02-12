@@ -74,12 +74,18 @@ public class RhythmAnswer {
     Color co = new Color(238, 153, 0);
     Color cg = new Color(152, 251, 152);
     Color ct = new Color(0, 0, 0);
-    if (result == 0) g.setColor(cg);
-    else if (result == 1) g.setColor(cr);
-    else if (result == 2) g.setColor(co);
-    else if (result == 3) g.setColor(ct);
-    if (this.goodNote) g.fillOval(this.posX, this.posY - 5, 10, 10);
-    else {
+    if (result == 0) {
+      g.setColor(cg);
+    } else if (result == 1) {
+      g.setColor(cr);
+    } else if (result == 2) {
+      g.setColor(co);
+    } else if (result == 3) {
+      g.setColor(ct);
+    }
+    if (this.goodNote) {
+      g.fillOval(this.posX, this.posY - 5, 10, 10);
+    } else {
       // g.drawRect(this.posX-5, this.posY-5, 8, 4);
       Font f = new Font("Sanserif", Font.BOLD, 16);
       g.setFont(f);

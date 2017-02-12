@@ -299,7 +299,9 @@ public class ScoreLevel implements Level {
     int index = generator.nextInt(this.pitcheslist.size());
     if (index > -1) {
       return (this.pitcheslist.get(index));
-    } else return 0;
+    } else {
+      return 0;
+    }
   }
 
   public int tripletRandomPitch(int basePitch) {

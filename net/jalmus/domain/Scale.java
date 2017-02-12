@@ -13,6 +13,7 @@ public class Scale {
   private final Pitch root;
   private final ArrayList<Pitch> upPitches;
   private final ArrayList<Pitch> downPitches;
+
   private Scale(Iterable<Pitch> upPitches, Iterable<Pitch> downPitches,
                 Mode mode, Pitch root) {
     this.upPitches = new ArrayList<>();

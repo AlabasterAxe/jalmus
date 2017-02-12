@@ -16,8 +16,9 @@ import javax.sound.midi.MidiUnavailableException;
 
 public class MidiCommon {
 
-  /**  TODO:
-   todo: flag long
+  /**
+   * TODO:
+   * todo: flag long
    */
   public static void listDevicesAndExit(boolean bForInput, boolean bForOutput) {
     listDevicesAndExit(bForInput, bForOutput, false);
@@ -68,22 +69,20 @@ public class MidiCommon {
     //  System.exit(0);
   }
 
-  /** Retrieve a MidiDevice.Info for a given name.
-
-   This method tries to return a MidiDevice.Info whose name
-   matches the passed name. If no matching MidiDevice.Info is
-   found, null is returned.  If bForOutput is true, then only
-   output devices are searched, otherwise only input devices.
-
-   @param strDeviceName the name of the device for which an info
-   object should be retrieved.
-
-   @param bForOutput If true, only output devices are
-   considered. If false, only input devices are considered.
-
-   @return A MidiDevice.Info object matching the passed device
-   name or null if none could be found.
-
+  /**
+   * Retrieve a MidiDevice.Info for a given name.
+   * <p>
+   * This method tries to return a MidiDevice.Info whose name
+   * matches the passed name. If no matching MidiDevice.Info is
+   * found, null is returned.  If bForOutput is true, then only
+   * output devices are searched, otherwise only input devices.
+   *
+   * @param strDeviceName the name of the device for which an info
+   *                      object should be retrieved.
+   * @param bForOutput    If true, only output devices are
+   *                      considered. If false, only input devices are considered.
+   * @return A MidiDevice.Info object matching the passed device
+   * name or null if none could be found.
    */
   public static MidiDevice.Info getMidiDeviceInfo(String strDeviceName, boolean bForOutput) {
     MidiDevice.Info[] aInfos = MidiSystem.getMidiDeviceInfo();
@@ -113,7 +112,7 @@ public class MidiCommon {
    *
    * @param index the index of the device to be retrieved
    * @return A MidiDevice.Info object of the specified index
-   *         or null if none could be found.
+   * or null if none could be found.
    */
   public static MidiDevice.Info getMidiDeviceInfo(int index) {
     MidiDevice.Info[] aInfos = MidiSystem.getMidiDeviceInfo();

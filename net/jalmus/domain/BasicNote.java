@@ -8,6 +8,7 @@ public final class BasicNote {
 
   ;
   private final Modifier modifier;
+
   private BasicNote(LetterName name, int octave, Modifier modifier) {
     this.name = name;
     this.octave = octave;

@@ -894,10 +894,11 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
           int[] tripletPitches = {pitch, 71, 71};
           int lowestPitch = tripletPitches[0];
           for (int i = 1; i < 3; i++) {
-            if (tripletPitches[i] < lowestPitch && !stemup)
+            if (tripletPitches[i] < lowestPitch && !stemup) {
               lowestPitch = tripletPitches[i];
-            else if (tripletPitches[i] > lowestPitch && stemup)
+            } else if (tripletPitches[i] > lowestPitch && stemup) {
               lowestPitch = tripletPitches[i];
+            }
           }
 
           System.out.println("Triplet pitches: " + tripletPitches[0] + ", " + tripletPitches[1] + ", " + tripletPitches[2]);
@@ -1065,7 +1066,9 @@ public class SwingRhythmReadingGame extends RhythmReadingGame implements SwingGa
 
     // paint answers: red = wrong, green = good
     for (int i = 0; i < answers.size(); i++) {
-      if (!answers.get(i).isnull()) answers.get(i).paint(g);
+      if (!answers.get(i).isnull()) {
+        answers.get(i).paint(g);
+      }
     }
 
     for (int i = 0; i < rhythms.size(); i++) {

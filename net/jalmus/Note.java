@@ -445,92 +445,140 @@ public class Note {
       if (this.sameNotePitch(0)) {
         this.name = DO;
         this.height = (60 - this.pitch) * 35 / 12 + dportee + 45;
-        if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) this.alteration = "n";
-        else this.alteration = "";
+        if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) {
+          this.alteration = "n";
+        } else {
+          this.alteration = "";
+        }
       } else if (this.sameNotePitch(1)) {
         if (nrlevel.getCurrentTonality().isflat()) {
           this.name = RE;
           this.height = (61 - this.pitch) * 35 / 12 + dportee + 40;
-          if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) this.alteration = "";
-          else this.alteration = "b";
+          if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) {
+            this.alteration = "";
+          } else {
+            this.alteration = "b";
+          }
         } else {
           this.name = DO;
           this.height = (61 - this.pitch) * 35 / 12 + dportee + 45;
-          if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) this.alteration = "";
-          else this.alteration = "#";
+          if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) {
+            this.alteration = "";
+          } else {
+            this.alteration = "#";
+          }
         }
       } else if (this.sameNotePitch(2)) {
         this.name = RE;
         this.height = (62 - this.pitch) * 35 / 12 + dportee + 40;
-        if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) this.alteration = "n";
-        else this.alteration = "";
+        if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) {
+          this.alteration = "n";
+        } else {
+          this.alteration = "";
+        }
       } else if (this.sameNotePitch(3)) {
         if (nrlevel.getCurrentTonality().issharp()) {
           this.name = RE;
           this.height = (63 - this.pitch) * 35 / 12 + dportee + 40;
-          if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) this.alteration = "";
-          else this.alteration = "#";
+          if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) {
+            this.alteration = "";
+          } else {
+            this.alteration = "#";
+          }
         } else {
           this.name = MI;
           this.height = (63 - this.pitch) * 35 / 12 + dportee + 35;
-          if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) this.alteration = "";
-          else this.alteration = "b";
+          if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) {
+            this.alteration = "";
+          } else {
+            this.alteration = "b";
+          }
         }
       } else if (this.sameNotePitch(4)) {
         this.name = MI;
         this.height = (64 - this.pitch) * 35 / 12 + dportee + 35;
-        if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) this.alteration = "n";
-        else this.alteration = "";
+        if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) {
+          this.alteration = "n";
+        } else {
+          this.alteration = "";
+        }
       } else if (this.sameNotePitch(5)) {
         this.name = FA;
         this.height = (65 - this.pitch) * 35 / 12 + dportee + 30;
-        if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) this.alteration = "n";
-        else this.alteration = "";
+        if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) {
+          this.alteration = "n";
+        } else {
+          this.alteration = "";
+        }
       } else if (this.sameNotePitch(6)) {
         if (nrlevel.getCurrentTonality().issharp()) {
           this.name = FA;
           this.height = (66 - this.pitch) * 35 / 12 + dportee + 30;
-          if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) this.alteration = "";
-          else this.alteration = "#";
+          if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) {
+            this.alteration = "";
+          } else {
+            this.alteration = "#";
+          }
         } else {
           this.name = SOL;
           this.height = (66 - this.pitch) * 35 / 12 + dportee + 25;
-          if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) this.alteration = "";
-          else this.alteration = "b";
+          if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) {
+            this.alteration = "";
+          } else {
+            this.alteration = "b";
+          }
         }
       } else if (this.sameNotePitch(7)) {
         this.name = SOL;
         this.height = (67 - this.pitch) * 35 / 12 + dportee + 25;
-        if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) this.alteration = "n";
-        else this.alteration = "";
+        if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) {
+          this.alteration = "n";
+        } else {
+          this.alteration = "";
+        }
       } else if (this.sameNotePitch(8)) {
         if (nrlevel.getCurrentTonality().issharp()) {
           this.name = SOL;
           this.height = (68 - this.pitch) * 35 / 12 + dportee + 25;
-          if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) this.alteration = "";
-          else this.alteration = "#";
+          if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) {
+            this.alteration = "";
+          } else {
+            this.alteration = "#";
+          }
         } else {
           this.name = LA;
           this.height = (68 - this.pitch) * 35 / 12 + dportee + 20;
-          if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) this.alteration = "";
-          else this.alteration = "b";
+          if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) {
+            this.alteration = "";
+          } else {
+            this.alteration = "b";
+          }
         }
       } else if (this.sameNotePitch(9)) {
         this.name = LA;
         this.height = (69 - this.pitch) * 35 / 12 + dportee + 20;
-        if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) this.alteration = "n";
-        else this.alteration = "";
+        if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) {
+          this.alteration = "n";
+        } else {
+          this.alteration = "";
+        }
       } else if (this.sameNotePitch(10)) {
         if (nrlevel.getCurrentTonality().isflat()) {
           this.name = SI;
           this.height = (70 - this.pitch) * 35 / 12 + dportee + 15;
-          if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) this.alteration = "";
-          else this.alteration = "b";
+          if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) {
+            this.alteration = "";
+          } else {
+            this.alteration = "b";
+          }
         } else {
           this.name = LA;
           this.height = (70 - this.pitch) * 35 / 12 + dportee + 20;
-          if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) this.alteration = "";
-          else this.alteration = "#";
+          if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) {
+            this.alteration = "";
+          } else {
+            this.alteration = "#";
+          }
         }
       } else if (this.sameNotePitch(11)) {
         this.name = SI;
@@ -580,41 +628,62 @@ public class Note {
         if (nrlevel.getCurrentTonality().issharp()) {
           this.name = RE;
           this.height = (63 - this.pitch) * 35 / 12 + dportee - 20 + doubleStaffHeight;
-          if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) this.alteration = "";
-          else this.alteration = "#";
+          if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) {
+            this.alteration = "";
+          } else {
+            this.alteration = "#";
+          }
         } else {
           this.name = MI;
           this.height = (63 - this.pitch) * 35 / 12 + dportee - 25 + doubleStaffHeight;
-          if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) this.alteration = "";
-          else this.alteration = "b";
+          if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) {
+            this.alteration = "";
+          } else {
+            this.alteration = "b";
+          }
         }
       } else if (this.sameNotePitch(4)) {
         this.name = MI;
         this.height = (64 - this.pitch) * 35 / 12 + dportee - 25 + doubleStaffHeight;
-        if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) this.alteration = "n";
-        else this.alteration = "";
+        if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) {
+          this.alteration = "n";
+        } else {
+          this.alteration = "";
+        }
       } else if (this.sameNotePitch(5)) {
         this.name = FA;
         this.height = (65 - this.pitch) * 35 / 12 + dportee - 30 + doubleStaffHeight;
-        if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) this.alteration = "n";
-        else this.alteration = "";
+        if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) {
+          this.alteration = "n";
+        } else {
+          this.alteration = "";
+        }
       } else if (this.sameNotePitch(6)) {
         if (nrlevel.getCurrentTonality().issharp()) {
           this.name = FA;
           this.height = (66 - this.pitch) * 35 / 12 + dportee - 30 + doubleStaffHeight;
-          if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) this.alteration = "";
-          else this.alteration = "#";
+          if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) {
+            this.alteration = "";
+          } else {
+            this.alteration = "#";
+          }
         } else {
           this.name = SOL;
           this.height = (66 - this.pitch) * 35 / 12 + dportee - 35 + doubleStaffHeight;
-          if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) this.alteration = "";
-          else this.alteration = "b";
+          if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) {
+            this.alteration = "";
+          } else {
+            this.alteration = "b";
+          }
         }
       } else if (this.sameNotePitch(7)) {
         this.name = SOL;
         this.height = (67 - this.pitch) * 35 / 12 + dportee - 35 + doubleStaffHeight;
-        if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) this.alteration = "n";
-        else this.alteration = "";
+        if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) {
+          this.alteration = "n";
+        } else {
+          this.alteration = "";
+        }
       } else if (this.sameNotePitch(8)) {
         if (nrlevel.getCurrentTonality().issharp()) {
           this.name = SOL;
@@ -627,8 +696,11 @@ public class Note {
         } else {
           this.name = LA;
           this.height = (68 - this.pitch) * 35 / 12 + dportee - 40 + doubleStaffHeight;
-          if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) this.alteration = "";
-          else this.alteration = "b";
+          if (accidentalInTonality(nrlevel.getCurrentTonality(), bundle)) {
+            this.alteration = "";
+          } else {
+            this.alteration = "b";
+          }
         }
       } else if (this.sameNotePitch(9)) {
         this.name = LA;

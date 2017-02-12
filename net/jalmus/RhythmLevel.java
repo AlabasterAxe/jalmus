@@ -323,24 +323,37 @@ public class RhythmLevel implements Level {
       //	fileContent.append("<game>"+this.gametype+"</game>"+newline);
       fileContent.append("<time>" + this.getTimeSignNumerator() + "/" + this.getTimeSignDenominator() + "</time>" + newline);
       fileContent.append("<rhythms>");
-      if (this.getWholeNote()) fileContent.append(1 + ",");
-      if (this.getHalfNote()) fileContent.append(2 + ",");
-      if (this.getDottedHalfNote()) fileContent.append(3 + ",");
-      if (this.getQuarterNote()) fileContent.append(4 + ",");
-      if (this.getEighthNote()) fileContent.append(8 + ",");
+      if (this.getWholeNote()) {
+        fileContent.append(1 + ",");
+      }
+      if (this.getHalfNote()) {
+        fileContent.append(2 + ",");
+      }
+      if (this.getDottedHalfNote()) {
+        fileContent.append(3 + ",");
+      }
+      if (this.getQuarterNote()) {
+        fileContent.append(4 + ",");
+      }
+      if (this.getEighthNote()) {
+        fileContent.append(8 + ",");
+      }
       fileContent.append("</rhythms>" + newline);
-      if (this.getSilence())
+      if (this.getSilence()) {
         fileContent.append("<rests>1,2,3,4,8</rests>" + newline); // no distinction yet
-      if (this.getTriplet())
+      }
+      if (this.getTriplet()) {
         fileContent.append("<tuplets>3</tuplets>" + newline); // no distinction yet
-      if (this.getMetronome() & this.getMetronomeBeats())
+      }
+      if (this.getMetronome() & this.getMetronomeBeats()) {
         fileContent.append("<metronome>both</metronome>" + newline);
-      else if (this.getMetronome() & !this.getMetronomeBeats())
+      } else if (this.getMetronome() & !this.getMetronomeBeats()) {
         fileContent.append("<metronome>sound</metronome>" + newline);
-      else if (!this.getMetronome() & !this.getMetronomeBeats())
+      } else if (!this.getMetronome() & !this.getMetronomeBeats()) {
         fileContent.append("<metronome>none</metronome>" + newline);
-      else if (!this.getMetronome() & this.getMetronomeBeats())
+      } else if (!this.getMetronome() & this.getMetronomeBeats()) {
         fileContent.append("<metronome>visual</metronome>" + newline);
+      }
       fileContent.append("<speed>" + this.speed + "</speed>" + newline);
       fileContent.append("</rhythmreading>" + newline + "</levels>" + newline);
       writeFile(f, fileContent.toString());

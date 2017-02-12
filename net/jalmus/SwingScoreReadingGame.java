@@ -719,14 +719,22 @@ public class SwingScoreReadingGame extends ScoreReadingGame implements SwingGame
     int nbrhythms = 0;
 
     for (int i = 0; i < answers.size(); i++) {
-      if (answers.get(i).allGood() && !answers.get(i).isnull()) nbgood = nbgood + 1;
-      if (!answers.get(i).isnull() && answers.get(i).badNote()) nbnotefalse = nbnotefalse + 1;
-      if (!answers.get(i).isnull() && answers.get(i).badRhythm()) nbrhythmfalse = nbrhythmfalse + 1;
+      if (answers.get(i).allGood() && !answers.get(i).isnull()) {
+        nbgood = nbgood + 1;
+      }
+      if (!answers.get(i).isnull() && answers.get(i).badNote()) {
+        nbnotefalse = nbnotefalse + 1;
+      }
+      if (!answers.get(i).isnull() && answers.get(i).badRhythm()) {
+        nbrhythmfalse = nbrhythmfalse + 1;
+      }
     }
 
     //Nb rhythms
     for (int i = 0; i < rhythms.size(); i++) {
-      if (!rhythms.get(i).isSilence() && !rhythms.get(i).isNull()) nbrhythms = nbrhythms + 1;
+      if (!rhythms.get(i).isSilence() && !rhythms.get(i).isNull()) {
+        nbrhythms = nbrhythms + 1;
+      }
     }
 
     if (nbrhythms == nbgood) {
@@ -748,7 +756,9 @@ public class SwingScoreReadingGame extends ScoreReadingGame implements SwingGame
 
     // paint answers: red = wrong, green = good
     for (int i = 0; i < answers.size(); i++) {
-      if (!answers.get(i).isnull()) answers.get(i).paint(g);
+      if (!answers.get(i).isnull()) {
+        answers.get(i).paint(g);
+      }
     }
 
     for (int i = 0; i < rhythms.size(); i++) {
@@ -931,10 +941,11 @@ public class SwingScoreReadingGame extends ScoreReadingGame implements SwingGame
           tripletPitches[1] = scoreLevel.tripletRandomPitch(tripletPitches[0]);
           tripletPitches[2] = scoreLevel.tripletRandomPitch(tripletPitches[0]);
           for (int i = 1; i < 3; i++) {
-            if (tripletPitches[i] < lowestPitch && !stemup)
+            if (tripletPitches[i] < lowestPitch && !stemup) {
               lowestPitch = tripletPitches[i];
-            else if (tripletPitches[i] > lowestPitch && stemup)
+            } else if (tripletPitches[i] > lowestPitch && stemup) {
               lowestPitch = tripletPitches[i];
+            }
           }
 
           System.out.println("Triplet pitches: " + tripletPitches[0] + ", " + tripletPitches[1] + ", " + tripletPitches[2]);

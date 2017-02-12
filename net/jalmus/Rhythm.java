@@ -206,44 +206,64 @@ public class Rhythm {
     }
 
     if (this.samenotePitch(0)) {  // DO
-      if ((t.issharp() && t.getAlterationsNumber() >= 2) || (t.isflat() && t.getAlterationsNumber() >= 6))
+      if ((t.issharp() && t.getAlterationsNumber() >= 2) || (t.isflat() && t.getAlterationsNumber() >= 6)) {
         alt = "n";
-      else alt = "";
+      } else {
+        alt = "";
+      }
       noteY = (60 - this.pitch) * 35 / 12 + 43 + keyoffset;
     } else if (this.samenotePitch(1)) { // DO# REb
       if (t.isflat()) {
         noteY = (61 - this.pitch) * 35 / 12 + 43 + keyoffset;
-        if (t.getAlterationsNumber() >= 4) alt = "";
-        else alt = "b";
+        if (t.getAlterationsNumber() >= 4) {
+          alt = "";
+        } else {
+          alt = "b";
+        }
       } else {
         noteY = (61 - this.pitch) * 35 / 12 + 38 + keyoffset;
-        if (t.getAlterationsNumber() >= 2) alt = "";
-        else alt = "#";
+        if (t.getAlterationsNumber() >= 2) {
+          alt = "";
+        } else {
+          alt = "#";
+        }
       }
     } else if (this.samenotePitch(2)) { // RE
-      if ((t.issharp() && t.getAlterationsNumber() >= 4) || (t.isflat() && t.getAlterationsNumber() >= 4))
+      if ((t.issharp() && t.getAlterationsNumber() >= 4) || (t.isflat() && t.getAlterationsNumber() >= 4)) {
         alt = "n";
-      else alt = "";
+      } else {
+        alt = "";
+      }
       noteY = (62 - this.pitch) * 35 / 12 + 38 + keyoffset;
     } else if (this.samenotePitch(3)) { //RE# MIb
       if (t.issharp()) {
         noteY = (63 - this.pitch) * 35 / 12 + 38 + keyoffset;
-        if (t.getAlterationsNumber() >= 4) alt = "";
-        else alt = "#";
+        if (t.getAlterationsNumber() >= 4) {
+          alt = "";
+        } else {
+          alt = "#";
+        }
       } else {
         noteY = (63 - this.pitch) * 35 / 12 + 33 + keyoffset;
-        if (t.getAlterationsNumber() >= 2) alt = "";
-        else alt = "b";
+        if (t.getAlterationsNumber() >= 2) {
+          alt = "";
+        } else {
+          alt = "b";
+        }
       }
     } else if (this.samenotePitch(4)) {  //MI
-      if ((t.issharp() && t.getAlterationsNumber() >= 6) || (t.isflat() && t.getAlterationsNumber() >= 2))
+      if ((t.issharp() && t.getAlterationsNumber() >= 6) || (t.isflat() && t.getAlterationsNumber() >= 2)) {
         alt = "n";
-      else alt = "";
+      } else {
+        alt = "";
+      }
       noteY = (64 - this.pitch) * 35 / 12 + 33 + keyoffset;
     } else if (this.samenotePitch(5)) { // FA
-      if ((t.issharp() && t.getAlterationsNumber() >= 1) || (t.isflat() && t.getAlterationsNumber() >= 7))
+      if ((t.issharp() && t.getAlterationsNumber() >= 1) || (t.isflat() && t.getAlterationsNumber() >= 7)) {
         alt = "n";
-      else alt = "";
+      } else {
+        alt = "";
+      }
       noteY = (65 - this.pitch) * 35 / 12 + 28 + keyoffset;
     } else if (this.samenotePitch(6)) { //FA# SOLb
       if (t.issharp()) {
@@ -262,34 +282,50 @@ public class Rhythm {
         }
       }
     } else if (this.samenotePitch(7)) { //SOL
-      if ((t.issharp() && t.getAlterationsNumber() >= 3) || (t.isflat() && t.getAlterationsNumber() >= 5))
+      if ((t.issharp() && t.getAlterationsNumber() >= 3) || (t.isflat() && t.getAlterationsNumber() >= 5)) {
         alt = "n";
-      else alt = "";
+      } else {
+        alt = "";
+      }
       noteY = (67 - this.pitch) * 35 / 12 + 23 + keyoffset;
     } else if (this.samenotePitch(8)) { //SOL# LAb
       if (t.issharp()) {
         noteY = (68 - this.pitch) * 35 / 12 + 23 + keyoffset;
-        if (t.getAlterationsNumber() >= 3) alt = "";
-        else alt = "#";
+        if (t.getAlterationsNumber() >= 3) {
+          alt = "";
+        } else {
+          alt = "#";
+        }
       } else {
         noteY = (68 - this.pitch) * 35 / 12 + 18 + keyoffset;
-        if (t.getAlterationsNumber() >= 3) alt = "";
-        else alt = "b";
+        if (t.getAlterationsNumber() >= 3) {
+          alt = "";
+        } else {
+          alt = "b";
+        }
       }
     } else if (this.samenotePitch(9)) {  //LA
-      if ((t.issharp() && t.getAlterationsNumber() >= 5) || (t.isflat() && t.getAlterationsNumber() >= 3))
+      if ((t.issharp() && t.getAlterationsNumber() >= 5) || (t.isflat() && t.getAlterationsNumber() >= 3)) {
         alt = "n";
-      else alt = "";
+      } else {
+        alt = "";
+      }
       noteY = (69 - this.pitch) * 35 / 12 + 18 + keyoffset;
     } else if (this.samenotePitch(10)) { // LA# SIb
       if (t.issharp()) {
         noteY = (70 - this.pitch) * 35 / 12 + 18 + keyoffset;
-        if (t.getAlterationsNumber() >= 3) alt = "";
-        else alt = "#";
+        if (t.getAlterationsNumber() >= 3) {
+          alt = "";
+        } else {
+          alt = "#";
+        }
       } else {
         noteY = (70 - this.pitch) * 35 / 12 + 13 + keyoffset;
-        if (t.getAlterationsNumber() >= 3) alt = "";
-        else alt = "b";
+        if (t.getAlterationsNumber() >= 3) {
+          alt = "";
+        } else {
+          alt = "b";
+        }
       }
     } else if (this.samenotePitch(11)) {  //SI
       if ((t.issharp() && t.getAlterationsNumber() >= 7) || (t.isflat() && t.getAlterationsNumber() >= 1)) {
@@ -349,10 +385,11 @@ public class Rhythm {
       } else { // minima
         drawAccidental(g, alt, scoreYpos, rowsDistance, noteY);
 
-        if (this.stemUp)
+        if (this.stemUp) {
           g.drawString("d", this.position, scoreYpos + this.rowNumber * rowsDistance + noteY + 13);
-        else
+        } else {
           g.drawString("l", this.position, scoreYpos + this.rowNumber * rowsDistance + noteY + 13 + 41);
+        }
       }
     } else if (this.duration == 1) {
       if (this.silence) { // pause
@@ -385,8 +422,11 @@ public class Rhythm {
         g.drawString(sm, this.position, ypos + noteY + voffset);
         if (this.tripletValue != 0) {
           int lowestYpos = 0;
-          if (this.tripletValue < 100) lowestYpos = getYpos(sl, this.tripletValue) + ypos;
-          else lowestYpos = getYpos(sl, this.tripletValue - 100) + ypos;
+          if (this.tripletValue < 100) {
+            lowestYpos = getYpos(sl, this.tripletValue) + ypos;
+          } else {
+            lowestYpos = getYpos(sl, this.tripletValue - 100) + ypos;
+          }
           //g.drawLine(this.position, ypos + noteY + 10, this.position, lowestYpos + 40);
           if (this.tripletValue < 100) { // means this is the first note of the triplet. Draw horizontal bar
             g.fillRect(this.position + 11, lowestYpos - 31, 49, 3);
@@ -405,8 +445,11 @@ public class Rhythm {
         g.drawString(sm, this.position, ypos + noteY + vOffset);
         if (this.tripletValue != 0) {
           int lowestYpos = 0;
-          if (this.tripletValue < 100) lowestYpos = getYpos(sl, this.tripletValue) + ypos;
-          else lowestYpos = getYpos(sl, this.tripletValue - 100) + ypos;
+          if (this.tripletValue < 100) {
+            lowestYpos = getYpos(sl, this.tripletValue) + ypos;
+          } else {
+            lowestYpos = getYpos(sl, this.tripletValue - 100) + ypos;
+          }
           //	System.out.println("newYpos: " + getYpos(sl, this.tripletValue)+ "oldYpos: " + sl.getYpos(this.tripletValue));
 
           g.drawLine(this.position + 11, ypos + noteY - 10, this.position + 11, lowestYpos - 30);
@@ -428,8 +471,11 @@ public class Rhythm {
         g.drawString(sm, this.position, ypos + noteY + voffset);
         if (this.tripletValue != 0) {
           int lowestYpos = 0;
-          if (this.tripletValue < 100) lowestYpos = getYpos(sl, this.tripletValue) + ypos;
-          else lowestYpos = getYpos(sl, this.tripletValue - 100) + ypos;
+          if (this.tripletValue < 100) {
+            lowestYpos = getYpos(sl, this.tripletValue) + ypos;
+          } else {
+            lowestYpos = getYpos(sl, this.tripletValue - 100) + ypos;
+          }
           g.drawLine(this.position, ypos + noteY + 10, this.position, lowestYpos + 40);
           if (this.tripletValue < 100) { // means this is the first note of the triplet. Draw horizontal bar
             g.fillRect(this.position, lowestYpos + 37, 49, 5);

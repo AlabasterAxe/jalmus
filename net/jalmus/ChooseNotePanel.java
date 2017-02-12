@@ -90,8 +90,9 @@ public class ChooseNotePanel extends JPanel {
     int numCols = table.getColumnCount();
     for (int i = 0; i < numRows; i++) {
       for (int j = 1; j < numCols; j++) {
-        if ((Boolean) table.getValueAt(i, j))
+        if ((Boolean) table.getValueAt(i, j)) {
           pitchselected.add(24 + 12 * i + (j - 1)); // first note Octave -3 C pitch 24
+        }
       }
     }
     return pitchselected;
