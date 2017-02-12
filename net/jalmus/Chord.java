@@ -17,11 +17,11 @@ import java.util.ResourceBundle;
  */
 public class Chord {
 
-  Note tabNotes[] = new Note[3];
+  SwingNote tabNotes[] = new SwingNote[3];
   String name;
   InversionType inversion;
 
-  public Chord(Note note1, Note note2, Note note3, String name, int inversion) {
+  public Chord(SwingNote note1, SwingNote note2, SwingNote note3, String name, int inversion) {
     this.tabNotes[0] = note1;
     this.tabNotes[1] = note2;
     this.tabNotes[2] = note3;
@@ -30,7 +30,7 @@ public class Chord {
   }
   //AudioClip son;
 
-  public Note getNote(int i) {
+  public SwingNote getNote(int i) {
     return this.tabNotes[i];
   }
 
@@ -43,9 +43,9 @@ public class Chord {
   }
 
   public void copy(Chord a) {
-    this.tabNotes[0] = new Note(a.tabNotes[0].getHeight(), a.tabNotes[0].getX(), a.tabNotes[0].getPitch());
-    this.tabNotes[1] = new Note(a.tabNotes[1].getHeight(), a.tabNotes[1].getX(), a.tabNotes[1].getPitch());
-    this.tabNotes[2] = new Note(a.tabNotes[2].getHeight(), a.tabNotes[2].getX(), a.tabNotes[2].getPitch());
+    this.tabNotes[0] = new SwingNote(a.tabNotes[0].getHeight(), a.tabNotes[0].getX(), a.tabNotes[0].getPitch());
+    this.tabNotes[1] = new SwingNote(a.tabNotes[1].getHeight(), a.tabNotes[1].getX(), a.tabNotes[1].getPitch());
+    this.tabNotes[2] = new SwingNote(a.tabNotes[2].getHeight(), a.tabNotes[2].getX(), a.tabNotes[2].getPitch());
     this.name = a.name;
     this.inversion = a.inversion;
   }

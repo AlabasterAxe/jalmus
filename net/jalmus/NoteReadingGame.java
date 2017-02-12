@@ -15,11 +15,11 @@ public abstract class NoteReadingGame implements Game {
   int position; // position of the current note in the list
   int posnote = 1; // current position of the note within a chor or an interval
 
-  Note[] line = new Note[40]; // array of notes
+  SwingNote[] line = new SwingNote[40]; // array of notes
   Chord[] lineacc = new Chord[40]; // array of chords
   Interval[] lineint = new Interval[40];
 
-  Note currentNote = new Note(0, 25, 0);
+  SwingNote currentNote = new SwingNote(0, 25, 0);
   Chord currentChord = new Chord(currentNote, currentNote, currentNote, "", 0);
   Interval currentInterval = new Interval(currentNote, currentNote, "");
 
@@ -48,7 +48,7 @@ public abstract class NoteReadingGame implements Game {
 
   @Override
   public void stopGame() {
-    currentNote = new Note(0, 25, 0);
+    currentNote = new SwingNote(0, 25, 0);
     currentChord = new Chord(currentNote, currentNote, currentNote, "", 0);
     currentInterval = new Interval(currentNote, currentNote, "");
   }

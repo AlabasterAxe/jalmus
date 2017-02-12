@@ -3,10 +3,8 @@ package net.jalmus.domain;
 public final class BasicNote {
   private final LetterName name;
 
-  ;
   private final int octave;
 
-  ;
   private final Modifier modifier;
 
   private BasicNote(LetterName name, int octave, Modifier modifier) {

@@ -17,16 +17,16 @@ import java.util.ResourceBundle;
  */
 public class Interval {
 
-  private Note interval[] = new Note[2];
+  private SwingNote interval[] = new SwingNote[2];
   private String name;
 
-  public Interval(Note n1, Note n2, String name) {
+  public Interval(SwingNote n1, SwingNote n2, String name) {
     this.interval[0] = n1;
     this.interval[1] = n2;
     this.name = name;
   }
 
-  public Note getNote(int i) {
+  public SwingNote getNote(int i) {
     return this.interval[i];
   }
 
@@ -35,9 +35,9 @@ public class Interval {
   }
 
   public void copy(Interval a) {
-    this.interval[0] = new Note(a.interval[0].getHeight(),
+    this.interval[0] = new SwingNote(a.interval[0].getHeight(),
         a.interval[0].getX(), a.interval[0].getPitch());
-    this.interval[1] = new Note(a.interval[1].getHeight(),
+    this.interval[1] = new SwingNote(a.interval[1].getHeight(),
         a.interval[1].getX(), a.interval[1].getPitch());
     this.name = a.name;
   }

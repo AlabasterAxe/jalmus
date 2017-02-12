@@ -696,7 +696,6 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
   }
 
   void rightAnswer() {
-    System.out.println("nailed it");
     if (noteLevel.isLearningGame()) {
       if (noteLevel.isChordsgame() || noteLevel.isIntervalsgame()) {
         nextNote();
@@ -998,11 +997,11 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
       }
     }
 
-    Note n1 = new Note(h, ui.noteMargin + 98, 0);
+    SwingNote n1 = new SwingNote(h, ui.noteMargin + 98, 0);
     n1.updateNote(noteLevel, ui.scoreYpos, ui.bundle);
     n1.updateAccidental(noteLevel, ui.bundle);
 
-    Note n2 = new Note(h - i * 5, ui.noteMargin + 98, 0);
+    SwingNote n2 = new SwingNote(h - i * 5, ui.noteMargin + 98, 0);
     n2.updateNote(noteLevel, ui.scoreYpos, ui.bundle);
     n2.updateAccidental(noteLevel, ui.bundle);
 
@@ -1067,9 +1066,9 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
 
   private Chord chordChoice() {
     int h;
-    Note n1 = new Note(0, 0, 0);
-    Note n2 = new Note(0, 0, 0);
-    Note n3 = new Note(0, 0, 0);
+    SwingNote n1 = new SwingNote(0, 0, 0);
+    SwingNote n2 = new SwingNote(0, 0, 0);
+    SwingNote n3 = new SwingNote(0, 0, 0);
 
     if (noteLevel.isCurrentKeyBoth()) {
       h = setNoteHeight(6, 5, -2, 10);
@@ -1088,15 +1087,15 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
     boolean ok = false;
     while (!ok) {
 
-      n1 = new Note(h, ui.noteMargin + 98, 0);
+      n1 = new SwingNote(h, ui.noteMargin + 98, 0);
       n1.updateNote(noteLevel, ui.scoreYpos, ui.bundle);
       n1.updateAccidental(noteLevel, ui.bundle);
 
-      n2 = new Note(h - 2 * 5, ui.noteMargin + 98, 0);
+      n2 = new SwingNote(h - 2 * 5, ui.noteMargin + 98, 0);
       n2.updateNote(noteLevel, ui.scoreYpos, ui.bundle);
       n2.updateAccidentalInChord(noteLevel.getCurrentTonality(), n1.getPitch(), 2, ui.bundle); //deuxieme note
 
-      n3 = new Note(h - 4 * 5, ui.noteMargin + 98, 0);
+      n3 = new SwingNote(h - 4 * 5, ui.noteMargin + 98, 0);
       n3.updateNote(noteLevel, ui.scoreYpos, ui.bundle);
       n3.updateAccidentalInChord(noteLevel.getCurrentTonality(), n1.getPitch(), 3, ui.bundle); //troisieme note
 
@@ -1147,7 +1146,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
     Interval inter = new Interval(currentNote, currentNote, "");
 
     if (noteLevel.isNotesgame() || noteLevel.isAccidentalsgame()) {
-      line[0] = new Note(setNoteHeight(noteLevel.getNbnotesupper(),
+      line[0] = new SwingNote(setNoteHeight(noteLevel.getNbnotesupper(),
           noteLevel.getNbnotesunder(), noteLevel.getNbnotesupper(),
           noteLevel.getNbnotesunder()), size.width - ui.noteMargin, 0);
       line[0].updateNote(noteLevel, ui.scoreYpos, ui.bundle);
@@ -1163,14 +1162,14 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
               noteLevel.getNbnotesunder()); // pour �viter les r�p�titions
         }
 
-        line[i] = new Note(tmph, size.width - ui.noteMargin + i * 35, 0);
+        line[i] = new SwingNote(tmph, size.width - ui.noteMargin + i * 35, 0);
         line[i].updateNote(noteLevel, ui.scoreYpos, ui.bundle);
         line[i].updateAccidental(noteLevel, ui.bundle);
       }
       currentNote = line[position];
     } else if (noteLevel.isCustomNotesgame()) {
 
-      line[0] = new Note(0, size.width - ui.noteMargin, noteLevel.getRandomPitch());
+      line[0] = new SwingNote(0, size.width - ui.noteMargin, noteLevel.getRandomPitch());
       line[0].updateNotePitch(noteLevel, ui.scoreYpos, ui.bundle);
 
       for (int i = 1; i < line.length; i++) {
@@ -1179,7 +1178,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
           tmpp = noteLevel.getRandomPitch(); // to avoid same pitch
         }
 
-        line[i] = new Note(0, size.width - ui.noteMargin + i * 35, tmpp);
+        line[i] = new SwingNote(0, size.width - ui.noteMargin + i * 35, tmpp);
         line[i].updateNotePitch(noteLevel, ui.scoreYpos, ui.bundle);
       }
 
@@ -1304,7 +1303,7 @@ public class SwingNoteReadingGame extends NoteReadingGame implements SwingGame {
     }
   }
 
-  void drawNote(Note note, Graphics g, Font f, Color couleur) {
+  void drawNote(SwingNote note, Graphics g, Font f, Color couleur) {
     Dimension size = ui.getSize();
 
     g.setColor(couleur);

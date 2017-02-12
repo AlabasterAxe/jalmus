@@ -14,7 +14,6 @@ public final class Pitch implements Comparable<Pitch> {
   private static final int SEMITONES_PER_OCTAVE = 12;
   private static final Pitch REFERENCE_PITCH = new Pitch(Name.A, 4, Modifier.NONE);
 
-  ;
   private static final int REFERENCE_FREQUENCY = 440;
   private final Name name;
   private final int octave;
@@ -111,7 +110,7 @@ public final class Pitch implements Comparable<Pitch> {
 
     private final int semitonesAboveC;
 
-    private Name(int semitones) {
+    Name(int semitones) {
       this.semitonesAboveC = semitones;
     }
 
@@ -139,7 +138,7 @@ public final class Pitch implements Comparable<Pitch> {
 
     private final int modification;
 
-    private Modifier(int modification) {
+    Modifier(int modification) {
       this.modification = modification;
     }
 

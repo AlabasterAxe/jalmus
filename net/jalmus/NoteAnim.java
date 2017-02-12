@@ -45,11 +45,11 @@ public class NoteAnim extends Anim {
       ui.noteGame.currentScore.paint(g, d.width);
     }
 
-    Note basenotet1 = new Note(0, 0, 0);
-    Note basenotet2 = new Note(0, 0, 0);
+    SwingNote basenotet1 = new SwingNote(0, 0, 0);
+    SwingNote basenotet2 = new SwingNote(0, 0, 0);
 
-    Note basenoteb1 = new Note(0, 0, 0);
-    Note basenoteb2 = new Note(0, 0, 0);
+    SwingNote basenoteb1 = new SwingNote(0, 0, 0);
+    SwingNote basenoteb2 = new SwingNote(0, 0, 0);
 
     if (ui.noteGame.noteLevel.isCurrentKeyTreble()) {
       basenotet1.setHeight(ui.scoreYpos + ui.noteGame.noteLevel.getBasetreble() - (ui.noteGame.noteLevel.getNbnotesunder() * 5));

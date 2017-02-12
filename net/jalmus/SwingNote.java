@@ -13,14 +13,14 @@ package net.jalmus;
 import java.awt.*;
 import java.util.ResourceBundle;
 
-public class Note {
+public class SwingNote {
   String alteration;
   String name;
   int height;
   int x; // x position for animation
   int pitch; // midi pitch
 
-  public Note(int h, int x, int p) {
+  public SwingNote(int h, int x, int p) {
     this.alteration = "";
     this.name = "";
     this.height = h; // pos. de la note dportee+20 = sol cle de sol, dportee+24 = fa (+4)
@@ -40,7 +40,7 @@ public class Note {
     this.pitch = 0;
   }
 
-  public void copy(Note n) {
+  public void copy(SwingNote n) {
     this.alteration = n.alteration;
     this.name = n.name;
     this.height = n.height; // pos. de la note dportee+20 = sol cle de sol, dportee+24 = fa (+4)
@@ -109,7 +109,7 @@ public class Note {
           g.drawLine(this.x - 2 + offsetN, i, this.x + 18 + offsetN, i); // dessine la port�e en dessous de la port�e normale
         }
       } else if (this.height <= dportee - 15) {  // <LA au dessus de la port�e en cl� de sol
-        for (int i = dportee - 10; i >= this.height + 5; i = i - 10) {
+        for (int i = dportee - 10; i >= this.height + 5; i -= 10) {
           if (i != this.height + 5) {
             g.setColor(Color.black);
           } else {
@@ -131,7 +131,7 @@ public class Note {
         }       // dessine la portee en dessus de la port�e normale
       } else if (this.height >= dportee + 135) {  // � partie du MI en dessous de la port�e
         // cas de la cl� de fa
-        for (int i = dportee + 140; i <= this.height + 5; i = i + 10) {
+        for (int i = dportee + 140; i <= this.height + 5; i += 10) {
           g.drawLine(this.x - 2 + offsetN, i, this.x + 18 + offsetN, i);
         }       // dessine la port�e en dessous de la port�e normale
       } else if (this.height <= dportee + 75 & this.height >= dportee + 60) {

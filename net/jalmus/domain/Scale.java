@@ -120,7 +120,7 @@ public class Scale {
       return tones;
     }
 
-    public Integer getTones(int integer) {
+    public Integer getTone(int integer) {
       return tones.get(integer);
     }
   }

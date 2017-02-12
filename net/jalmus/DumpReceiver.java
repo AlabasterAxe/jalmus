@@ -73,7 +73,7 @@ class DumpReceiver implements Receiver {
 
                 if (((ShortMessage) event).getData2() != 0 && ui.jalmus.gameStarted &&
                     !ui.jalmus.paused) {
-                  if (Note.samePitch(((ShortMessage) event).getData1(),
+                  if (SwingNote.samePitch(((ShortMessage) event).getData1(),
                       ui.jalmus.noteGame.currentNote.getPitch(),
                       (int) ui.transpositionSpinner.getValue())) {
                     ui.noteGame.rightAnswer();
